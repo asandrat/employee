@@ -39,10 +39,10 @@ public class CommandLineAppRunner implements CommandLineRunner {
         Validator validator = new Validator();
         CommandInvoker invoker = new CommandInvoker();
         if (SupportedCommands.isSupportedCommand(args[0])) {
-            String[] namedArgs = Arrays.stream(args).skip(1).toArray(String[]::new);
-            Map<String, String> data = ArgumentParser.parseData(namedArgs);
-            validator.setStrategy(ValidationStrategyPicker.pickStrategy(args[0]));
             try {
+                String[] namedArgs = Arrays.stream(args).skip(1).toArray(String[]::new);
+                Map<String, String> data = ArgumentParser.parseData(namedArgs);
+                validator.setStrategy(ValidationStrategyPicker.pickStrategy(args[0]));
                 data = validator.validateAndRemoveRedundantArgs(data);
                 invoker.setCommand(CommandPicker.pickCommand(args[0], service, data));
                 invoker.executeCommand();
@@ -54,6 +54,8 @@ public class CommandLineAppRunner implements CommandLineRunner {
         } else {
             guideForSupportedCommands(args[0]);
         }
+
+
     }
 
 }
