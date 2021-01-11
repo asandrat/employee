@@ -4,6 +4,7 @@ import com.bamboo.employee.service.EmployeeService;
 import com.bamboo.employee.service.SupportedCommands;
 import com.bamboo.employee.service.command.AddEmployeeCommand;
 import com.bamboo.employee.service.command.Command;
+import com.bamboo.employee.service.command.RemoveEmployeeCommand;
 
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public final class CommandPicker {
             case employee_addition:
                 return new AddEmployeeCommand(service, args);
             case employee_removal:
-                break;
+                return new RemoveEmployeeCommand(service, args);
             case vacation_addition:
                 break;
             case vacation_removal:
