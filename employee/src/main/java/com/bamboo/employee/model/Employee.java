@@ -2,11 +2,11 @@ package com.bamboo.employee.model;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @NotNull
-public class Employee {
-    //to do: Model Employee's associations
+public class Employee implements Serializable {
 
     private int id; //required
     private String name; //required

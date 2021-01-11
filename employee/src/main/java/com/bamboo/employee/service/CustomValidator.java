@@ -35,7 +35,6 @@ public class CustomValidator {
     }
 
     private static boolean validateVacationRejectionAction(List<String> args) {
-        args.forEach(System.out::println);
         if (args.size() != 3) {
             return false;
         }
@@ -47,7 +46,6 @@ public class CustomValidator {
         //vacation status check: status should be REJECTED
         Optional<VacationStatus> status = Optional.ofNullable(
                 VacationStatus.fromString(mapKeyValueArguments.get("status")));
-        System.out.println(status);
         //if status is empty or != REJECTED: return false
         return status
                 .map(vacationStatus -> vacationStatus.name()
@@ -67,7 +65,6 @@ public class CustomValidator {
         //vacation status check: status should be APPROVED
         Optional<VacationStatus> status = Optional.ofNullable(
                 VacationStatus.fromString(mapKeyValueArguments.get("status")));
-        System.out.println(status);
         //if status is empty or != APPROVED: return false
         return status
                 .map(vacationStatus -> vacationStatus.name()
@@ -112,7 +109,6 @@ public class CustomValidator {
         //vacation status check: status should be SUBMITTED
         Optional<VacationStatus> status = Optional.ofNullable(
                 VacationStatus.fromString(mapKeyValueArguments.get("status")));
-        System.out.println(status);
         //if status is empty or != SUBMITTED: return false
         return status
                 .map(vacationStatus -> vacationStatus.name()
