@@ -42,11 +42,11 @@ public class AddEmployeeValidateStrategy implements ValidationStrategy {
     }
 
     private boolean isSurnameValid(final String surname) {
-        return SURNAME_PATTERN.matcher(surname).matches();
+        return surname != null && SURNAME_PATTERN.matcher(surname).matches();
     }
 
     private boolean isNameValid(final String name) {
-        return NAME_PATTERN.matcher(name).matches();
+        return name != null && NAME_PATTERN.matcher(name).matches();
     }
 
 

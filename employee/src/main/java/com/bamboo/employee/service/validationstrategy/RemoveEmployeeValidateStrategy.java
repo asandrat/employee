@@ -21,6 +21,6 @@ public class RemoveEmployeeValidateStrategy implements ValidationStrategy {
     }
 
     private boolean isValidId(final String potentialId) {
-        return idPattern.matcher(potentialId).matches();
+        return potentialId != null && idPattern.matcher(potentialId).matches();
     }
 }

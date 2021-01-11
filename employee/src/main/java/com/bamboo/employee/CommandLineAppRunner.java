@@ -55,4 +55,5 @@ public class CommandLineAppRunner implements CommandLineRunner {
             guideForSupportedCommands(args[0]);
         }
     }
+
 }
