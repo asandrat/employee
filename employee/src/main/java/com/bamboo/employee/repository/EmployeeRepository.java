@@ -9,10 +9,12 @@ import java.util.Collection;
 public interface EmployeeRepository {
 
     Collection<Employee> findAll();
-    void create(final Employee employee);
-    void create(final Vacation vacation);
-    Employee read(final int employeeId);
-    Vacation read(final VacationId vacationId);
+    void create(Employee employee);
+    void create(Vacation vacation);
+    Employee read(int employeeId);
+    Vacation read(VacationId vacationId);
 
-    void saveAll(final Collection<Employee> employees);
+    void saveAll(Collection<Employee> employees);
+
+    void delete(Integer id);
 }

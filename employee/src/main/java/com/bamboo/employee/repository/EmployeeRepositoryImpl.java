@@ -5,7 +5,10 @@ import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Repository
@@ -47,12 +50,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public Employee read(int employeeId) {
+    public Employee read(final int employeeId) {
         return employees.get(employeeId);
     }
 
     @Override
-    public Vacation read(VacationId vacationId) {
+    public Vacation read(final VacationId vacationId) {
         return vacations.get(vacationId);
     }
 
@@ -72,7 +75,17 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public void saveAll(final Collection<Employee> employees) {
-        //TODO: delegate to repository to save employees
-        // #TODO save in file
+        // #todo: delegate to repository to save employees
+        // #todo save in file
+    }
+
+    @Override
+    public void delete(Integer id) {
+        Employee e = employees.remove(id);
+        if (e == null) {
+            System.out.println("There's no such employee with id: " + id);
+        } else {
+            System.out.println("Successfully removed employee");
+        }
     }
 }
