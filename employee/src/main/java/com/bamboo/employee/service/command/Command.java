@@ -1,7 +1,11 @@
 package com.bamboo.employee.service.command;
 
 
-@FunctionalInterface
+import com.bamboo.employee.service.EmployeeService;
+
+import java.util.Map;
+
 public interface Command {
     void execute();
+    Command initialize(Map<String, String> params, EmployeeService service);
 }

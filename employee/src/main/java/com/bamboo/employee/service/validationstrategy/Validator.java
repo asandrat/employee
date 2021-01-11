@@ -1,18 +1,25 @@
 package com.bamboo.employee.service.validationstrategy;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.Map;
 
-public class Validator {
+@Component
+public final class Validator {
 
-    private ValidationStrategy strategy;
+    @Autowired
+    private Map<String, ValidationStrategy> strategies;
 
-    public void setStrategy(final ValidationStrategy strategy) {
-        this.strategy = strategy;
+    public void setStrategies(
+            final Map<String, ValidationStrategy> strategies) {
+        this.strategies = strategies;
     }
 
     public Map<String, String> validateAndRemoveRedundantArgs(
+            final String command,
             final Map<String, String> arguments) {
-        return strategy.execute(arguments);
+        return strategies.get(command + "_validator").execute(arguments);
     }
 }

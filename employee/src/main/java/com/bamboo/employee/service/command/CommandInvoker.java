@@ -1,13 +1,26 @@
 package com.bamboo.employee.service.command;
 
-public class CommandInvoker {
-    private Command command;
+import com.bamboo.employee.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-    public void setCommand(final Command command) {
-        this.command = command;
+import java.util.Map;
+
+@Component
+public final class CommandInvoker {
+
+    @Autowired
+    Map<String, Command> commands;
+
+    public CommandInvoker(final Map<String, Command> commands) {
+        this.commands = commands;
     }
 
-    public void executeCommand() {
-        command.execute();
+    public void executeCommand(final String command,
+                               final Map<String, String> validatedCommandArgs,
+                               final EmployeeService employeeService) {
+        commands.get(command + "_command")
+                .initialize(validatedCommandArgs, employeeService)
+                .execute();
     }
 }

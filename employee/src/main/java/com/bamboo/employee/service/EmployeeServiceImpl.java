@@ -7,8 +7,6 @@ import com.bamboo.employee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -20,20 +18,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         repository.create(employee);
     }
 
-    @Override
-    public void addVacation(final Vacation vacation) {
-        repository.create(vacation);
-    }
 
     @Override
     public Employee getEmployee(final int id) {
         return repository.read(id);
     }
 
-    @Override
-    public Vacation getVacation(final VacationId id) {
-        return repository.read(id);
-    }
+
 
     @Override
     public void removeEmployee(Integer id) {

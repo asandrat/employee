@@ -1,10 +1,14 @@
 package com.bamboo.employee.service.validationstrategy;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class RemoveEmployeeValidateStrategy implements ValidationStrategy {
+
+@Component("employee_removal_validator")
+final class RemoveEmployeeValidateStrategy implements ValidationStrategy {
 
     private static final Pattern idPattern = Pattern.compile("\\d+");
 

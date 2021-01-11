@@ -2,10 +2,12 @@ package com.bamboo.employee.service.command;
 
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.service.EmployeeService;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-public class AddEmployeeCommand implements Command {
+@Component("employee_addition_command")
+final class AddEmployeeCommand implements Command {
 
     private EmployeeService service;
     private Map<String, String> params;
@@ -20,6 +22,14 @@ public class AddEmployeeCommand implements Command {
     public void execute() {
         Employee employee = createEmployee();
         service.addEmployee(employee);
+    }
+
+    @Override
+    public Command initialize(final Map<String, String> params,
+                              final EmployeeService service) {
+        this.params = params;
+        this.service = service;
+        return this;
     }
 
     private Employee createEmployee() {

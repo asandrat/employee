@@ -1,10 +1,12 @@
 package com.bamboo.employee.service.command;
 
 import com.bamboo.employee.service.EmployeeService;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-public class RemoveEmployeeCommand implements Command {
+@Component("employee_removal_command")
+final class RemoveEmployeeCommand implements Command {
 
     private EmployeeService service;
     private Map<String, String> params;
@@ -19,5 +21,12 @@ public class RemoveEmployeeCommand implements Command {
     public void execute() {
         Integer id = Integer.parseInt(params.get("uniqueId"));
         service.removeEmployee(id);
+    }
+
+    @Override
+    public Command initialize(Map<String, String> params, EmployeeService service) {
+        this.params = params;
+        this.service = service;
+        return this;
     }
 }

@@ -1,10 +1,13 @@
 package com.bamboo.employee.service.validationstrategy;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class AddEmployeeValidateStrategy implements ValidationStrategy {
+@Component("employee_addition_validator")
+final class AddEmployeeValidateStrategy implements ValidationStrategy {
 
     private static final Pattern NAME_PATTERN =
             Pattern.compile("[A-Z][A-Za-z]+");
