@@ -19,17 +19,9 @@ final class AddEmployeeCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute(final Map<String, String> params) {
         Employee employee = createEmployee();
         service.addEmployee(employee);
-    }
-
-    @Override
-    public Command initialize(final Map<String, String> params,
-                              final EmployeeService service) {
-        this.params = params;
-        this.service = service;
-        return this;
     }
 
     private Employee createEmployee() {

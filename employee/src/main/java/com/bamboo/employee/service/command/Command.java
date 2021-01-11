@@ -6,6 +6,5 @@ import com.bamboo.employee.service.EmployeeService;
 import java.util.Map;
 
 public interface Command {
-    void execute();
-    Command initialize(Map<String, String> params, EmployeeService service);
+    void execute(Map<String, String> params);
 }

@@ -36,7 +36,7 @@ public class CommandLineAppRunner implements CommandLineRunner {
             String[] inputArgs = Arrays.stream(args).skip(1).toArray(String[]::new);
             Map<String, String> commandArgs = ArgumentParser.parseData(inputArgs);
             Map<String, String> validatedCommandArgs = validator.validateAndRemoveRedundantArgs(args[0], commandArgs);
-            commandInvoker.executeCommand(args[0], validatedCommandArgs, employeeService);
+            commandInvoker.executeCommand(args[0], validatedCommandArgs);
         } catch (IllegalArgumentException e) {
             System.out.println("Bad input");
             System.exit(64);

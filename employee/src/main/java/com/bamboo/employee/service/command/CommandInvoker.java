@@ -17,10 +17,8 @@ public final class CommandInvoker {
     }
 
     public void executeCommand(final String command,
-                               final Map<String, String> validatedCommandArgs,
-                               final EmployeeService employeeService) {
+                               final Map<String, String> validatedCommandArgs) {
         commands.get(command + "_command")
-                .initialize(validatedCommandArgs, employeeService)
-                .execute();
+                .execute(validatedCommandArgs);
     }
 }

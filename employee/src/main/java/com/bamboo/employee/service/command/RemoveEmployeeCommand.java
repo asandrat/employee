@@ -9,24 +9,15 @@ import java.util.Map;
 final class RemoveEmployeeCommand implements Command {
 
     private EmployeeService service;
-    private Map<String, String> params;
 
-    public RemoveEmployeeCommand(final EmployeeService service,
-                              final Map<String, String> params) {
+    public RemoveEmployeeCommand(final EmployeeService service) {
         this.service = service;
-        this.params = params;
     }
 
     @Override
-    public void execute() {
+    public void execute(final Map<String, String> params) {
         Integer id = Integer.parseInt(params.get("uniqueId"));
         service.removeEmployee(id);
     }
 
-    @Override
-    public Command initialize(Map<String, String> params, EmployeeService service) {
-        this.params = params;
-        this.service = service;
-        return this;
-    }
 }
