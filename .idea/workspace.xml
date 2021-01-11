@@ -4,17 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2b0e5474-30c9-411b-a61a-d3259883c9f0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="2b0e5474-30c9-411b-a61a-d3259883c9f0" name="Default Changelist" comment="read and write binary file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/employees.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/model/Employee.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/model/Employee.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/CustomValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/CustomValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/EmployeeServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/CommandLineAppRunner.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/CommandLineAppRunner.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/model/Employee.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/model/Employee.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/service/CustomValidator.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/service/CustomValidator.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,12 +87,20 @@
       <option name="project" value="LOCAL" />
       <updated>1610365429594</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="read and write binary file">
+      <created>1610378627032</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1610378627032</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="model structures" />
     <MESSAGE value="add validator for arguments" />
-    <option name="LAST_COMMIT_MESSAGE" value="add validator for arguments" />
+    <MESSAGE value="read and write binary file" />
+    <option name="LAST_COMMIT_MESSAGE" value="read and write binary file" />
   </component>
 </project>
