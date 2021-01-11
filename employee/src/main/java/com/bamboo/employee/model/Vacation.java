@@ -44,7 +44,7 @@ public class Vacation {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -62,12 +62,12 @@ public class Vacation {
 
     @Override
     public String toString() {
-        return "Vacation{" +
-                "id=" + id +
-                ", from=" + from +
-                ", to=" + to +
-                ", duration=" + duration +
-                ", status=" + status +
-                '}';
+        return "Vacation{"
+                + "id=" + id
+                + ", from=" + from
+                + ", to=" + to
+                + ", duration=" + duration
+                + ", status=" + status
+                + '}';
     }
 }

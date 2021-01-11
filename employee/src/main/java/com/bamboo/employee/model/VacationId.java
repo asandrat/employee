@@ -6,7 +6,8 @@ public final class VacationId {
     private Integer employeeId;
     private Integer vacationId;
 
-    public VacationId(Integer employeeId, Integer vacationId) {
+    public VacationId(final Integer employeeId,
+                      final Integer vacationId) {
         this.employeeId = employeeId;
         this.vacationId = vacationId;
     }
@@ -16,7 +17,7 @@ public final class VacationId {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
