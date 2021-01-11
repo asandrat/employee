@@ -9,10 +9,8 @@ import java.util.Collection;
 public interface EmployeeRepository {
 
     Collection<Employee> findAll();
-    void create(Employee employee);
-    void create(Vacation vacation);
     Employee read(int employeeId);
-    Vacation read(VacationId vacationId);
+    void create(Employee employee);
 
     void saveAll(Collection<Employee> employees);
 
