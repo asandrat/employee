@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "employees.data",
+      "type": "java.lang.String",
+      "description": "Description for employees.data.",
+      "sourceType": "com.bamboo.employee.service.CustomProperties",
+      "defaultValue": "target/employees.json"
+    }
+  ] }

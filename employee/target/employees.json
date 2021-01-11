@@ -1,0 +1,41 @@
+{
+  "faeed505-202b-46ca-91bd-6fda2258c7ba" : {
+    "uniqueId" : "faeed505-202b-46ca-91bd-6fda2258c7ba",
+    "name" : "Jovana",
+    "surname" : "Arsic",
+    "vacations" : [ ]
+  },
+  "ee287623-5688-498d-843b-af916b09615d" : {
+    "uniqueId" : "ee287623-5688-498d-843b-af916b09615d",
+    "name" : "Djina",
+    "surname" : "Polak",
+    "vacations" : [ {
+      "uniqueId" : "f326dcf3-7be4-4d0b-9299-a37b328bf374",
+      "employeeUniqueId" : "ee287623-5688-498d-843b-af916b09615d",
+      "dateFrom" : "29/01/2021",
+      "dateTo" : "15/02/2021",
+      "duration" : 17,
+      "vacationStatus" : "SUBMITTED"
+    }, {
+      "uniqueId" : "f7d0706d-c658-4808-aefe-af762326b120",
+      "employeeUniqueId" : "ee287623-5688-498d-843b-af916b09615d",
+      "dateFrom" : "29/05/2021",
+      "dateTo" : "15/06/2021",
+      "duration" : 17,
+      "vacationStatus" : "REJECTED"
+    } ]
+  },
+  "23878f93-cdcd-468e-b67f-6d23bf3680f1" : {
+    "uniqueId" : "23878f93-cdcd-468e-b67f-6d23bf3680f1",
+    "name" : "Katarina",
+    "surname" : "Stavljanin",
+    "vacations" : [ {
+      "uniqueId" : "f763fa88-184b-4cc6-9413-0a59f3ff98f8",
+      "employeeUniqueId" : "23878f93-cdcd-468e-b67f-6d23bf3680f1",
+      "dateFrom" : "29/05/2021",
+      "dateTo" : "10/06/2021",
+      "duration" : 12,
+      "vacationStatus" : "APPROVED"
+    } ]
+  }
+}
