@@ -27,7 +27,7 @@ public class CommandLineAppRunner implements CommandLineRunner {
             throw new IllegalArgumentException();
         }
 
-        if (!CustomValidator.validateAction(args[0])) {
+        if (!CustomValidator.validateArguments(args)) {
             throw new IllegalArgumentException();
         }
 

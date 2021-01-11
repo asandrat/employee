@@ -13,12 +13,12 @@ public class Employee {
     private String surname; //required
     private Set<Vacation> vacations;
 
-    public Employee(final int id, final String name, final String surname,
-                    final Set<Vacation> vacations) {
+    public Employee(final int id, final String name, final String surname) {
+        //final Set<Vacation> vacations) {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.vacations = vacations;
+        //this.vacations = vacations;
     }
 
     public int getId() {
