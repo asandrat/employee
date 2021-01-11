@@ -1,7 +1,7 @@
 package com.bamboo.employee.service.command;
 
 public class CommandInvoker {
-    Command command;
+    private Command command;
 
     public void setCommand(final Command command) {
         this.command = command;

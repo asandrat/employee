@@ -1,20 +1,18 @@
 package com.bamboo.employee.service.validationstrategy;
 
-import com.bamboo.employee.service.validationstrategy.ValidationStrategy;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 public class AddEmployeeValidateStrategy implements ValidationStrategy {
 
-    private static final Pattern namePattern =
+    private static final Pattern NAME_PATTERN =
             Pattern.compile("[A-Z][A-Za-z]+");
-    private static final Pattern surnamePattern =
+    private static final Pattern SURNAME_PATTERN =
             Pattern.compile("[A-Z][a-zA-Z-]+");
 
     @Override
-    public Map<String, String> execute(Map<String, String> arguments) {
+    public Map<String, String> execute(final Map<String, String> arguments) {
 
         Map<String, String> result = new HashMap<>();
 
@@ -44,11 +42,11 @@ public class AddEmployeeValidateStrategy implements ValidationStrategy {
     }
 
     private boolean isSurnameValid(final String surname) {
-        return surnamePattern.matcher(surname).matches();
+        return SURNAME_PATTERN.matcher(surname).matches();
     }
 
     private boolean isNameValid(final String name) {
-        return namePattern.matcher(name).matches();
+        return NAME_PATTERN.matcher(name).matches();
     }
 
 
