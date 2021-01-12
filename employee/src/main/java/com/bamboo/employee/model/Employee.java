@@ -1,16 +1,17 @@
 package com.bamboo.employee.model;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class Employee {
 
     private Integer uniqueId;
     private String name;
     private String surname;
-    private List<Vacation> vacations = new ArrayList<>();
+    private Set<Vacation> vacations = new HashSet<>();
 
 
     public Employee(final Integer uniqueId,
@@ -33,11 +34,10 @@ public class Employee {
         return surname;
     }
 
-    public List<Vacation> getVacations() {
+    public Collection<Vacation> getVacations() {
         return vacations;
     }
-
-
+    
     public void setUniqueId(final Integer uniqueId) {
         this.uniqueId = uniqueId;
     }
@@ -52,6 +52,11 @@ public class Employee {
 
     public void addVacation(final Vacation vacation) {
         this.vacations.add(vacation);
+    }
+
+    public void removeVacation(final VacationId id) {
+        Vacation vacation = new Vacation(id);
+        vacations.remove(vacation);
     }
 
     @Override

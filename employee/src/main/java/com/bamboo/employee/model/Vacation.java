@@ -25,6 +25,10 @@ public class Vacation {
         this.status = status;
     }
 
+    public Vacation(VacationId id) {
+        this.id = id;
+    }
+
     public VacationId getId() {
         return id;
     }

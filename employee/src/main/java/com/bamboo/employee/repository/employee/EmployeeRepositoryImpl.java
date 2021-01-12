@@ -1,11 +1,10 @@
-package com.bamboo.employee.repository;
+package com.bamboo.employee.repository.employee;
 
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,5 +58,11 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         } else {
             System.out.println("Successfully removed employee");
         }
+    }
+
+    @Override
+    public void removeEmployeesVacation(VacationId id) {
+        Employee emp = employees.get(id.getEmployeeId());
+        emp.removeVacation(id);
     }
 }

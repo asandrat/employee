@@ -5,8 +5,8 @@ import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
-import com.bamboo.employee.repository.EmployeeRepository;
-import com.bamboo.employee.repository.VacationRepository;
+import com.bamboo.employee.repository.employee.EmployeeRepository;
+import com.bamboo.employee.repository.vacation.VacationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +44,7 @@ public class VacationServiceImpl implements VacationService {
     @Override
     public void removeVacation(VacationId id) {
         vacationRepository.delete(id);
+        employeeRepository.removeEmployeesVacation(id);
     }
 
     @Override

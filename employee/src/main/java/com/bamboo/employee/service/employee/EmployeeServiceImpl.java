@@ -1,7 +1,7 @@
 package com.bamboo.employee.service.employee;
 
 import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.repository.EmployeeRepository;
+import com.bamboo.employee.repository.employee.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

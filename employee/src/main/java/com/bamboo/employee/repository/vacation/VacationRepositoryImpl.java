@@ -1,4 +1,4 @@
-package com.bamboo.employee.repository;
+package com.bamboo.employee.repository.vacation;
 
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
