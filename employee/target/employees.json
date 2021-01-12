@@ -24,18 +24,5 @@
       "duration" : 17,
       "vacationStatus" : "REJECTED"
     } ]
-  },
-  "23878f93-cdcd-468e-b67f-6d23bf3680f1" : {
-    "uniqueId" : "23878f93-cdcd-468e-b67f-6d23bf3680f1",
-    "name" : "Katarina",
-    "surname" : "Stavljanin",
-    "vacations" : [ {
-      "uniqueId" : "f763fa88-184b-4cc6-9413-0a59f3ff98f8",
-      "employeeUniqueId" : "23878f93-cdcd-468e-b67f-6d23bf3680f1",
-      "dateFrom" : "29/05/2021",
-      "dateTo" : "10/06/2021",
-      "duration" : 12,
-      "vacationStatus" : "APPROVED"
-    } ]
   }
 }

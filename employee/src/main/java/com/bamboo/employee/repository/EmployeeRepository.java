@@ -2,11 +2,9 @@ package com.bamboo.employee.repository;
 
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
-import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 
-@Repository
 public interface EmployeeRepository {
     Map<String, Employee> findAll();
 
