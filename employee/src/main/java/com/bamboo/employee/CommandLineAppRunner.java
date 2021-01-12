@@ -1,8 +1,9 @@
 package com.bamboo.employee;
 
 import com.bamboo.employee.service.EmployeeService;
-import com.bamboo.employee.service.InputParser;
-import com.bamboo.employee.service.UserAction;
+import com.bamboo.employee.parser.InputParser;
+import com.bamboo.employee.validator.UserAction;
+import com.bamboo.employee.validator.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import java.util.Map;
 public class CommandLineAppRunner implements CommandLineRunner {
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    Validator validator;
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(CommandLineAppRunner.class);
@@ -35,30 +39,41 @@ public class CommandLineAppRunner implements CommandLineRunner {
 
             switch (action) {
                 case employee_addition:
-                    employeeService.addEmployee(
-                            data.get("name"),
-                            data.get("surname")
-                    );
+                    if (validator.validateEmployeeAddition(data)) {
+                        employeeService.addEmployee(
+                                data.get("name"),
+                                data.get("surname"));
+                    }
                     break;
                 case employee_removal:
-                    employeeService.removeEmployee(data.get("uniqueId"));
+                    if(validator.validateEmployeeRemoval(data)){
+                        employeeService.removeEmployee(data.get("uniqueId"));
+                    }
                     break;
                 case vacation_addition:
-                    employeeService.addVacation(
-                            data.get("employeeUniqueId"),
-                            data.get("dateFrom"),
-                            data.get("dateTo"),
-                            data.get("status")
-                    );
+                    if(validator.validateVacationAddition(data)) {
+                        employeeService.addVacation(
+                                data.get("employeeUniqueId"),
+                                data.get("dateFrom"),
+                                data.get("dateTo"),
+                                data.get("status")
+                        );
+                    }
                     break;
                 case vacation_removal:
-                    employeeService.removeVacation(data.get("uniqueId"));
+                    if (validator.validateVacationRemoval(data)) {
+                        employeeService.removeVacation(data.get("uniqueId"));
+                    }
                     break;
                 case vacation_approval:
-                    employeeService.approveVacation(data.get("uniqueId"));
+                    if (validator.validateVacationStatusChanging(data)) {
+                        employeeService.approveVacation(data.get("uniqueId"));
+                    }
                     break;
                 case vacation_rejection:
-                    employeeService.rejectVacation(data.get("uniqueId"));
+                    if (validator.validateVacationStatusChanging(data)) {
+                        employeeService.rejectVacation(data.get("uniqueId"));
+                    }
                     break;
             }
         } else {

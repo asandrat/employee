@@ -79,7 +79,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 localDateFrom,
                 localDateTo,
                 duration,
-                VacationStatus.valueOf(status)
+                VacationStatus.valueOf(status.toUpperCase())
         );
     }
 }
