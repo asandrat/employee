@@ -3,7 +3,8 @@ package com.bamboo.employee.model;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @NotNull
 public class Employee implements Serializable {
@@ -11,14 +12,12 @@ public class Employee implements Serializable {
     private int id; //required
     private String name; //required
     private String surname; //required
-    private Set<Vacation> vacations;
+    private List<Vacation> vacations;
 
     public Employee(final int id, final String name, final String surname) {
-        //final Set<Vacation> vacations) {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        //this.vacations = vacations;
     }
 
     public int getId() {
@@ -45,11 +44,18 @@ public class Employee implements Serializable {
         this.surname = surname;
     }
 
-    public Set<Vacation> getVacations() {
+    public List<Vacation> getVacations() {
+        if (vacations == null) {
+            vacations = new ArrayList<>();
+        }
         return vacations;
     }
 
-    public void setVacations(final Set<Vacation> vacations) {
-        this.vacations = vacations;
+    public void setVacations(final List<Vacation> vacations) {
+        if (this.vacations.size() == 0) {
+            this.vacations.addAll(vacations);
+        } else {
+            this.vacations = vacations;
+        }
     }
 }

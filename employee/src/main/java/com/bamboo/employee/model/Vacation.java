@@ -2,19 +2,21 @@ package com.bamboo.employee.model;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 @NotNull
-public class Vacation {
+public class Vacation implements Serializable {
     private int id; //required
     private int employeeId; //required
-    private Date dateFrom; //required
-    private Date dateTo; //required
+    private LocalDate dateFrom; //required
+    private LocalDate dateTo; //required
     private int duration; //number of days
     private VacationStatus status; //required
 
-    public Vacation(final int id, final int employeeId, final Date dateFrom,
-                    final Date dateTo, final int duration,
+    public Vacation(final int id, final int employeeId, final LocalDate dateFrom,
+                    final LocalDate dateTo, final int duration,
                     final VacationStatus status) {
         this.id = id;
         this.employeeId = employeeId;
@@ -40,19 +42,19 @@ public class Vacation {
         this.employeeId = employeeId;
     }
 
-    public Date getDateFrom() {
+    public LocalDate getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(final Date dateFrom) {
+    public void setDateFrom(final LocalDate dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public Date getDateTo() {
+    public LocalDate getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(final Date dateTo) {
+    public void setDateTo(final LocalDate dateTo) {
         this.dateTo = dateTo;
     }
 

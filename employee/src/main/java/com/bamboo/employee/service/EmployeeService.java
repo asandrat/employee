@@ -18,8 +18,8 @@ public interface EmployeeService {
 
     void rejectVacation(int id, int employeeId, String status);
 
-    Map<Integer, Employee> findAll(int numberOfObjectsInFile, String fileName);
+    Map<Integer, Employee> findAll();
 
-    int saveAll(Map<Integer, Employee> map, String fileName);
+    void saveAll(Map<Integer, Employee> map);
 
 }
