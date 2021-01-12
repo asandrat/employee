@@ -1,14 +1,14 @@
 package com.bamboo.employee.service.argumentparser;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public final class ArgumentParser {
 
-    private ArgumentParser() {
-    }
-
-    public static Map<String, String> parseData(final String[] args) {
+    public Map<String, String> parseData(final String[] args) {
         Map<String, String> result = new HashMap<>();
         for (String arg : args) {
             String[] fieldNameAndValue = arg.split("=");

@@ -1,9 +1,6 @@
-package com.bamboo.employee.service;
+package com.bamboo.employee.service.employee;
 
 import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationId;
-
 
 public interface EmployeeService {
 

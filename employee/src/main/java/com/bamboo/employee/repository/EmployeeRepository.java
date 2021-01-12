@@ -9,10 +9,14 @@ import java.util.Collection;
 public interface EmployeeRepository {
 
     Collection<Employee> findAll();
+
     Employee read(int employeeId);
+
     void create(Employee employee);
 
     void saveAll(Collection<Employee> employees);
+
+    void addVacationToEmployee(Vacation vacation);
 
     void delete(Integer id);
 }

@@ -1,6 +1,6 @@
 package com.bamboo.employee.service.commandstrategy;
 
-import com.bamboo.employee.service.EmployeeService;
+import com.bamboo.employee.service.employee.EmployeeService;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

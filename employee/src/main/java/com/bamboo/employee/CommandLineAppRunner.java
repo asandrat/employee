@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -20,7 +21,7 @@ public class CommandLineAppRunner implements CommandLineRunner {
             LoggerFactory.getLogger(CommandLineAppRunner.class);
 
     @Autowired
-    private EmployeeService employeeService;
+    private ArgumentParser parser;
     @Autowired
     private Validator validator;
     @Autowired
@@ -35,9 +36,22 @@ public class CommandLineAppRunner implements CommandLineRunner {
     private void runCommand(final String... args) {
         try {
             String[] inputArgs = Arrays.stream(args).skip(1).toArray(String[]::new);
-            Map<String, String> commandArgs = ArgumentParser.parseData(inputArgs);
-            Map<String, String> validatedCommandArgs = validator.validateAndRemoveRedundantArgs(args[0], commandArgs);
-            commandInvoker.executeCommand(args[0], validatedCommandArgs);
+            Map<String, String> commandArgs = parser.parseData(inputArgs);
+            validator.validate(args[0], commandArgs);
+
+//            Map<String, String> emp = new HashMap<>();
+//            emp.put("uniqueId", "1");
+//            emp.put("name", "Petar");
+//            emp.put("surname", "Kosanin");
+//
+//            commandInvoker.executeCommand("employee_addition", emp);
+
+            commandInvoker.executeCommand(args[0], commandArgs);
+
+//            Map<String, String> xs = new HashMap<>();
+//            xs.put("uniqueId", "1");
+//            xs.put("employeeUniqueId", "1");
+//            commandInvoker.executeCommand("vacation_removal", xs);
         } catch (IllegalArgumentException e) {
             System.out.println("Bad input");
             System.exit(64);

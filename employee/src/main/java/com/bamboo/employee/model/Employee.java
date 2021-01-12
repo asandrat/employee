@@ -50,10 +50,6 @@ public class Employee {
         this.surname = surname;
     }
 
-    public void setVacations(final List<Vacation> vacations) {
-        this.vacations = vacations;
-    }
-
     public void addVacation(final Vacation vacation) {
         this.vacations.add(vacation);
     }

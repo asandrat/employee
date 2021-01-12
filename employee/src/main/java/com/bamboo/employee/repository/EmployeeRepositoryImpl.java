@@ -45,6 +45,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
+    public void addVacationToEmployee(Vacation vacation) {
+        Integer employeeId = vacation.getId().getEmployeeId();
+        Employee employee = employees.get(employeeId);
+        employee.addVacation(vacation);
+    }
+
+    @Override
     public void delete(Integer id) {
         Employee e = employees.remove(id);
         if (e == null) {

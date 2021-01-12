@@ -1,6 +1,7 @@
-package com.bamboo.employee.service;
+package com.bamboo.employee.service.vacation;
 
 
+import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.repository.EmployeeRepository;
@@ -12,20 +13,35 @@ import org.springframework.stereotype.Service;
 public class VacationServiceImpl implements VacationService {
 
 
-    private VacationRepository repository;
+    private VacationRepository vacationRepository;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
-    public VacationServiceImpl(VacationRepository repository) {
-        this.repository = repository;
+    public VacationServiceImpl(final VacationRepository vacationRepository,
+                               final EmployeeRepository employeeRepository) {
+        this.vacationRepository = vacationRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
     public void addVacation(final Vacation vacation) {
-        repository.create(vacation);
+        Employee employee = employeeRepository.read(vacation.getId().getEmployeeId());
+        if (employee != null) {
+            vacationRepository.create(vacation);
+//            employee.addVacation(vacation);
+            employeeRepository.addVacationToEmployee(vacation);
+        } else {
+            System.out.println("No such employee to associate vacation with");
+        }
     }
 
     @Override
     public Vacation getVacation(final VacationId id) {
-        return repository.read(id);
+        return vacationRepository.read(id);
+    }
+
+    @Override
+    public void removeVacation(VacationId id) {
+        vacationRepository.delete(id);
     }
 }

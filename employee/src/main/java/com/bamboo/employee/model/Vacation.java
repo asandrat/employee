@@ -1,19 +1,21 @@
 package com.bamboo.employee.model;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
 
 public class Vacation {
     private VacationId id;
-    private LocalDate from;
-    private LocalDate to;
+    private Date from;
+    private Date to;
     private Integer duration;
     private VacationStatus status;
 
+
     public Vacation(final Integer employeeId,
                     final Integer vacationId,
-                    final LocalDate from,
-                    final LocalDate to,
+                    final Date from,
+                    final Date to,
                     final Integer duration,
                     final VacationStatus status) {
         this.id = new VacationId(employeeId, vacationId);
@@ -27,11 +29,11 @@ public class Vacation {
         return id;
     }
 
-    public LocalDate getFrom() {
+    public Date getFrom() {
         return from;
     }
 
-    public LocalDate getTo() {
+    public Date getTo() {
         return to;
     }
 

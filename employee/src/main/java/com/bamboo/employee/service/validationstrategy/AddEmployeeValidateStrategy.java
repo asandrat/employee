@@ -2,7 +2,6 @@ package com.bamboo.employee.service.validationstrategy;
 
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -27,14 +26,6 @@ final class AddEmployeeValidateStrategy implements ValidationStrategy {
         throw new IllegalArgumentException();
     }
 
-    private boolean isUniqueIdValid(final String uniqueId) {
-         try {
-             Integer.parseInt(uniqueId);
-         } catch (NumberFormatException e) {
-             return false;
-         }
-         return true;
-    }
 
     private boolean isSurnameValid(final String surname) {
         return surname != null && SURNAME_PATTERN.matcher(surname).matches();

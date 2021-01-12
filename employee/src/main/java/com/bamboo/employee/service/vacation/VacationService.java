@@ -1,4 +1,4 @@
-package com.bamboo.employee.service;
+package com.bamboo.employee.service.vacation;
 
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
@@ -10,4 +10,5 @@ public interface VacationService {
     Vacation getVacation(VacationId id);
 
 
+    void removeVacation(VacationId id);
 }
