@@ -1,4 +1,4 @@
-package com.bamboo.employee.service.commandexecutionstrategy;
+package com.bamboo.employee.service.commandstrategy;
 
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.service.EmployeeService;
