@@ -3,10 +3,12 @@ package com.bamboo.employee.repository;
 import com.bamboo.employee.model.Employee;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface EmployeeRepository {
 
-    Collection<Employee> findAll();
+    Map<Integer, Employee> findAll(int numberOfObjectsInFile, String fileName);
 
-    void saveAll(Collection<Employee> employees);
+    void saveAll(Map<Integer, Employee> employees, String fileName);
+
 }

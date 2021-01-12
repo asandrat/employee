@@ -4,8 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2b0e5474-30c9-411b-a61a-d3259883c9f0" name="Default Changelist" comment="read and write binary file">
+    <list default="true" id="2b0e5474-30c9-411b-a61a-d3259883c9f0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/EmployeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/EmployeeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/EmployeeRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/EmployeeRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/EmployeeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/EmployeeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/EmployeeServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/CommandLineAppRunner.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/CommandLineAppRunner.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/model/Employee.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/model/Employee.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/repository/EmployeeRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/repository/EmployeeRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/repository/EmployeeRepositoryImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/repository/EmployeeRepositoryImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/service/EmployeeService.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/service/EmployeeService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/service/EmployeeServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/service/EmployeeServiceImpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,13 +108,21 @@
       <option name="project" value="LOCAL" />
       <updated>1610378627032</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="add gitignore">
+      <created>1610379532835</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1610379532835</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="model structures" />
     <MESSAGE value="add validator for arguments" />
     <MESSAGE value="read and write binary file" />
-    <option name="LAST_COMMIT_MESSAGE" value="read and write binary file" />
+    <MESSAGE value="add gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="add gitignore" />
   </component>
 </project>
