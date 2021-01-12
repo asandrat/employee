@@ -39,19 +39,27 @@ public class CommandLineAppRunner implements CommandLineRunner {
             Map<String, String> commandArgs = parser.parseData(inputArgs);
             validator.validate(args[0], commandArgs);
 
-//            Map<String, String> emp = new HashMap<>();
-//            emp.put("uniqueId", "1");
-//            emp.put("name", "Petar");
-//            emp.put("surname", "Kosanin");
-//
-//            commandInvoker.executeCommand("employee_addition", emp);
+            Map<String, String> emp = new HashMap<>();
+            emp.put("uniqueId", "1");
+            emp.put("name", "Petar");
+            emp.put("surname", "Kosanin");
+
+            commandInvoker.executeCommand("employee_addition", emp);
 
             commandInvoker.executeCommand(args[0], commandArgs);
 
-//            Map<String, String> xs = new HashMap<>();
-//            xs.put("uniqueId", "1");
-//            xs.put("employeeUniqueId", "1");
-//            commandInvoker.executeCommand("vacation_removal", xs);
+            Map<String, String> xs = new HashMap<>();
+            xs.put("uniqueId", "1");
+            xs.put("employeeUniqueId", "1");
+
+            commandInvoker.executeCommand("get_employee", xs);
+            commandInvoker.executeCommand("vacation_approval", xs);
+            commandInvoker.executeCommand("vacation_rejection", xs);
+
+            commandInvoker.executeCommand("vacation_removal", xs);
+
+            commandInvoker.executeCommand("get_employee", xs);
+
         } catch (IllegalArgumentException e) {
             System.out.println("Bad input");
             System.exit(64);

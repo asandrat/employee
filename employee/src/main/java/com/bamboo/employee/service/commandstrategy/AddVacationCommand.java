@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 @Component("vacation_addition_command")
-public class AddVacationCommand implements Command {
+final class AddVacationCommand implements Command {
 
     private VacationService service;
 

@@ -73,15 +73,11 @@ public class Employee {
 
     @Override
     public String toString() {
-        String vacations = this.vacations != null
-                ? this.vacations.toString()
-                : "";
-
         return "Employee{"
                 + "uniqueId=" + uniqueId
                 + ", name='" + name
                 + '\'' + ", surname='" + surname
-                + '\'' + ", vacations=" + vacations
+                + '\'' + ", vacations=" + vacations.toString()
                 + '}';
     }
 }

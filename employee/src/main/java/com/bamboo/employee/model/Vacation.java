@@ -45,6 +45,11 @@ public class Vacation {
         return status;
     }
 
+
+    public void setStatus(VacationStatus status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

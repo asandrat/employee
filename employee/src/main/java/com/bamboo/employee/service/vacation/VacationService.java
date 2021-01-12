@@ -9,6 +9,9 @@ public interface VacationService {
 
     Vacation getVacation(VacationId id);
 
-
     void removeVacation(VacationId id);
+
+    void approveVacation(VacationId vacationId);
+
+    void rejectVacation(VacationId vacationId);
 }

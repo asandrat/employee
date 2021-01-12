@@ -2,6 +2,7 @@ package com.bamboo.employee.repository;
 
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
+import com.bamboo.employee.model.VacationStatus;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -35,6 +36,17 @@ public class VacationRepositoryImpl implements VacationRepository {
             System.out.println("No such vacation with id:" + id + " to be removed");
         } else {
             System.out.println("Successfully removed vacation with id:" + id);
+        }
+    }
+
+    @Override
+    public void update(final VacationId vacationId,
+                       final VacationStatus status) {
+        if (vacations.containsKey(vacationId)) {
+            vacations.get(vacationId).setStatus(status);
+            System.out.println("Vacation with id:" + vacationId + " is " + status);
+        } else {
+            System.out.println("No such vacation with id:" + vacationId);
         }
     }
 }

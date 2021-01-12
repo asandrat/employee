@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component("vacation_removal_command")
-public class RemoveVacationCommand implements Command {
+final class RemoveVacationCommand implements Command {
 
     private final VacationService service;
 

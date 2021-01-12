@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component("vacation_addition_validator")
-public class AddVacationValidateStrategy implements ValidationStrategy {
+final class AddVacationValidateStrategy implements ValidationStrategy {
 
     @Override
     public void validate(Map<String, String> arguments) {
