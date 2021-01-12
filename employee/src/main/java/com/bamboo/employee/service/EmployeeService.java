@@ -5,21 +5,21 @@ import com.bamboo.employee.model.Employee;
 import java.util.Map;
 
 public interface EmployeeService {
-    void addEmployee(int id, String name, String surname);
+    void addEmployee(String name, String surname);
 
-    void removeEmployee(int id);
+    void removeEmployee(String id);
 
-    void addVacation(int id, int employeeId, String dateFrom, String dateTo,
+    void addVacation(String id, String employeeId, String dateFrom, String dateTo,
                      String status);
 
-    void removeVacation(int id, int employeeId);
+    void removeVacation(String id, String employeeId);
 
-    void approveVacation(int id, int employeeId, String status);
+    void approveVacation(String id, String employeeId, String status);
 
-    void rejectVacation(int id, int employeeId, String status);
+    void rejectVacation(String id, String employeeId, String status);
 
-    Map<Integer, Employee> findAll();
+    Map<String, Employee> findAll();
 
-    void saveAll(Map<Integer, Employee> map);
+    void saveAll(Map<String, Employee> map);
 
 }

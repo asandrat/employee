@@ -7,18 +7,18 @@ import java.util.Map;
 
 public interface EmployeeRepository {
 
-    Map<Integer, Employee> findAll();
+    Map<String, Employee> findAll();
 
-    void saveAll(Map<Integer, Employee> employees);
+    void saveAll(Map<String, Employee> employees);
 
     void addEmployee(Employee employee);
 
-    Employee findEmployee(int id);
+    Employee findEmployee(String id);
 
-    void removeEmployee(int id);
+    void removeEmployee(String id);
 
-    void addVacationToEmployee(int employeeId, Vacation vacation);
+    void addVacationToEmployee(String employeeId, Vacation vacation);
 
-    void removeVacation(int id, int employeeId);
+    void removeVacation(String id, String employeeId);
 
 }

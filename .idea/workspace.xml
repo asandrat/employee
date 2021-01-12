@@ -4,22 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2b0e5474-30c9-411b-a61a-d3259883c9f0" name="Default Changelist" comment="">
+    <list default="true" id="2b0e5474-30c9-411b-a61a-d3259883c9f0" name="Default Changelist" comment="small changes suggested in PR">
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/employee/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/Action.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/model/Employee.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/model/Employee.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/model/Vacation.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/model/Vacation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/EmployeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/EmployeeRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/EmployeeRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/EmployeeRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/EmployeeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/EmployeeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/EmployeeServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/Action.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/Action.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/CommandLineAppRunner.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/CommandLineAppRunner.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/model/Employee.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/model/Employee.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/model/Vacation.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/model/Vacation.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/repository/EmployeeRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/repository/EmployeeRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/repository/EmployeeRepositoryImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/repository/EmployeeRepositoryImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/service/EmployeeService.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/service/EmployeeService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/service/EmployeeServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/employee/target/classes/com/bamboo/employee/service/EmployeeServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employees.txt" beforeDir="false" afterPath="$PROJECT_DIR$/employees.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,8 +34,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -115,7 +120,21 @@
       <option name="project" value="LOCAL" />
       <updated>1610379532835</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="refactor code">
+      <created>1610450820434</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1610450820434</updated>
+    </task>
+    <task id="LOCAL-00007" summary="implement methods for employee addition, employee removal, vacation addition and vacation removal">
+      <created>1610469525872</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1610469525872</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -123,6 +142,35 @@
     <MESSAGE value="add validator for arguments" />
     <MESSAGE value="read and write binary file" />
     <MESSAGE value="add gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="add gitignore" />
+    <MESSAGE value="refactor code" />
+    <MESSAGE value="implement methods for employee addition, employee removal, vacation addition and vacation removal" />
+    <MESSAGE value="small changes suggested in PR" />
+    <option name="LAST_COMMIT_MESSAGE" value="small changes suggested in PR" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.io.EOFException" package="java.io" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.io.NotSerializableException" package="java.io" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.io.WriteAbortedException" package="java.io" />
+          <option name="timeStamp" value="4" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.io.InvalidClassException" package="java.io" />
+          <option name="timeStamp" value="5" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

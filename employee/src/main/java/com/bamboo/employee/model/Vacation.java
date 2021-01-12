@@ -8,14 +8,14 @@ import java.util.Date;
 
 @NotNull
 public class Vacation implements Serializable {
-    private int id; //required
-    private int employeeId; //required
+    private String id; //required
+    private String employeeId; //required
     private LocalDate dateFrom; //required
     private LocalDate dateTo; //required
     private int duration; //number of days
     private VacationStatus status; //required
 
-    public Vacation(final int id, final int employeeId, final LocalDate dateFrom,
+    public Vacation(final String id, final String employeeId, final LocalDate dateFrom,
                     final LocalDate dateTo, final int duration,
                     final VacationStatus status) {
         this.id = id;
@@ -26,19 +26,19 @@ public class Vacation implements Serializable {
         this.status = status;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(final int id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
-    public int getEmployeeId() {
+    public String getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(final int employeeId) {
+    public void setEmployeeId(final String employeeId) {
         this.employeeId = employeeId;
     }
 

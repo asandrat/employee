@@ -34,31 +34,16 @@ public class CommandLineAppRunner implements CommandLineRunner {
             throw new IllegalArgumentException();
         }
 
-        //map bellow is just to write to file for the first time:
-//        Map<Integer, Employee> map = new HashMap<>();
-//        map.put(1, new Employee(1, "Will", "Smith"));
-//        map.put(2, new Employee(2, "Jennifer", "Aniston"));
-//        map.put(3, new Employee(3, "Lisa", "Kudrow"));
-//        //write to file for the first time: (when file is empty)
-//        employeeService.saveAll(map);
-
-
         //read from file:
-        Map<Integer, Employee> mapRead = employeeService.findAll();
-        for (Integer id : mapRead.keySet()) {
+        Map<String, Employee> mapRead = employeeService.findAll();
+        for (String id : mapRead.keySet()) {
             System.out.println(id + " " + mapRead.get(id).getName() + " " + mapRead.get(id).getSurname());
         }
 
-        //action:
-        //employeeService.addEmployee(4,"Branislav", "Jovanovic");
-        //employeeService.removeEmployee(3);
-//        employeeService.addVacation(1, 1, "2021-03-01", "2021-03-07",
-//         "SUBMITTED");
-        //employeeService.removeVacation(1,1);
-
         System.out.println("Changed map---------------- ");
-        Map<Integer, Employee> mapRead1 = employeeService.findAll();
-        for (Integer id : mapRead1.keySet()) {
+
+        Map<String, Employee> mapRead1 = employeeService.findAll();
+        for (String id : mapRead1.keySet()) {
             System.out.println(id + " " + mapRead1.get(id).getName() + " " + mapRead1.get(id).getSurname());
             if (mapRead1.get(id).getVacations().size() > 0) {
                 System.out.println(mapRead1.get(id).getVacations().get(0).getStatus());

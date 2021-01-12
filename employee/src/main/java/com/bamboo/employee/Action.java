@@ -1,12 +1,12 @@
 package com.bamboo.employee;
 
 public enum Action {
-    employee_addition,
-    employee_removal,
-    vacation_addition,
-    vacation_removal,
-    vacation_approval,
-    vacation_rejection;
+    EMPLOYEE_ADDITION,
+    EMPLOYEE_REMOVAL,
+    VACATION_ADDITION,
+    VACATION_REMOVAL,
+    VACATION_APPROVAL,
+    VACATION_REJECTION;
 
     public static Action fromString(final String text) {
         for (Action action : Action.values()) {

@@ -10,14 +10,13 @@ import java.io.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Repository
 public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Value("${spring.file.name.employees}")
     private String fileName;
 
-    private Map<Integer, Employee> employeeMap;
+    private Map<String, Employee> employeeMap;
 
     @PostConstruct
     public void init() {
@@ -27,9 +26,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
 
     @Override
-    public Map<Integer, Employee> findAll() {
+    public Map<String, Employee> findAll() {
         //read from file
-        Map<Integer, Employee> map = new HashMap<>();
+        Map<String, Employee> map = new HashMap<>();
         try {
             FileInputStream fileInputStream = new FileInputStream(fileName);
             ObjectInputStream objectInputStream =
@@ -39,12 +38,6 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 if (employee == null) {
                     break;
                 } else {
-//                    employee.setVacations(Collections.singletonList(new
-//                    Vacation(
-//                            1, employee.getId(), LocalDate.of(2021, 1, 1),
-//                            LocalDate.of(2021, 1, 7), 7,
-//                            VacationStatus.fromString("SUBMITTED"))));
-                    //System.out.println(employee.getName());
                     map.put(employee.getId(), employee);
                 }
             }
@@ -63,13 +56,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void saveAll(Map<Integer, Employee> employeeMap) {
+    public void saveAll(Map<String, Employee> employeeMap) {
         //write to file
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(fileName);
             ObjectOutputStream objectOutputStream =
                     new ObjectOutputStream(fileOutputStream);
-            for (Integer id : employeeMap.keySet()) {
+            for (String id : employeeMap.keySet()) {
                 objectOutputStream.writeObject(employeeMap.get(id));
             }
             objectOutputStream.writeObject(null);
@@ -87,13 +80,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void removeEmployee(int id) {
+    public void removeEmployee(String id) {
         employeeMap.remove(id);
         saveAll(employeeMap);
     }
 
     @Override
-    public void addVacationToEmployee(int employeeId, Vacation vacation) {
+    public void addVacationToEmployee(String employeeId, Vacation vacation) {
         Employee employee = findEmployee(employeeId);
         //employee.getVacations().add(vacation);
         if (employee == null) {
@@ -108,7 +101,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void removeVacation(int id, int employeeId) {
+    public void removeVacation(String id, String employeeId) {
         Employee employee = findEmployee(id);
         if (employee == null) {
             return;
@@ -125,16 +118,16 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public Employee findEmployee(int id) {
+    public Employee findEmployee(String id) {
         return employeeMap.get(id);
     }
 
-    public Vacation findVacation(int id, int employeeId) {
+    public Vacation findVacation(String id, String employeeId) {
         return employeeMap
                 .get(employeeId)
                 .getVacations()
                 .stream()
-                .filter(vacation -> vacation.getId() == id)
+                .filter(vacation -> vacation.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }

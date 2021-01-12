@@ -9,22 +9,22 @@ import java.util.List;
 @NotNull
 public class Employee implements Serializable {
 
-    private int id; //required
+    private String id; //required
     private String name; //required
     private String surname; //required
     private List<Vacation> vacations;
 
-    public Employee(final int id, final String name, final String surname) {
+    public Employee(final String id, final String name, final String surname) {
         this.id = id;
         this.name = name;
         this.surname = surname;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(final int id) {
+    public void setId(final String id) {
         this.id = id;
     }
 

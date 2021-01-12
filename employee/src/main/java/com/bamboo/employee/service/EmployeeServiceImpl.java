@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -19,29 +20,31 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Override
-    public Map<Integer, Employee> findAll() {
+    public Map<String, Employee> findAll() {
         return employeeRepository.findAll();
     }
 
     @Override
-    public void saveAll(Map<Integer, Employee> map) {
+    public void saveAll(Map<String, Employee> map) {
         //write to file
         employeeRepository.saveAll(map);
     }
 
     @Override
-    public void addEmployee(int id, String name, String surname) {
+    public void addEmployee(String name, String surname) {
+        final String id = UUID.randomUUID().toString();
+        System.out.println("service: "+id);
         Employee employee = new Employee(id, name, surname);
         employeeRepository.addEmployee(employee);
     }
 
     @Override
-    public void removeEmployee(int id) {
+    public void removeEmployee(String id) {
         employeeRepository.removeEmployee(id);
     }
 
     @Override
-    public void addVacation(int id, int employeeId, String dateFromString,
+    public void addVacation(String id, String employeeId, String dateFromString,
                             String dateToString, String status) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
@@ -62,17 +65,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void removeVacation(int id, int employeeId) {
+    public void removeVacation(String id, String employeeId) {
         employeeRepository.removeVacation(id,employeeId);
     }
 
     @Override
-    public void approveVacation(int id, int employeeId, String status) {
+    public void approveVacation(String id, String employeeId, String status) {
 
     }
 
     @Override
-    public void rejectVacation(int id, int employeeId, String status) {
+    public void rejectVacation(String id, String employeeId, String status) {
 
     }
 
