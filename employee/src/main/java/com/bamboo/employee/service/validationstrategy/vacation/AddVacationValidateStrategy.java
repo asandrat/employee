@@ -1,6 +1,7 @@
-package com.bamboo.employee.service.validationstrategy;
+package com.bamboo.employee.service.validationstrategy.vacation;
 
 import com.bamboo.employee.model.VacationStatus;
+import com.bamboo.employee.service.validationstrategy.ValidationStrategy;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -26,7 +27,7 @@ final class AddVacationValidateStrategy implements ValidationStrategy {
         throw new IllegalArgumentException();
     }
 
-    private boolean isValidDate(final String potentialTo) {
+    private boolean isValidDate(final String date) {
         return true;
     }
 

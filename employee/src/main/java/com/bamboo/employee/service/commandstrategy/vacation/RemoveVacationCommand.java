@@ -1,6 +1,7 @@
-package com.bamboo.employee.service.commandstrategy;
+package com.bamboo.employee.service.commandstrategy.vacation;
 
 import com.bamboo.employee.model.VacationId;
+import com.bamboo.employee.service.commandstrategy.Command;
 import com.bamboo.employee.service.vacation.VacationService;
 import org.springframework.stereotype.Component;
 

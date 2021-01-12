@@ -37,7 +37,7 @@ public class Employee {
     public Collection<Vacation> getVacations() {
         return vacations;
     }
-    
+
     public void setUniqueId(final Integer uniqueId) {
         this.uniqueId = uniqueId;
     }

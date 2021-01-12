@@ -1,5 +1,6 @@
-package com.bamboo.employee.service.validationstrategy;
+package com.bamboo.employee.service.validationstrategy.employee;
 
+import com.bamboo.employee.service.validationstrategy.ValidationStrategy;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

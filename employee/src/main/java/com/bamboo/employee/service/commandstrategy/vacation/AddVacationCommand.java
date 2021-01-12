@@ -1,7 +1,8 @@
-package com.bamboo.employee.service.commandstrategy;
+package com.bamboo.employee.service.commandstrategy.vacation;
 
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationStatus;
+import com.bamboo.employee.service.commandstrategy.Command;
 import com.bamboo.employee.service.vacation.VacationService;
 import org.springframework.stereotype.Component;
 
