@@ -15,23 +15,15 @@ final class AddEmployeeValidateStrategy implements ValidationStrategy {
             Pattern.compile("[A-Z][a-zA-Z-]+");
 
     @Override
-    public Map<String, String> execute(final Map<String, String> arguments) {
-
-        Map<String, String> result = new HashMap<>();
-
+    public void validate(final Map<String, String> arguments) {
         String potentialName = arguments.get("name");
         String potentialSurname = arguments.get("surname");
         String potentialId = arguments.get("uniqueId");
         if (isNameValid(potentialName)
                 && isSurnameValid(potentialSurname)
                 && isUniqueIdValid(potentialId)) {
-
-            result.put("name", potentialName);
-            result.put("surname", potentialSurname);
-            result.put("uniqueId", potentialId);
-            return result;
+            return;
         }
-
         throw new IllegalArgumentException();
     }
 

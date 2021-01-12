@@ -13,15 +13,11 @@ final class RemoveEmployeeValidateStrategy implements ValidationStrategy {
     private static final Pattern idPattern = Pattern.compile("\\d+");
 
     @Override
-    public Map<String, String> execute(Map<String, String> arguments) {
-
-        Map<String, String> result = new HashMap<>();
-
+    public void validate(Map<String, String> arguments) {
         String potentialId = arguments.get("uniqueId");
-        if (isValidId(potentialId)) {
-            result.put("uniqueId", potentialId);
+        if (!isValidId(potentialId)) {
+            throw new IllegalArgumentException();
         }
-        return result;
     }
 
     private boolean isValidId(final String potentialId) {
