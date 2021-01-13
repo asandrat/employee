@@ -1,7 +1,8 @@
-package com.bamboo.employee.repository;
+package com.bamboo.employee.repository.employee;
 
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
+import com.bamboo.employee.repository.employee.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -14,13 +15,13 @@ import java.util.Map;
 @Repository
 public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Value("${spring.file.name.employees}")
-    private String fileName;
+    private String fileNameEmployees;
 
     private Map<String, Employee> employeeMap;
 
     @PostConstruct
     public void init() {
-        System.out.println("init: " + fileName);
+        System.out.println("init: " + fileNameEmployees);
         employeeMap = findAll();
     }
 
@@ -30,7 +31,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         //read from file
         Map<String, Employee> map = new HashMap<>();
         try {
-            FileInputStream fileInputStream = new FileInputStream(fileName);
+            FileInputStream fileInputStream = new FileInputStream(fileNameEmployees);
             ObjectInputStream objectInputStream =
                     new ObjectInputStream(fileInputStream);
             while (true) {
@@ -59,7 +60,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public void saveAll(Map<String, Employee> employeeMap) {
         //write to file
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(fileNameEmployees);
             ObjectOutputStream objectOutputStream =
                     new ObjectOutputStream(fileOutputStream);
             for (String id : employeeMap.keySet()) {
@@ -86,50 +87,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void addVacationToEmployee(String employeeId, Vacation vacation) {
-        Employee employee = findEmployee(employeeId);
-        //employee.getVacations().add(vacation);
-        if (employee == null) {
-            return;
-        }
-        if (employee.getVacations().size() == 0) {
-            employee.setVacations(Collections.singletonList(vacation));
-        } else {
-            employee.getVacations().add(vacation);
-        }
-        saveAll(employeeMap);
-    }
-
-    @Override
-    public void removeVacation(String id, String employeeId) {
-        Employee employee = findEmployee(id);
-        if (employee == null) {
-            return;
-        }
-        if (employee.getVacations().size() == 0) {
-            return;
-        }
-        Vacation vacation = findVacation(id, employeeId);
-        if (vacation == null) {
-            return;
-        }
-        employee.getVacations().remove(vacation);
-        saveAll(employeeMap);
-    }
-
-    @Override
     public Employee findEmployee(String id) {
         return employeeMap.get(id);
-    }
-
-    public Vacation findVacation(String id, String employeeId) {
-        return employeeMap
-                .get(employeeId)
-                .getVacations()
-                .stream()
-                .filter(vacation -> vacation.getId().equals(id))
-                .findFirst()
-                .orElse(null);
     }
 
 }
