@@ -1,10 +1,8 @@
 {
   "properties": [
     {
-      "name": "employees.data",
+      "name": "spring.employeeApp.file.path",
       "type": "java.lang.String",
-      "description": "Description for employees.data.",
-      "sourceType": "com.bamboo.employee.service.CustomProperties",
-      "defaultValue": "target/employees.json"
+      "description": "Description for spring.employeeApp.file.path."
     }
   ] }

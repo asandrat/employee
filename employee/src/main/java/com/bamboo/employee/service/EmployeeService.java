@@ -11,9 +11,10 @@ public interface EmployeeService {
             String dateTo,
             String status);
 
-    void removeVacation(String vacationId);
+    void removeVacation(String vacationId, String employeeUniqueId);
 
-    void approveVacation(String vacationId);
+    void approveVacation(String vacationId, String employeeUniqueId);
 
-    void rejectVacation(String vacationId);
+    void rejectVacation(String vacationId, String employeeUniqueId);
+
 }

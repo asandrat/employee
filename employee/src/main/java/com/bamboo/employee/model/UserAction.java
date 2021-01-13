@@ -1,4 +1,4 @@
-package com.bamboo.employee.validator;
+package com.bamboo.employee.model;
 
 import java.util.Arrays;
 

@@ -17,4 +17,10 @@ public interface EmployeeRepository {
     void deleteEmployee(String employee);
 
     void addVacationToEmployee(String employeeId, Vacation vacation);
+
+    void removeVacation(String vacationId, String employeeUniqueId);
+
+    void approveVacation(String vacationId, String employeeUniqueId);
+
+    void rejectVacation(String vacationId, String employeeUniqueId);
 }

@@ -1,64 +1,19 @@
 package com.bamboo.employee.validator;
 
-import com.bamboo.employee.model.VacationStatus;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 import java.util.Map;
 
 @Component
-public class Validator {
-    public boolean validateEmployeeAddition(Map<String, String> userData) {
+public final class Validator {
 
-        return userData.size() == 2
-                && Arrays.stream(new String[]{"name", "surname"})
-                .allMatch(userData::containsKey);
+    private final Map<String, AbstractValidator> validatorMap;
+
+    public Validator(Map<String, AbstractValidator> validatorMap) {
+        this.validatorMap = validatorMap;
     }
 
-    public boolean validateEmployeeRemoval(Map<String, String> userData) {
-        return userData.size() == 1
-                && userData.containsKey("uniqueId");
+    public boolean validate(String action, Map<String, String> userData) {
+        return validatorMap.get(action).validate(userData);
     }
-
-    public boolean validateVacationAddition(Map<String, String> userData) {
-        LocalDate dateFrom;
-        LocalDate dateTo;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        try {
-            dateFrom = LocalDate.parse(userData.get("dateFrom"), formatter);
-            dateTo = LocalDate.parse(userData.get("dateTo"), formatter);
-        } catch (DateTimeParseException e) {
-            System.out.println("Date must be in format dd/MM/yyyy");
-            return false;
-        }
-
-        return userData.size() == 4
-                && Arrays.stream(new String[]{
-                        "employeeUniqueId", "dateFrom", "dateTo", "status"
-                })
-                .allMatch(userData::containsKey)
-                && dateFrom.isBefore(dateTo)
-                && Arrays.stream(VacationStatus.values())
-                .anyMatch(status ->
-                        status.name().equalsIgnoreCase(userData.get("status"))
-                );
-    }
-
-    public boolean validateVacationRemoval(Map<String, String> userData) {
-
-        return userData.size() == 1
-                && userData.containsKey("uniqueId");
-    }
-
-    public boolean validateVacationStatusChanging(Map<String, String> userData) {
-
-        return userData.size() == 2
-                && Arrays.stream(new String[]{"uniqueId", "employeeUniqueId"})
-                .allMatch(userData::containsKey);
-    }
-
-
 }

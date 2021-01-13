@@ -4,7 +4,6 @@ import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationStatus;
 import com.bamboo.employee.repository.EmployeeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -14,8 +13,13 @@ import java.util.UUID;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    @Autowired
-    private EmployeeRepository employeeRepository;
+
+
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
 
     @Override
     public void addEmployee(String name, String surname) {
@@ -35,23 +39,23 @@ public class EmployeeServiceImpl implements EmployeeService {
             String dateTo,
             String status
     ) {
-        Vacation vacation = createVacation(employeeId, dateFrom, dateTo, status);
+        Vacation vacation = createVacation(dateFrom, dateTo, status);
         employeeRepository.addVacationToEmployee(employeeId, vacation);
     }
 
     @Override
-    public void removeVacation(String vacationId) {
-
+    public void removeVacation(String vacationId, String employeeUniqueId) {
+        employeeRepository.removeVacation(vacationId, employeeUniqueId);
     }
 
     @Override
-    public void approveVacation(String vacationId) {
-
+    public void approveVacation(String vacationId, String employeeUniqueId) {
+        employeeRepository.approveVacation(vacationId, employeeUniqueId);
     }
 
     @Override
-    public void rejectVacation(String vacationId) {
-
+    public void rejectVacation(String vacationId, String employeeUniqueId) {
+        employeeRepository.rejectVacation(vacationId, employeeUniqueId);
     }
 
     private Employee createEmployee(String name, String surname) {
@@ -60,7 +64,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     private Vacation createVacation(
-            String employeeId,
             String dateFrom,
             String dateTo,
             String status
@@ -75,7 +78,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return new Vacation(
                 vacationId,
-                employeeId,
                 localDateFrom,
                 localDateTo,
                 duration,

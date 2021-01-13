@@ -9,13 +9,13 @@ public class Employee {
     private String surname;
     private List<Vacation> vacations;
 
+    public Employee() { }
+
     public Employee(String uniqueId, String name, String surname) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.surname = surname;
     }
-
-    public Employee() { }
 
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
@@ -45,11 +45,19 @@ public class Employee {
         this.vacations = vacations;
     }
 
-    public List<Vacation> getVacations() {
+    public void addVacation(Vacation vacation) {
         if (vacations == null) {
             vacations = new ArrayList<>();
         }
+        vacations.add(vacation);
+    }
+
+    public List<Vacation> getVacations() {
         return vacations;
+    }
+
+    public void removeVacation(Vacation vacation) {
+        vacations.remove(vacation);
     }
 
 }

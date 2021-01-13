@@ -1,9 +1,14 @@
 package com.bamboo.employee.repository;
 
+import com.bamboo.employee.custom.exception.EmployeeFileNotFoundException;
+import com.bamboo.employee.custom.exception.EmployeeNotFoundException;
+import com.bamboo.employee.custom.exception.EmployeeStorageException;
+import com.bamboo.employee.custom.exception.VacationNotFoundException;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
@@ -14,9 +19,16 @@ import java.util.Map;
 @Repository
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
-    private Map<String, Employee> employeeList;
+    private final String fileName;
 
-    public EmployeeRepositoryImpl() {
+    private Map<String, Employee> employeeList;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+
+    public EmployeeRepositoryImpl(
+            @Value("${spring.employeeApp.file.path}") String fileName
+    ) {
+        this.fileName = fileName;
         employeeList = findAll();
         if (employeeList == null) {
             employeeList = new HashMap<>();
@@ -25,15 +37,16 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public Map<String, Employee> findAll() {
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             employeeList = objectMapper.readValue(
-                    new File("target/employees.json"),
+                    new File(fileName),
                     new TypeReference<Map<String, Employee>>() {
                     }
             );
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new EmployeeFileNotFoundException(
+                    "Could not read employees from file " + fileName, e
+            );
         }
         return employeeList;
     }
@@ -41,14 +54,15 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public void saveAll(Map<String, Employee> employees) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writerWithDefaultPrettyPrinter()
                     .writeValue(
-                    new File("target/employees.json"),
+                    new File(fileName),
                     employeeList
             );
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new EmployeeStorageException(
+                    "Could not save changes to file " + fileName, e
+            );
         }
     }
 
@@ -60,7 +74,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public Employee findEmployee(String uniqueId) {
-        return employeeList.get(uniqueId);
+        Employee employee = employeeList.get(uniqueId);
+        if (employee == null) {
+            throw new EmployeeNotFoundException(
+                    "Could not find employee with id: " + uniqueId
+            );
+        }
+        return employee;
     }
 
     @Override
@@ -72,7 +92,42 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public void addVacationToEmployee(String employeeId, Vacation vacation) {
         Employee employee = findEmployee(employeeId);
-        employee.getVacations().add(vacation);
+        employee.addVacation(vacation);
         saveAll(employeeList);
+    }
+
+    @Override
+    public void removeVacation(String vacationId, String employeeUniqueId) {
+        Employee employee = findEmployee(employeeUniqueId);
+        Vacation vacation = findVacation(employee, vacationId);
+        employee.removeVacation(vacation);
+        saveAll(employeeList);
+    }
+
+    @Override
+    public void approveVacation(String vacationId, String employeeUniqueId) {
+        Employee employee = findEmployee(employeeUniqueId);
+        Vacation vacation = findVacation(employee, vacationId);
+        vacation.approveRequest();
+        saveAll(employeeList);
+    }
+
+    @Override
+    public void rejectVacation(String vacationId, String employeeUniqueId) {
+        Employee employee = findEmployee(employeeUniqueId);
+        Vacation vacation = findVacation(employee, vacationId);
+        vacation.rejectRequest();
+        saveAll(employeeList);
+    }
+
+    private Vacation findVacation(Employee employee, String vacationId) {
+        return employee.getVacations().stream()
+                .filter(
+                        vacation -> vacation.getUniqueId().equals(vacationId)
+                ).findFirst()
+                .orElseThrow(() -> new VacationNotFoundException(
+                        "Could not find vacation with id " + vacationId
+                                + "for the given employee"
+                ));
     }
 }
