@@ -12,7 +12,7 @@ final class AddEmployeeValidateStrategy implements ValidationStrategy {
     private static final Pattern NAME_PATTERN =
             Pattern.compile("[A-Z][A-Za-z]+");
     private static final Pattern SURNAME_PATTERN =
-            Pattern.compile("[A-Z][a-zA-Z-]+");
+            Pattern.compile("[A-Z][a-zA-Z']+");
 
     @Override
     public void validate(final Map<String, String> arguments) {
