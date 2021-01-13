@@ -1,5 +1,6 @@
 package com.bamboo.employee.service;
 
+import com.bamboo.employee.InputParser;
 import com.bamboo.employee.model.VacationStatus;
 
 import java.text.ParseException;
@@ -35,12 +36,12 @@ public class CustomValidator {
     }
 
     private static boolean validateVacationRejectionAction(List<String> args) {
-        if (args.size() != 3) {
+        if (args.size() != 2) {
             return false;
         }
-        Map<String, String> mapKeyValueArguments = argumentsMap(args);
+        Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);
         if (!mapKeyValueArguments.keySet().containsAll(Arrays.asList(
-                "id", "employeeId", "status"))) {
+                "id", "status"))) {
             return false;
         }
         //vacation status check: status should be REJECTED
@@ -54,12 +55,12 @@ public class CustomValidator {
     }
 
     private static boolean validateVacationApprovalAction(List<String> args) {
-        if (args.size() != 3) {
+        if (args.size() != 2) {
             return false;
         }
-        Map<String, String> mapKeyValueArguments = argumentsMap(args);
+        Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);
         if (!mapKeyValueArguments.keySet().containsAll(Arrays.asList(
-                "id", "employeeId", "status"))) {
+                "id", "status"))) {
             return false;
         }
         //vacation status check: status should be APPROVED
@@ -73,23 +74,22 @@ public class CustomValidator {
     }
 
     private static boolean validateVacationRemovalAction(List<String> args) {
-        if (args.size() != 2) {
+        if (args.size() != 1) {
             return false;
         }
-        Map<String, String> mapKeyValueArguments = argumentsMap(args);
+        Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);
         //to do: check if vacationId is present in employee
 
-        return mapKeyValueArguments.keySet().containsAll(Arrays.asList(
-                "id", "employeeId"));
+        return mapKeyValueArguments.containsKey("id");
     }
 
     private static boolean validateVacationAdditionAction(List<String> args) {
-        if (args.size() != 5) {
+        if (args.size() != 4) {
             return false;
         }
-        Map<String, String> mapKeyValueArguments = argumentsMap(args);
+        Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);
         if (!mapKeyValueArguments.keySet().containsAll(Arrays.asList(
-                "id", "employeeId", "dateFrom", "dateTo", "status"))) {
+                "employeeId", "dateFrom", "dateTo", "status"))) {
             return false;
         }
 
@@ -120,29 +120,20 @@ public class CustomValidator {
         if (args.size() != 1) {
             return false;
         }
-        Map<String, String> mapKeyValueArguments = argumentsMap(args);
+        Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);
 
         return mapKeyValueArguments.containsKey("id");
     }
 
     private static boolean validateEmployeeAdditionAction(List<String> args) {
-        if (args.size() != 3) {
+        if (args.size() != 2) {
             return false;
         }
-        Map<String, String> mapKeyValueArguments = argumentsMap(args);
+        Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);
 
         //if map contains all keys it is valid form
         return mapKeyValueArguments.keySet().containsAll(Arrays.asList(
-                "id", "name", "surname"));
-    }
-
-    private static Map<String, String> argumentsMap(List<String> args) {
-        Map<String, String> keyValueArguments = new HashMap<>();
-        for (String arg : args) {
-            String[] keyValue = arg.split("=");
-            keyValueArguments.put(keyValue[0], keyValue[1]);
-        }
-        return keyValueArguments;
+                "name", "surname"));
     }
 
 }

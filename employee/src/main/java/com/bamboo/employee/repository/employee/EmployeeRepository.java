@@ -1,4 +1,4 @@
-package com.bamboo.employee.repository;
+package com.bamboo.employee.repository.employee;
 
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
@@ -17,8 +17,5 @@ public interface EmployeeRepository {
 
     void removeEmployee(String id);
 
-    void addVacationToEmployee(String employeeId, Vacation vacation);
-
-    void removeVacation(String id, String employeeId);
 
 }

@@ -1,8 +1,8 @@
 package com.bamboo.employee;
 
-import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.service.CustomValidator;
-import com.bamboo.employee.service.EmployeeService;
+import com.bamboo.employee.service.employee.EmployeeService;
+import com.bamboo.employee.service.vacation.VacationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +10,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class CommandLineAppRunner implements CommandLineRunner {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private VacationService vacationService;
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(CommandLineAppRunner.class);
@@ -34,20 +39,37 @@ public class CommandLineAppRunner implements CommandLineRunner {
             throw new IllegalArgumentException();
         }
 
-        //read from file:
-        Map<String, Employee> mapRead = employeeService.findAll();
-        for (String id : mapRead.keySet()) {
-            System.out.println(id + " " + mapRead.get(id).getName() + " " + mapRead.get(id).getSurname());
-        }
+        Action action = Action.fromString(args[0]);
+        System.out.println(action);
 
-        System.out.println("Changed map---------------- ");
+        List<String> arguments =
+                Arrays.stream(args).skip(1).collect(Collectors.toList());
 
-        Map<String, Employee> mapRead1 = employeeService.findAll();
-        for (String id : mapRead1.keySet()) {
-            System.out.println(id + " " + mapRead1.get(id).getName() + " " + mapRead1.get(id).getSurname());
-            if (mapRead1.get(id).getVacations().size() > 0) {
-                System.out.println(mapRead1.get(id).getVacations().get(0).getStatus());
-            }
+        Map<String, String> data = InputParser.parseInput(arguments);
+
+
+        switch (action) {
+            case EMPLOYEE_ADDITION:
+                employeeService.addEmployee(data.get("name"), data.get(
+                        "surname"));
+                break;
+            case EMPLOYEE_REMOVAL:
+                employeeService.removeEmployee(data.get("id"));
+                break;
+            case VACATION_ADDITION:
+                vacationService.addVacation(
+                        data.get("employeeId"), data.get("dateFrom"),
+                        data.get("dateTo"), data.get("status"));
+                break;
+            case VACATION_REMOVAL:
+                vacationService.removeVacation(data.get("id"));
+                break;
+            case VACATION_APPROVAL:
+                vacationService.approveVacation(data.get("id"));
+                break;
+            case VACATION_REJECTION:
+                vacationService.rejectVacation(data.get("id"));
+                break;
         }
     }
 }
