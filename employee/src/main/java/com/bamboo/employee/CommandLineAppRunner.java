@@ -42,23 +42,21 @@ public class CommandLineAppRunner implements CommandLineRunner {
         }
 
         Action action = Action.fromString(args[0]);
-        System.out.println(action);
 
         List<String> arguments = Arrays.stream(args)
                 .skip(1).collect(Collectors.toList());
-        arguments.forEach(System.out::println);
 
-        System.out.println("MAPA:-----------------");
 
         Map<String, String> data = InputParser.parseInput(arguments);
-        data.entrySet().forEach(System.out::println);
 
         //read from file:
         Map<String, Employee> mapRead = employeeService.findAll();
-        System.out.println("read from file first time:*******************");
-        for (String id : mapRead.keySet()) {
-            System.out.println(id + " " + mapRead.get(id).getName() + " " +
-                    mapRead.get(id).getSurname());
+        if (mapRead.size() > 0) {
+            System.out.println("read from file first time:*******************");
+            for (String id : mapRead.keySet()) {
+                System.out.println(id + " " + mapRead.get(id).getName() + " " +
+                        mapRead.get(id).getSurname());
+            }
         }
 
         switch (action) {
@@ -83,17 +81,6 @@ public class CommandLineAppRunner implements CommandLineRunner {
             case VACATION_REJECTION:
                 vacationService.rejectVacation(data.get("id"));
                 break;
-        }
-
-
-        System.out.println("Changed map---------------- ");
-
-        Map<String, Vacation> mapVacation = vacationService.findAll();
-        for (String id : mapVacation.keySet()) {
-            System.out.println(mapRead
-                    .get(mapVacation.get(id).getEmployeeId()).getName()
-                    + "'s vacation:");
-            System.out.println(id + " " + mapVacation.get(id).getStatus());
         }
     }
 }

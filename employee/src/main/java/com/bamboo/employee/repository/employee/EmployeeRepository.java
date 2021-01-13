@@ -3,6 +3,8 @@ package com.bamboo.employee.repository.employee;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 public interface EmployeeRepository {
@@ -16,6 +18,8 @@ public interface EmployeeRepository {
     Employee findEmployee(String id);
 
     void removeEmployee(String id);
+
+    boolean isFileEmpty(File file) throws IOException;
 
 
 }

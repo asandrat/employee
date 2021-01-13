@@ -30,6 +30,10 @@ public class VacationRepositoryImpl implements VacationRepository {
         try {
             FileInputStream fileInputStream =
                     new FileInputStream(fileNameVacations);
+            if (isFileEmpty(new File(fileNameVacations))) {
+                System.out.println("vacations.txt is empty");
+                return map;
+            }
             ObjectInputStream objectInputStream =
                     new ObjectInputStream(fileInputStream);
             while (true) {
@@ -42,14 +46,8 @@ public class VacationRepositoryImpl implements VacationRepository {
             }
         } catch (EOFException eofException) {
             eofException.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (WriteAbortedException writeAbortedException) {
-            writeAbortedException.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("Cannot read vacations file");
         }
         return map;
     }
@@ -107,5 +105,11 @@ public class VacationRepositoryImpl implements VacationRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean isFileEmpty(File file) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        return br.readLine() == null;
     }
 }

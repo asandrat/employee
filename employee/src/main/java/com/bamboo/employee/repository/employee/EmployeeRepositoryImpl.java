@@ -1,14 +1,11 @@
 package com.bamboo.employee.repository.employee;
 
 import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.repository.employee.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +28,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         //read from file
         Map<String, Employee> map = new HashMap<>();
         try {
-            FileInputStream fileInputStream = new FileInputStream(fileNameEmployees);
+            FileInputStream fileInputStream =
+                    new FileInputStream(fileNameEmployees);
+            if (isFileEmpty(new File(fileNameEmployees))) {
+                System.out.println("employees.txt is empty");
+                return map;
+            }
             ObjectInputStream objectInputStream =
                     new ObjectInputStream(fileInputStream);
             while (true) {
@@ -44,14 +46,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             }
         } catch (EOFException eofException) {
             eofException.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (WriteAbortedException writeAbortedException) {
-            writeAbortedException.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("Cannot read employees file");
         }
         return map;
     }
@@ -60,7 +56,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public void saveAll(Map<String, Employee> employeeMap) {
         //write to file
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(fileNameEmployees);
+            FileOutputStream fileOutputStream =
+                    new FileOutputStream(fileNameEmployees);
             ObjectOutputStream objectOutputStream =
                     new ObjectOutputStream(fileOutputStream);
             for (String id : employeeMap.keySet()) {
@@ -89,6 +86,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public Employee findEmployee(String id) {
         return employeeMap.get(id);
+    }
+
+    @Override
+    public boolean isFileEmpty(File file) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        return br.readLine() == null;
     }
 
 }
