@@ -15,8 +15,8 @@ public class CustomValidator {
     }
 
     public static boolean validateArguments(String[] args) {
-        List<String> argsWithoutFirst =
-                Arrays.stream(args).skip(1).collect(Collectors.toList());
+        String[] argsWithoutFirst =
+                Arrays.stream(args).skip(1).toArray(String[]::new);
         switch (args[0]) {
             case "employee_addition":
                 return validateEmployeeAdditionAction(argsWithoutFirst);
@@ -35,8 +35,8 @@ public class CustomValidator {
         }
     }
 
-    private static boolean validateVacationRejectionAction(List<String> args) {
-        if (args.size() != 2) {
+    private static boolean validateVacationRejectionAction(String[] args) {
+        if (args.length != 2) {
             return false;
         }
         Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);
@@ -54,8 +54,8 @@ public class CustomValidator {
                 .orElse(false);
     }
 
-    private static boolean validateVacationApprovalAction(List<String> args) {
-        if (args.size() != 2) {
+    private static boolean validateVacationApprovalAction(String[] args) {
+        if (args.length != 2) {
             return false;
         }
         Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);
@@ -73,8 +73,8 @@ public class CustomValidator {
                 .orElse(false);
     }
 
-    private static boolean validateVacationRemovalAction(List<String> args) {
-        if (args.size() != 1) {
+    private static boolean validateVacationRemovalAction(String[] args) {
+        if (args.length != 1) {
             return false;
         }
         Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);
@@ -83,8 +83,8 @@ public class CustomValidator {
         return mapKeyValueArguments.containsKey("id");
     }
 
-    private static boolean validateVacationAdditionAction(List<String> args) {
-        if (args.size() != 4) {
+    private static boolean validateVacationAdditionAction(String[] args) {
+        if (args.length != 4) {
             return false;
         }
         Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);
@@ -116,8 +116,8 @@ public class CustomValidator {
                 .orElse(false);
     }
 
-    private static boolean validateEmployeeRemovalAction(List<String> args) {
-        if (args.size() != 1) {
+    private static boolean validateEmployeeRemovalAction(String[] args) {
+        if (args.length != 1) {
             return false;
         }
         Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);
@@ -125,8 +125,8 @@ public class CustomValidator {
         return mapKeyValueArguments.containsKey("id");
     }
 
-    private static boolean validateEmployeeAdditionAction(List<String> args) {
-        if (args.size() != 2) {
+    private static boolean validateEmployeeAdditionAction(String[] args) {
+        if (args.length != 2) {
             return false;
         }
         Map<String, String> mapKeyValueArguments = InputParser.parseInput(args);

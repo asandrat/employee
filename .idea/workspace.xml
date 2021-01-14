@@ -4,14 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2b0e5474-30c9-411b-a61a-d3259883c9f0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="2b0e5474-30c9-411b-a61a-d3259883c9f0" name="Default Changelist" comment="add strategy design pattern">
+      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/ActionExecutor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/AddEmployeeCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/AddVacationCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/ApproveVacationCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/CommandLineArgument.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/RejectVacationCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/RemoveEmployeeCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/RemoveVacationCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/employee/EmployeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/employee/EmployeeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/employee/EmployeeRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/employee/EmployeeRepositoryImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/vacation/VacationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/vacation/VacationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/vacation/VacationRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/repository/vacation/VacationRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/InputParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/InputParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/CustomValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/CustomValidator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employees.txt" beforeDir="false" afterPath="$PROJECT_DIR$/employees.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vacations.txt" beforeDir="false" afterPath="$PROJECT_DIR$/vacations.txt" afterDir="false" />
     </list>
@@ -61,7 +66,7 @@
     <configuration name="EmployeeApplication" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.bamboo.employee.EmployeeApplication" />
       <module name="employee" />
-      <option name="PROGRAM_PARAMETERS" value="vacation_rejection id=9ba727d0-4fd7-43ae-9620-8415b3099f98 status=REJECTED" />
+      <option name="PROGRAM_PARAMETERS" value="employee_removal id=68ee7750-8ca5-437e-ac1b-9425f2638321" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -156,7 +161,8 @@
     <MESSAGE value="implement methods for employee addition, employee removal, vacation addition and vacation removal" />
     <MESSAGE value="small changes suggested in PR" />
     <MESSAGE value="create separate services, repositories and files for employee and vacation" />
-    <option name="LAST_COMMIT_MESSAGE" value="create separate services, repositories and files for employee and vacation" />
+    <MESSAGE value="add strategy design pattern" />
+    <option name="LAST_COMMIT_MESSAGE" value="add strategy design pattern" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

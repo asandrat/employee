@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class InputParser {
 
-    public static Map<String, String> parseInput(List<String> arguments) {
+    public static Map<String, String> parseInput(String[] arguments) {
         Map<String, String> result = new HashMap<>();
         for (String argument : arguments) {
             String[] keyValue = argument.split("=");
