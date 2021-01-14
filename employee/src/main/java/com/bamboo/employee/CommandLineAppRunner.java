@@ -2,7 +2,6 @@ package com.bamboo.employee;
 
 import com.bamboo.employee.service.command.ActionExecutor;
 import com.bamboo.employee.service.validator.CustomValidator;
-import com.bamboo.employee.service.validator.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
