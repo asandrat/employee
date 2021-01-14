@@ -4,21 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2b0e5474-30c9-411b-a61a-d3259883c9f0" name="Default Changelist" comment="add strategy design pattern">
-      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/ActionExecutor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/AddEmployeeCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/AddVacationCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/ApproveVacationCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/CommandLineArgument.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/RejectVacationCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/RemoveEmployeeCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/command/RemoveVacationCommand.java" afterDir="false" />
+    <list default="true" id="2b0e5474-30c9-411b-a61a-d3259883c9f0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/InputParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/InputParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/CustomValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/CustomValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/employees.txt" beforeDir="false" afterPath="$PROJECT_DIR$/employees.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vacations.txt" beforeDir="false" afterPath="$PROJECT_DIR$/vacations.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/CustomValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/service/validator/CustomValidator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +55,7 @@
     <configuration name="EmployeeApplication" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.bamboo.employee.EmployeeApplication" />
       <module name="employee" />
-      <option name="PROGRAM_PARAMETERS" value="employee_removal id=68ee7750-8ca5-437e-ac1b-9425f2638321" />
+      <option name="PROGRAM_PARAMETERS" value="employee_removal id=06a54ebc-5d1e-43d3-b399-35fbe602af84" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -149,7 +138,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610550341433</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="add strategy design pattern">
+      <created>1610648924607</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1610648924607</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

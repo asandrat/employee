@@ -31,16 +31,6 @@ public class CommandLineAppRunner implements CommandLineRunner {
         LOGGER.info("Application context started with command line arguments: "
                 + Arrays.toString(args));
 
-        //if (UserAction.isValid(args[0]) && validator.validate(args[0],
-        // data)) {
-        //            processor.process(args[0], data);
-        //        }
-        //        else {
-        //            throw new IllegalArgumentException("Parameters are not
-        //            valid");
-        //        }
-
-
         String[] arguments = Arrays.stream(args)
                 .skip(1).toArray(String[]::new);
 
