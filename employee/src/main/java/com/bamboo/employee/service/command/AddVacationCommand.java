@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component("vacation_addition_processor")
+@Component
 public class AddVacationCommand implements Command {
 
     private final EmployeeService employeeService;
@@ -22,5 +22,10 @@ public class AddVacationCommand implements Command {
                 data.get("dateTo"),
                 data.get("status")
         );
+    }
+
+    @Override
+    public String getAction() {
+        return "vacation_addition";
     }
 }

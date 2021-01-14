@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component("employee_removal_processor")
+@Component
 public class RemoveEmployeeCommand implements Command {
 
     private final EmployeeService employeeService;
@@ -17,5 +17,10 @@ public class RemoveEmployeeCommand implements Command {
     @Override
     public void execute(Map<String, String> data) {
         employeeService.removeEmployee(data.get("uniqueId"));
+    }
+
+    @Override
+    public String getAction() {
+        return "employee_removal";
     }
 }

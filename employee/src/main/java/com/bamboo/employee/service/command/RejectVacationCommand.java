@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component("vacation_rejection_processor")
+@Component
 public class RejectVacationCommand implements Command {
 
     private final EmployeeService employeeService;
@@ -20,5 +20,10 @@ public class RejectVacationCommand implements Command {
                 data.get("uniqueId"),
                 data.get("employeeUniqueId")
         );
+    }
+
+    @Override
+    public String getAction() {
+        return "vacation_rejection";
     }
 }

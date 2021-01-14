@@ -36,7 +36,10 @@ public class VacationValidator {
             VacationStatus newStatus
     ) {
         VacationStatus currentStatus = vacation.getVacationStatus();
-        List<VacationStatus> validStates = VALID_TRANSITIONS.get(currentStatus);
+        List<VacationStatus> validStates = VALID_TRANSITIONS.getOrDefault(
+                currentStatus,
+                Collections.emptyList()
+        );
         if (!validStates.contains(newStatus)) {
             throw new InvalidStateTransitionException(
                     "Could not transfer from state " + currentStatus +

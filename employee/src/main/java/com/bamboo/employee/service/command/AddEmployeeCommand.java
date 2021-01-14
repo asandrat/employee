@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component("employee_addition_processor")
+@Component
 public class AddEmployeeCommand implements Command {
 
     private final EmployeeService employeeService;
@@ -19,5 +19,10 @@ public class AddEmployeeCommand implements Command {
         employeeService.addEmployee(
                 data.get("name"),
                 data.get("surname"));
+    }
+
+    @Override
+    public String getAction() {
+        return "employee_addition";
     }
 }

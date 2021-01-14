@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component("vacation_removal_processor")
+@Component
 public class RemoveVacationCommand implements Command {
 
     private final EmployeeService employeeService;
@@ -20,5 +20,10 @@ public class RemoveVacationCommand implements Command {
                 data.get("uniqueId"),
                 data.get("employeeUniqueId")
         );
+    }
+
+    @Override
+    public String getAction() {
+        return "vacation_removal";
     }
 }
