@@ -16,9 +16,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     private final EmployeeRepository employeeRepository;
+    private final VacationValidator vacationValidator;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(
+            EmployeeRepository employeeRepository,
+            VacationValidator vacationValidator
+    ) {
         this.employeeRepository = employeeRepository;
+        this.vacationValidator = vacationValidator;
     }
 
     @Override
@@ -50,12 +55,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void approveVacation(String vacationId, String employeeUniqueId) {
-        employeeRepository.approveVacation(vacationId, employeeUniqueId);
+        Employee employee = employeeRepository.findEmployee(employeeUniqueId);
+        Vacation vacation = employeeRepository.findVacation(employee, vacationId);
+        vacationValidator.validateVacationTransitionStatus(
+                vacation,
+                VacationStatus.APPROVED);
+        employeeRepository.approveVacation(vacation);
     }
 
     @Override
     public void rejectVacation(String vacationId, String employeeUniqueId) {
-        employeeRepository.rejectVacation(vacationId, employeeUniqueId);
+        Employee employee = employeeRepository.findEmployee(employeeUniqueId);
+        Vacation vacation = employeeRepository.findVacation(employee, vacationId);
+        vacationValidator.validateVacationTransitionStatus(
+                vacation,
+                VacationStatus.REJECTED);
+        employeeRepository.rejectVacation(vacation);
     }
 
     private Employee createEmployee(String name, String surname) {

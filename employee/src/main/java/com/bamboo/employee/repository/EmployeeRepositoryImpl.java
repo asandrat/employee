@@ -105,22 +105,18 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void approveVacation(String vacationId, String employeeUniqueId) {
-        Employee employee = findEmployee(employeeUniqueId);
-        Vacation vacation = findVacation(employee, vacationId);
+    public void approveVacation(Vacation vacation) {
         vacation.approveRequest();
         saveAll(employeeList);
     }
 
     @Override
-    public void rejectVacation(String vacationId, String employeeUniqueId) {
-        Employee employee = findEmployee(employeeUniqueId);
-        Vacation vacation = findVacation(employee, vacationId);
+    public void rejectVacation(Vacation vacation) {
         vacation.rejectRequest();
         saveAll(employeeList);
     }
 
-    private Vacation findVacation(Employee employee, String vacationId) {
+    public Vacation findVacation(Employee employee, String vacationId) {
         return employee.getVacations().stream()
                 .filter(
                         vacation -> vacation.getUniqueId().equals(vacationId)

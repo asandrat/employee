@@ -18,9 +18,11 @@ public interface EmployeeRepository {
 
     void addVacationToEmployee(String employeeId, Vacation vacation);
 
+    Vacation findVacation(Employee employee, String vacationId);
+
     void removeVacation(String vacationId, String employeeUniqueId);
 
-    void approveVacation(String vacationId, String employeeUniqueId);
+    void approveVacation(Vacation vacation);
 
-    void rejectVacation(String vacationId, String employeeUniqueId);
+    void rejectVacation(Vacation vacation);
 }

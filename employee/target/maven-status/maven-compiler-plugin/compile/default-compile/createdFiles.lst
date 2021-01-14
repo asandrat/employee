@@ -1,7 +1,5 @@
 com/bamboo/employee/repository/EmployeeRepositoryImpl$1.class
 com/bamboo/employee/validator/strategy/RemoveVacationValidator.class
-com/bamboo/employee/deserializer/VacationDeserializer.class
-com/bamboo/employee/model/vacation/state/Approved.class
 com/bamboo/employee/service/EmployeeService.class
 com/bamboo/employee/model/Vacation.class
 com/bamboo/employee/validator/strategy/RemoveEmployeeValidator.class
@@ -12,6 +10,7 @@ com/bamboo/employee/CommandLineAppRunner.class
 com/bamboo/employee/validator/Validator.class
 com/bamboo/employee/custom/exception/EmployeeFileNotFoundException.class
 com/bamboo/employee/repository/EmployeeRepositoryImpl.class
+com/bamboo/employee/custom/exception/InvalidStateTransitionException.class
 com/bamboo/employee/validator/strategy/AddVacationValidator.class
 com/bamboo/employee/validator/strategy/VacationRejectionValidator.class
 com/bamboo/employee/custom/exception/VacationNotFoundException.class
@@ -19,11 +18,8 @@ com/bamboo/employee/parser/InputParser.class
 com/bamboo/employee/service/EmployeeServiceImpl.class
 com/bamboo/employee/model/Employee.class
 com/bamboo/employee/model/VacationStatus.class
-com/bamboo/employee/model/vacation/state/VacationState.class
 com/bamboo/employee/custom/exception/EmployeeNotFoundException.class
 com/bamboo/employee/model/UserAction.class
-com/bamboo/employee/model/vacation/state/Submitted.class
-com/bamboo/employee/CommandLineAppRunner$1.class
-com/bamboo/employee/model/vacation/state/Rejected.class
+com/bamboo/employee/service/VacationValidator.class
 com/bamboo/employee/EmployeeApplication.class
 com/bamboo/employee/validator/strategy/AddEmployeeValidator.class

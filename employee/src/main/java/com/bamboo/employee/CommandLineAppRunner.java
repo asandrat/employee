@@ -1,8 +1,8 @@
 package com.bamboo.employee;
 
-import com.bamboo.employee.parser.InputParser;
-import com.bamboo.employee.service.EmployeeService;
 import com.bamboo.employee.model.UserAction;
+import com.bamboo.employee.parser.InputParser;
+import com.bamboo.employee.service.command.ActionProcessor;
 import com.bamboo.employee.validator.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,14 +14,15 @@ import java.util.Map;
 
 @Component
 public class CommandLineAppRunner implements CommandLineRunner {
-    private final EmployeeService employeeService;
     private final Validator validator;
+    private final ActionProcessor processor;
 
     public CommandLineAppRunner(
-            EmployeeService employeeService,
-            Validator validator) {
-        this.employeeService = employeeService;
+            Validator validator,
+            ActionProcessor processor
+    ) {
         this.validator = validator;
+        this.processor = processor;
     }
 
     private static final Logger LOGGER =
@@ -38,52 +39,12 @@ public class CommandLineAppRunner implements CommandLineRunner {
                 .toArray(String[]::new);
         Map<String, String> data = InputParser.parseData(userInput);
 
-        if (!UserAction.isValid(args[0])) {
-            throw new IllegalArgumentException("Wrong action");
+        if (UserAction.isValid(args[0]) && validator.validate(args[0], data)) {
+            processor.process(args[0], data);
         }
-        else if (validator.validate(args[0], data)) {
-            UserAction action = UserAction.valueOf(args[0]);
-
-            switch (action) {
-                case employee_addition:
-                    employeeService.addEmployee(
-                            data.get("name"),
-                            data.get("surname"));
-
-                    break;
-                case employee_removal:
-                    employeeService.removeEmployee(data.get("uniqueId"));
-                    break;
-                case vacation_addition:
-                    employeeService.addVacation(
-                            data.get("employeeUniqueId"),
-                            data.get("dateFrom"),
-                            data.get("dateTo"),
-                            data.get("status")
-                    );
-                    break;
-                case vacation_removal:
-                    employeeService.removeVacation(
-                            data.get("uniqueId"),
-                            data.get("employeeUniqueId")
-                    );
-                    break;
-                case vacation_approval:
-                    employeeService.approveVacation(
-                            data.get("uniqueId"),
-                            data.get("employeeUniqueId")
-                    );
-                    break;
-                case vacation_rejection:
-                    employeeService.rejectVacation(
-                            data.get("uniqueId"),
-                            data.get("employeeUniqueId")
-                            );
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + action);
-            }
+        else {
+            throw new IllegalArgumentException("Parameters are not valid");
+        }
         }
     }
 
-}
