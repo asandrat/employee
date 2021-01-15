@@ -13,8 +13,10 @@ import java.util.Optional;
 
 @Component
 public class CommandLineAppRunner implements CommandLineRunner {
-    private final ActionExecutor actionExecutor;
-    private final CustomValidator customValidator;
+    private final ActionExecutor actionExecutor; // to reduce if/else for
+    // command line arguments
+    private final CustomValidator customValidator; //to reduce if/else for
+    // command line arguments (validation)
 
     public CommandLineAppRunner(ActionExecutor actionExecutor,
                                 CustomValidator customValidator) {
@@ -30,13 +32,13 @@ public class CommandLineAppRunner implements CommandLineRunner {
         LOGGER.info("Application context started with command line arguments: "
                 + Arrays.toString(args));
 
+        Optional<Action> action =
+                Optional.ofNullable(Action.fromString(args[0]));
+
         String[] arguments = Arrays.stream(args)
                 .skip(1).toArray(String[]::new);
 
         Map<String, String> data = InputParser.parseInput(arguments);
-
-        Optional<Action> action =
-                Optional.ofNullable(Action.fromString(args[0]));
 
         if (action.isPresent() && customValidator.validate(args[0], data)) {
             actionExecutor.executeAction(args[0], data);

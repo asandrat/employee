@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class AddEmployeeCommand implements CommandLineArgument {
+public class AddEmployeeCommand implements Command {
 
     private final EmployeeService employeeService;
 

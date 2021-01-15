@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class RemoveVacationCommand implements CommandLineArgument{
+public class RemoveVacationCommand implements Command{
     private final VacationService vacationService;
 
     public RemoveVacationCommand(VacationService vacationService) {

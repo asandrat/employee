@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b0e5474-30c9-411b-a61a-d3259883c9f0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/CommandLineAppRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/InputParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/InputParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/model/Vacation.java" beforeDir="false" afterPath="$PROJECT_DIR$/employee/src/main/java/com/bamboo/employee/model/Vacation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/employees.txt" beforeDir="false" afterPath="$PROJECT_DIR$/employees.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vacations.txt" beforeDir="false" afterPath="$PROJECT_DIR$/vacations.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610651082682</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="small changes">
+      <created>1610651228020</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1610651228020</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -171,7 +183,8 @@
     <MESSAGE value="create separate services, repositories and files for employee and vacation" />
     <MESSAGE value="add strategy design pattern" />
     <MESSAGE value="add strategy design pattern for validator" />
-    <option name="LAST_COMMIT_MESSAGE" value="add strategy design pattern for validator" />
+    <MESSAGE value="small changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="small changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

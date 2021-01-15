@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 @NotNull
 public class Vacation implements Serializable {
