@@ -9,26 +9,27 @@ import com.bamboo.employee.model.Vacation;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Repository
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     private final String fileName;
 
     private Map<String, Employee> employeeList;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
 
 
     public EmployeeRepositoryImpl(
-            @Value("${spring.employeeApp.file.path}") String fileName
+            @Value("${spring.employeeApp.file.path}") String fileName,
+            ObjectMapper objectMapper
     ) {
         this.fileName = fileName;
+        this.objectMapper = objectMapper;
         employeeList = findAll();
         if (employeeList == null) {
             employeeList = new HashMap<>();
