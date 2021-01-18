@@ -15,7 +15,7 @@ public class RemoveVacationCommand implements Command{
 
     @Override
     public void execute(Map<String, String> data) {
-        vacationService.rejectVacation(data.get("id"));
+        vacationService.removeVacation(data.get("id"));
     }
 
     @Override
