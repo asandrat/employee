@@ -34,7 +34,6 @@ public class AddVacationValidator implements Validator {
             }
         } catch (ParseException e) {
             throw new IllegalArgumentException("input data not valid");
-            //TODO: throw exception
         }
         //vacation status check: status should be SUBMITTED
         Optional<VacationStatus> status = Optional.ofNullable(

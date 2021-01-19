@@ -50,13 +50,12 @@ class AddVacationValidatorTest {
     }
 
     @Test
-    @Disabled
-    void parseExceptionExpected() {
+    void illegalArgumentExceptionExpected() {
         data.put("employeeId", "1234");
         data.put("dateFrom", "'2021-03-01");
         data.put("dateTo", "2021-03-05");
         data.put("status", "SUBMITTED");
-        Assertions.assertThrows(ParseException.class,
+        Assertions.assertThrows(IllegalArgumentException.class,
                 () -> addVacationValidator.validate(data));
     }
 
