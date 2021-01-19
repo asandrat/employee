@@ -33,6 +33,7 @@ public class AddVacationValidator implements Validator {
                 return false;
             }
         } catch (ParseException e) {
+            throw new IllegalArgumentException("input data not valid");
             //TODO: throw exception
         }
         //vacation status check: status should be SUBMITTED

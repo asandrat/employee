@@ -12,6 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -64,5 +68,22 @@ class VacationServiceImplTest {
         Assertions.assertEquals("456", argumentCaptorString.getValue());
     }
 
+    @Test
+    void saveAllVacationsToRepository() {
+        Map<String, Vacation> vacationMap = new HashMap<>();
+        vacationMap.put("456",
+                new Vacation("456", "123",
+                LocalDate.of(2021, 3, 1),
+                LocalDate.of(2021, 3, 5),
+                5, VacationStatus.fromString("submitted")));
+        vacationServiceImpl.saveAllVacations(vacationMap);
+        verify(vacationRepository).saveAllVacations(vacationMap);
+    }
+
+    @Test
+    void findAllVacationsFromRepository(){
+        vacationServiceImpl.findAll();
+        verify(vacationRepository).findAll();
+    }
 
 }

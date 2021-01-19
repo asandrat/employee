@@ -56,4 +56,9 @@ public class VacationServiceImpl implements VacationService {
     public Map<String, Vacation> findAll() {
         return vacationRepository.findAll();
     }
+
+    @Override
+    public void saveAllVacations(Map<String, Vacation> vacationMap) {
+        vacationRepository.saveAllVacations(vacationMap);
+    }
 }
