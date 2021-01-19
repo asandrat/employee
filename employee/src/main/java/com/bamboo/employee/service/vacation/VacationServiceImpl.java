@@ -34,7 +34,7 @@ public class VacationServiceImpl implements VacationService {
         Vacation vacation = new Vacation(id, employeeId, dateFrom, dateTo,
                 duration, vacationStatus);
 
-        vacationRepository.addVacationToEmployee(employeeId, vacation);
+        vacationRepository.addVacationToEmployee(vacation);
     }
 
     @Override

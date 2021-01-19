@@ -38,7 +38,6 @@ class VacationServiceImplTest {
                 "submitted");
 
         verify(vacationRepository).addVacationToEmployee(
-                argumentCaptorString.capture(),
                 argumentCaptorVacation.capture());
 
         Vacation vacation = argumentCaptorVacation.getValue();

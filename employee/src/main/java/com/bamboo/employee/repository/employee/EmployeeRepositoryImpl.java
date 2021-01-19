@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 
 @Repository
@@ -42,13 +41,14 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public void addEmployee(Employee employee) {
         employeeMap.put(employee.getId(), employee);
-        saveAll(employeeMap);
+        fileReaderAndWriter.saveAllEmployees(employeeMap);
     }
+
 
     @Override
     public void removeEmployee(String id) {
         employeeMap.remove(id);
-        saveAll(employeeMap);
+        fileReaderAndWriter.saveAllEmployees(employeeMap);
     }
 
     @Override

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 
 @Repository
@@ -35,15 +34,15 @@ public class VacationRepositoryImpl implements VacationRepository {
     }
 
     @Override
-    public void addVacationToEmployee(String employeeId, Vacation vacation) {
-        vacationsMap.put(employeeId, vacation);
-        saveAllVacations(vacationsMap);
+    public void addVacationToEmployee(Vacation vacation) {
+        vacationsMap.put(vacation.getId(), vacation);
+        fileReaderAndWriter.saveAllVacations(vacationsMap);
     }
 
     @Override
     public void removeVacation(String id) {
         vacationsMap.remove(id);
-        saveAllVacations(vacationsMap);
+        fileReaderAndWriter.saveAllVacations(vacationsMap);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class VacationRepositoryImpl implements VacationRepository {
             return;
         }
         vacation.setStatus(vacationStatus);
-        saveAllVacations(vacationsMap);
+        fileReaderAndWriter.saveAllVacations(vacationsMap);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class VacationRepositoryImpl implements VacationRepository {
         vacation.setStatus(vacationStatus);
 
         removeVacation(id);
-        saveAllVacations(vacationsMap);
+        fileReaderAndWriter.saveAllVacations(vacationsMap);
     }
 
     public void saveAllVacations(Map<String, Vacation> map) {
@@ -79,5 +78,10 @@ public class VacationRepositoryImpl implements VacationRepository {
     @Override
     public boolean isFileEmpty(File file) throws IOException {
         return fileReaderAndWriter.isFileEmpty(file);
+    }
+
+    @Override
+    public Vacation findVacation(String id) {
+        return vacationsMap.get(id);
     }
 }

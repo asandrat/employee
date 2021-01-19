@@ -3,7 +3,6 @@ package com.bamboo.employee.service.employee;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.repository.employee.EmployeeRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceImplTest {
