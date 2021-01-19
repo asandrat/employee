@@ -106,6 +106,58 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void shouldFailToApproveApprovedVacation() {
+    void shouldApproveSubmittedVacations() {
+        VacationId id = new VacationId(1, 1);
+        Employee e = new Employee(1, "petar", "testovski");
+        e.addVacation(v);
+        when(repository.read(1)).thenReturn(e);
+
+        Assertions.assertTrue(service.approveVacation(id));
+        verify(repository).update(id, VacationStatus.APPROVED);
+    }
+
+    @Test
+    void shouldRejectSubmittedVacations() {
+        VacationId id = new VacationId(1, 1);
+        Employee e = new Employee(1, "petar", "testovski");
+        e.addVacation(v);
+        when(repository.read(1)).thenReturn(e);
+
+        Assertions.assertTrue(service.rejectVacation(id));
+        verify(repository, never()).update(id, VacationStatus.APPROVED);
+    }
+
+    @Test
+    void shouldFailToModifyAlreadyModifiedVacation() {
+        VacationId id = new VacationId(1, 1);
+        v.setStatus(VacationStatus.APPROVED);
+        Employee e = new Employee(1, "petar", "testovski");
+        e.addVacation(v);
+        when(repository.read(1)).thenReturn(e);
+
+        Assertions.assertFalse(service.approveVacation(id));
+
+        v.setStatus(VacationStatus.REJECTED);
+        e.removeVacation(id);
+        e.addVacation(v);
+        Assertions.assertFalse(service.approveVacation(id));
+
+        v.setStatus(VacationStatus.APPROVED);
+        e.removeVacation(id);
+        e.addVacation(v);
+        Assertions.assertFalse(service.rejectVacation(id));
+
+        v.setStatus(VacationStatus.REJECTED);
+        e.removeVacation(id);
+        e.addVacation(v);
+        Assertions.assertFalse(service.rejectVacation(id));
+    }
+
+
+    @Test
+    void shouldDelegateDeletionOfVacationToRepository() {
+        VacationId id = new VacationId(1, 1);
+        when(repository.deleteVacation(id)).thenReturn(new Vacation(id));
+        service.removeVacationFromEmployee(id);
     }
 }
