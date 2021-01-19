@@ -2,6 +2,8 @@ package com.bamboo.employee.repository.vacation;
 
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationStatus;
+import com.bamboo.employee.repository.FileReaderAndWriter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +14,9 @@ import java.util.Map;
 
 @Repository
 public class VacationRepositoryImpl implements VacationRepository {
+    @Autowired
+    FileReaderAndWriter fileReaderAndWriter;
+
     @Value("${spring.file.name.vacations}")
     private String fileNameVacations;
 
@@ -26,30 +31,7 @@ public class VacationRepositoryImpl implements VacationRepository {
 
     public Map<String, Vacation> findAll() {
         //read from file
-        Map<String, Vacation> map = new HashMap<>();
-        try {
-            FileInputStream fileInputStream =
-                    new FileInputStream(fileNameVacations);
-            if (isFileEmpty(new File(fileNameVacations))) {
-                System.out.println("vacations.txt is empty");
-                return map;
-            }
-            ObjectInputStream objectInputStream =
-                    new ObjectInputStream(fileInputStream);
-            while (true) {
-                Vacation vacation = (Vacation) objectInputStream.readObject();
-                if (vacation == null) {
-                    break;
-                } else {
-                    map.put(vacation.getId(), vacation);
-                }
-            }
-        } catch (EOFException eofException) {
-            eofException.printStackTrace();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException("Cannot read vacations file");
-        }
-        return map;
+       return fileReaderAndWriter.findAllVacations();
     }
 
     @Override
@@ -91,25 +73,11 @@ public class VacationRepositoryImpl implements VacationRepository {
     public void saveAllVacations(Map<String, Vacation> map) {
         //map: (id,vacation)
         //write to file
-        try {
-            FileOutputStream fileOutputStream =
-                    new FileOutputStream(fileNameVacations);
-            ObjectOutputStream objectOutputStream =
-                    new ObjectOutputStream(fileOutputStream);
-            for (String id : map.keySet()) {
-                objectOutputStream.writeObject(map.get(id));
-            }
-            objectOutputStream.writeObject(null);
-            objectOutputStream.flush();
-            objectOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        fileReaderAndWriter.saveAllVacations(map);
     }
 
     @Override
     public boolean isFileEmpty(File file) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        return br.readLine() == null;
+        return fileReaderAndWriter.isFileEmpty(file);
     }
 }
