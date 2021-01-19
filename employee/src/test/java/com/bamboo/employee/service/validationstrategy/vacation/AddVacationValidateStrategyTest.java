@@ -1,12 +1,9 @@
 package com.bamboo.employee.service.validationstrategy.vacation;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -180,5 +177,11 @@ class AddVacationValidateStrategyTest {
         args.put("duration", "20");
         Assertions.assertThrows(IllegalArgumentException.class,
                 () -> strategy.validate(args));
+    }
+
+    @Test
+    void shouldIgnoreNullDuration() {
+        args.put("duration", null);
+        Assertions.assertDoesNotThrow(() -> strategy.validate(args));
     }
 }
