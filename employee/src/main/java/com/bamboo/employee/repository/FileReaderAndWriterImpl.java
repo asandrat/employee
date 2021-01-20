@@ -33,12 +33,8 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
                 return map;
             }
 
-            Employee employee = (Employee) objectInputStream.readObject();
-            while (employee != null) {
-                map.put(employee.getId(), employee);
-                employee = (Employee) objectInputStream.readObject();
+            map = readEmployeesFromFile(objectInputStream);
 
-            }
         } catch (EOFException eofException) {
             logger.fatal("Can't read employees from file", eofException);
         } catch (IOException | ClassNotFoundException e) {
@@ -57,11 +53,7 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
                 return map;
             }
 
-            Vacation vacation = (Vacation) objectInputStream.readObject();
-            while (vacation != null) {
-                map.put(vacation.getId(), vacation);
-                vacation = (Vacation) objectInputStream.readObject();
-            }
+            map = readVacationsFromFile(objectInputStream);
 
         } catch (EOFException eofException) {
             logger.fatal("Can't read vacations from file", eofException);
@@ -72,35 +64,76 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
     }
 
     @Override
+    public Map<String, Vacation> readVacationsFromFile
+            (ObjectInputStream objectInputStream)
+            throws IOException, ClassNotFoundException {
+
+        Map<String, Vacation> resultMap = new HashMap<>();
+        Vacation vacation = (Vacation) objectInputStream.readObject();
+        while (vacation != null) {
+            resultMap.put(vacation.getId(), vacation);
+            vacation = (Vacation) objectInputStream.readObject();
+        }
+        return resultMap;
+    }
+
+    @Override
+    public Map<String, Employee> readEmployeesFromFile
+            (ObjectInputStream objectInputStream)
+            throws IOException, ClassNotFoundException {
+
+        Map<String, Employee> resultMap = new HashMap<>();
+        Employee employee = (Employee) objectInputStream.readObject();
+        while (employee != null) {
+            resultMap.put(employee.getId(), employee);
+            employee = (Employee) objectInputStream.readObject();
+        }
+        return resultMap;
+    }
+
+    @Override
     public void saveAllEmployees(Map<String, Employee> employeeMap) {
         //write to file
         try (ObjectOutputStream objectOutputStream =
                      createObjectOutputStream(fileNameEmployees)) {
 
-            for (String id : employeeMap.keySet()) {
-                objectOutputStream.writeObject(employeeMap.get(id));
-            }
-            objectOutputStream.writeObject(null);
-            objectOutputStream.flush();
+            writeEmployeesToFile(employeeMap, objectOutputStream);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void saveAllVacations(Map<String, Vacation> map) {
+    public void saveAllVacations(Map<String, Vacation> vacationMap) {
         try (ObjectOutputStream objectOutputStream =
                      createObjectOutputStream(fileNameVacations)) {
 
-            for (String id : map.keySet()) {
-                objectOutputStream.writeObject(map.get(id));
-            }
-            objectOutputStream.writeObject(null);
-            objectOutputStream.flush();
+            writeVacationsToFile(vacationMap, objectOutputStream);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public void writeEmployeesToFile(Map<String, Employee> employeeMap,
+                                     ObjectOutputStream objectOutputStream) throws IOException {
+        for (String id : employeeMap.keySet()) {
+            objectOutputStream.writeObject(employeeMap.get(id));
+        }
+        objectOutputStream.writeObject(null);
+        objectOutputStream.flush();
+    }
+
+    public void writeVacationsToFile(Map<String, Vacation> vacationMap,
+                                     ObjectOutputStream objectOutputStream) throws IOException {
+        for (String id : vacationMap.keySet()) {
+            objectOutputStream.writeObject(vacationMap.get(id));
+        }
+        objectOutputStream.writeObject(null);
+        objectOutputStream.flush();
+    }
+
 
     @Override
     public boolean isFileEmpty(File file) throws IOException {

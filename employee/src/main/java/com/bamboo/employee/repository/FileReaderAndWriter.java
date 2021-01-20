@@ -26,4 +26,12 @@ public interface FileReaderAndWriter {
 
     ObjectOutputStream createObjectOutputStream(String fileName)
             throws IOException;
+
+    Map<String, Employee> readEmployeesFromFile
+            (ObjectInputStream objectInputStream)
+            throws IOException, ClassNotFoundException;
+
+    Map<String, Vacation> readVacationsFromFile
+            (ObjectInputStream objectInputStream)
+            throws IOException, ClassNotFoundException;
 }
