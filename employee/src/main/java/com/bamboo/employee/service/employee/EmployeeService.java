@@ -1,12 +1,21 @@
 package com.bamboo.employee.service.employee;
 
 import com.bamboo.employee.model.Employee;
+import com.bamboo.employee.model.Vacation;
+import com.bamboo.employee.model.VacationId;
 
 public interface EmployeeService {
-
-    void addEmployee(Employee employee);
+    boolean addEmployee(Employee employee);
 
     Employee getEmployee(int id);
 
-    void removeEmployee(Integer id);
+    Employee removeEmployee(Integer id);
+
+    void addVacationToEmployee(Vacation vacation);
+
+    Vacation removeVacationFromEmployee(VacationId id);
+
+    boolean approveVacation(VacationId vacationId);
+
+    boolean rejectVacation(VacationId vacationId);
 }

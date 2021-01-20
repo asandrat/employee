@@ -19,12 +19,11 @@ final class AddEmployeeValidateStrategy implements ValidationStrategy {
         String potentialName = arguments.get("name");
         String potentialSurname = arguments.get("surname");
         String potentialId = arguments.get("uniqueId");
-        if (isNameValid(potentialName)
-                && isSurnameValid(potentialSurname)
-                && isUniqueIdValid(potentialId)) {
-            return;
+        if (!isNameValid(potentialName)
+                || !isSurnameValid(potentialSurname)
+                ||  !isUniqueIdValid(potentialId)) {
+            throw new IllegalArgumentException();
         }
-        throw new IllegalArgumentException();
     }
 
 

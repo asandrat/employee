@@ -3,6 +3,7 @@ package com.bamboo.employee.repository.employee;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
+import com.bamboo.employee.model.VacationStatus;
 
 import java.util.Collection;
 
@@ -12,13 +13,15 @@ public interface EmployeeRepository {
 
     Employee read(int employeeId);
 
-    void create(Employee employee);
+    boolean create(Employee employee);
 
     void saveAll(Collection<Employee> employees);
 
     void addVacationToEmployee(Vacation vacation);
 
-    void delete(Integer id);
+    Employee delete(Integer id);
 
-    void removeEmployeesVacation(VacationId id);
+    Vacation deleteVacation(VacationId id);
+
+    void update(VacationId vacationId, VacationStatus status);
 }

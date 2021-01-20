@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-
 public final class Validator {
 
     private final Map<String, ValidationStrategy> strategies;

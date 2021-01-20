@@ -80,11 +80,6 @@ class EmployeeServiceImplTest {
 
         Assertions.assertEquals(e, service.removeEmployee(1));
 
-        verify(repository).delete(1);
-
-        // can't delete same employee multiple times
-        when(repository.delete(1)).thenReturn(null);
-        Assertions.assertNull(service.removeEmployee(1));
     }
 
     @Test

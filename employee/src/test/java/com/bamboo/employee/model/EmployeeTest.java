@@ -26,6 +26,7 @@ class EmployeeTest {
         Assertions.assertEquals(1, e.getVacations().size());
     }
 
+    //todo invalid za hibernate
     @Test
     void addVacationShouldMakeCopyOfPassedVacation() {
         Vacation v = new Vacation(new VacationId(1, 1));

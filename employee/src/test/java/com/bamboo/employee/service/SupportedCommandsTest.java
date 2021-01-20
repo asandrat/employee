@@ -19,7 +19,8 @@ class SupportedCommandsTest {
 
     @Test
     void isSupportedShouldReturnTrueForGoodCmds() {
-        Assertions.assertTrue(SupportedCommands.isSupportedCommand("EMPLOYEE_ADDITION"));
+        Assertions.assertTrue(SupportedCommands.isSupportedCommand(
+                "EMPLOYEE_ADDITION"));
         Assertions.assertTrue(SupportedCommands.isSupportedCommand(
                 "EMPLOYEE_REMOVAL"));
         Assertions.assertTrue(SupportedCommands.isSupportedCommand(

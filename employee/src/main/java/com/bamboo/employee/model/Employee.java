@@ -1,18 +1,14 @@
 package com.bamboo.employee.model;
 
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class Employee {
 
-    private Integer uniqueId;
+    private Integer uniqueId; // todo change autogenerating with uuid
     private String name;
     private String surname;
-    private Set<Vacation> vacations = new HashSet<>();
-
+    private final Map<VacationId, Vacation> vacations = new HashMap<>();
 
     public Employee(final Integer uniqueId,
                     final String name,
@@ -35,7 +31,7 @@ public class Employee {
     }
 
     public Collection<Vacation> getVacations() {
-        return vacations;
+        return new HashMap<>(vacations).values();
     }
 
     public void setUniqueId(final Integer uniqueId) {
@@ -50,13 +46,23 @@ public class Employee {
         this.surname = surname;
     }
 
-    public void addVacation(final Vacation vacation) {
-        this.vacations.add(vacation);
+    public Vacation addVacation(final Vacation vacation) {
+        return vacations.put(vacation.getId(), new Vacation(vacation));
     }
 
-    public void removeVacation(final VacationId id) {
-        Vacation vacation = new Vacation(id);
-        vacations.remove(vacation);
+    public Vacation getVacation(final VacationId id) {
+        return vacations.get(id);
+    }
+
+    public Vacation removeVacation(final VacationId id) {
+        return vacations.remove(id);
+    }
+
+    // todo move to service
+    public void updateVacation(final VacationId id,
+                               final VacationStatus status) {
+        Vacation v = getVacation(id);
+        v.setStatus(status);
     }
 
     @Override

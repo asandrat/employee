@@ -1,5 +1,6 @@
 package com.bamboo.employee.service.commandstrategy.employee;
 
+import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.service.commandstrategy.Command;
 import com.bamboo.employee.service.employee.EmployeeService;
 import org.springframework.stereotype.Component;
@@ -16,9 +17,9 @@ final class RemoveEmployeeCommand implements Command {
     }
 
     @Override
-    public void execute(final Map<String, String> params) {
+    public Employee execute(final Map<String, String> params) {
         Integer id = Integer.parseInt(params.get("uniqueId"));
-        service.removeEmployee(id);
+        return service.removeEmployee(id);
     }
 
 }

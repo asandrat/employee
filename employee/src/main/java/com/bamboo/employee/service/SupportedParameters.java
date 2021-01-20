@@ -12,7 +12,9 @@ public enum SupportedParameters {
 
     public static boolean isSupported(final String string) {
         try {
-            SupportedParameters.valueOf(string.toUpperCase());
+            SupportedParameters.valueOf(string != null ?
+                    string.toUpperCase() : "");
+
             return true;
         } catch (IllegalArgumentException e) {
             return false;

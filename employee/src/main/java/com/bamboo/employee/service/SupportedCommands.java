@@ -1,15 +1,16 @@
 package com.bamboo.employee.service;
 
 public enum SupportedCommands {
-    employee_addition,
-    employee_removal,
-    vacation_addition,
-    vacation_removal,
-    help;
+    EMPLOYEE_ADDITION,
+    EMPLOYEE_REMOVAL,
+    VACATION_ADDITION,
+    VACATION_REMOVAL,
+    HELP;
 
     public static boolean isSupportedCommand(final String command) {
         try {
-            SupportedCommands.valueOf(command);
+            SupportedCommands.valueOf(command != null ?
+                    command.toUpperCase() : "");
         } catch (IllegalArgumentException e) {
             return false;
         }
