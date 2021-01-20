@@ -99,7 +99,7 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void approveVacation() {
+    void Should_DelegateApproveVacationActionToEmployeeRepository() {
         String employeeUniqueId = "123AA-bH0A-BBB";
         String vacationId = "aFG-778-iio-9AA";
         Employee employee = new Employee(
@@ -128,7 +128,7 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void rejectVacation() {
+    void Should_DelegateRejectVacationActionToEmployeeRepository() {
         String employeeUniqueId = "BB677-HHH8-BBB";
         String vacationId = "ujh-jk88-BBB-9AA";
         Employee employee = new Employee(

@@ -19,6 +19,7 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class RejectVacationCommandTest {
+
     @Mock
     private EmployeeService employeeService;
 

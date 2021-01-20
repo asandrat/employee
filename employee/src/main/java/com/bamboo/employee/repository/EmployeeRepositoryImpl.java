@@ -8,13 +8,16 @@ import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Repository
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     private final String fileName;
@@ -55,8 +58,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public void saveAll(Map<String, Employee> employees) {
         try {
-            objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(
+            objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+            objectMapper.writeValue(
                     new File(fileName),
                     employeeList
             );
