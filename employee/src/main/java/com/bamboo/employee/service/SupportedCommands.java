@@ -1,5 +1,7 @@
 package com.bamboo.employee.service;
 
+import java.util.Objects;
+
 public enum SupportedCommands {
     EMPLOYEE_ADDITION,
     EMPLOYEE_REMOVAL,
@@ -9,9 +11,10 @@ public enum SupportedCommands {
 
     public static boolean isSupportedCommand(final String command) {
         try {
-            SupportedCommands.valueOf(command.toUpperCase());
+            String tmp = Objects.toString(command, "");
+            SupportedCommands.valueOf(tmp.toUpperCase());
             return true;
-        } catch (IllegalArgumentException | NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }

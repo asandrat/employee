@@ -1,5 +1,7 @@
 package com.bamboo.employee.service;
 
+import java.util.Objects;
+
 public enum SupportedParameters {
     NAME,
     SURNAME,
@@ -12,9 +14,10 @@ public enum SupportedParameters {
 
     public static boolean isSupported(final String string) {
         try {
-            SupportedParameters.valueOf(string.toUpperCase());
+            String tmp = Objects.toString(string, "");
+            SupportedParameters.valueOf(tmp.toUpperCase());
             return true;
-        } catch (IllegalArgumentException | NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }
