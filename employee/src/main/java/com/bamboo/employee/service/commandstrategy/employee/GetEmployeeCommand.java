@@ -17,8 +17,9 @@ final class GetEmployeeCommand implements Command {
     }
 
     @Override
-    public void execute(Map<String, String> params) {
+    public Object execute(Map<String, String> params) {
         Employee e = service.getEmployee(Integer.parseInt(params.get("uniqueId")));
         System.out.println(e);
+        return e;
     }
 }

@@ -1,7 +1,5 @@
 package com.bamboo.employee.model;
 
-import com.bamboo.employee.service.SupportedCommands;
-
 public enum VacationStatus {
     SUBMITTED,
     APPROVED,
@@ -9,10 +7,10 @@ public enum VacationStatus {
 
     public static boolean isSupportedStatus(final String status) {
         try {
-            VacationStatus.valueOf(status.toUpperCase());
+            VacationStatus.valueOf(status != null ? status.toUpperCase() : "");
+            return true;
         } catch (IllegalArgumentException e) {
             return false;
         }
-        return true;
     }
 }

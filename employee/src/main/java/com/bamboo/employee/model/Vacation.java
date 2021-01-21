@@ -1,27 +1,38 @@
 package com.bamboo.employee.model;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.Objects;
 
 public class Vacation {
     private VacationId id;
-    private Date from;
-    private Date to;
-    private Integer duration;
+    private LocalDate from;
+    private LocalDate to;
+    private long duration;
     private VacationStatus status;
+
+    public Vacation(final Vacation other) {
+        this.id = other.id;
+        this.from = other.from;
+        this.to = other.to;
+        this.duration = other.duration;
+        this.status = other.status;
+    }
 
 
     public Vacation(final Integer employeeId,
                     final Integer vacationId,
-                    final Date from,
-                    final Date to,
-                    final Integer duration,
+                    final LocalDate from,
+                    final LocalDate to,
+                    final String duration,
                     final VacationStatus status) {
         this.id = new VacationId(employeeId, vacationId);
         this.from = from;
         this.to = to;
-        this.duration = duration;
+        this.duration = duration == null
+                ? Math.abs(ChronoUnit.DAYS.between(from, to))
+                : Long.parseLong(duration);
         this.status = status;
     }
 
@@ -33,15 +44,15 @@ public class Vacation {
         return id;
     }
 
-    public Date getFrom() {
+    public LocalDate getFrom() {
         return from;
     }
 
-    public Date getTo() {
+    public LocalDate getTo() {
         return to;
     }
 
-    public Integer getDuration() {
+    public long getDuration() {
         return duration;
     }
 

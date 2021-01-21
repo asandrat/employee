@@ -6,7 +6,6 @@ import com.bamboo.employee.service.commandstrategy.CommandInvoker;
 import com.bamboo.employee.service.validationstrategy.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +19,17 @@ public class CommandLineAppRunner implements CommandLineRunner {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(CommandLineAppRunner.class);
 
-    @Autowired
-    private ArgumentParser parser;
-    @Autowired
-    private Validator validator;
-    @Autowired
-    private CommandInvoker commandInvoker;
+    private final ArgumentParser parser;
+    private final Validator validator;
+    private final CommandInvoker commandInvoker;
+
+    public CommandLineAppRunner(final ArgumentParser parser,
+                         final Validator validator,
+                         final CommandInvoker commandInvoker) {
+        this.parser = parser;
+        this.validator = validator;
+        this.commandInvoker = commandInvoker;
+    }
 
     private void guideForSupportedCommands(final String command) {
         System.out.println(
@@ -53,12 +57,13 @@ public class CommandLineAppRunner implements CommandLineRunner {
             xs.put("employeeUniqueId", "1");
 
             commandInvoker.executeCommand("get_employee", xs);
-            commandInvoker.executeCommand("vacation_approval", xs);
             commandInvoker.executeCommand("vacation_rejection", xs);
-
-            commandInvoker.executeCommand("vacation_removal", xs);
+            commandInvoker.executeCommand("get_employee", xs);
+            commandInvoker.executeCommand("vacation_approval", xs);
 
             commandInvoker.executeCommand("get_employee", xs);
+            commandInvoker.executeCommand("vacation_removal", xs);
+
 
         } catch (IllegalArgumentException e) {
             System.out.println("Bad input");

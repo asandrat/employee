@@ -17,11 +17,11 @@ final class AddEmployeeCommand implements Command {
     }
 
     @Override
-    public void execute(final Map<String, String> params) {
+    public Object execute(final Map<String, String> params) {
         Employee employee =
                 new Employee(Integer.parseInt(params.get("uniqueId")),
                         params.get("name"),
                         params.get("surname"));
-        service.addEmployee(employee);
+        return service.addEmployee(employee);
     }
 }
