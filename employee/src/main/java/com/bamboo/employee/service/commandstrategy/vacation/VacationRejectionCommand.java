@@ -22,6 +22,6 @@ final class VacationRejectionCommand implements Command {
         Integer id = Integer.parseInt(params.get("uniqueId"));
         VacationId vacationId = new VacationId(empId, id);
 
-        return service.rejectVacation(vacationId);
+        return service.rejectVacationForEmployee(vacationId);
     }
 }

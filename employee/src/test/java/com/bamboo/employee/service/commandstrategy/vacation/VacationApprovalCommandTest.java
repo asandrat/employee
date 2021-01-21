@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -44,14 +43,14 @@ class VacationApprovalCommandTest {
 
     @Test
     void approveVacationComandShouldDelegateToService() {
-        when(service.approveVacation(id)).thenReturn(true);
-        Assertions.assertTrue(service.approveVacation(id));
+        when(service.approveVacationForEmployee(id)).thenReturn(true);
+        Assertions.assertTrue(service.approveVacationForEmployee(id));
     }
 
     @Test
     void approveVacationShouldPassVacationIdToService() {
         command.execute(args);
-        verify(service).approveVacation(captor.capture());
+        verify(service).approveVacationForEmployee(captor.capture());
         Assertions.assertEquals(id, captor.getValue());
     }
 }

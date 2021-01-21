@@ -15,7 +15,7 @@ public interface EmployeeService {
 
     Vacation removeVacationFromEmployee(VacationId id);
 
-    boolean approveVacation(VacationId vacationId);
+    boolean approveVacationForEmployee(VacationId vacationId);
 
-    boolean rejectVacation(VacationId vacationId);
+    boolean rejectVacationForEmployee(VacationId vacationId);
 }

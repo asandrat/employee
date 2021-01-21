@@ -107,7 +107,7 @@ class EmployeeServiceImplTest {
         e.addVacation(v);
         when(repository.read(1)).thenReturn(e);
 
-        Assertions.assertTrue(service.approveVacation(id));
+        Assertions.assertTrue(service.approveVacationForEmployee(id));
         verify(repository).update(id, VacationStatus.APPROVED);
     }
 
@@ -118,7 +118,7 @@ class EmployeeServiceImplTest {
         e.addVacation(v);
         when(repository.read(1)).thenReturn(e);
 
-        Assertions.assertTrue(service.rejectVacation(id));
+        Assertions.assertTrue(service.rejectVacationForEmployee(id));
         verify(repository, never()).update(id, VacationStatus.APPROVED);
     }
 
@@ -130,22 +130,22 @@ class EmployeeServiceImplTest {
         e.addVacation(v);
         when(repository.read(1)).thenReturn(e);
 
-        Assertions.assertFalse(service.approveVacation(id));
+        Assertions.assertFalse(service.approveVacationForEmployee(id));
 
         v.setStatus(VacationStatus.REJECTED);
         e.removeVacation(id);
         e.addVacation(v);
-        Assertions.assertFalse(service.approveVacation(id));
+        Assertions.assertFalse(service.approveVacationForEmployee(id));
 
         v.setStatus(VacationStatus.APPROVED);
         e.removeVacation(id);
         e.addVacation(v);
-        Assertions.assertFalse(service.rejectVacation(id));
+        Assertions.assertFalse(service.rejectVacationForEmployee(id));
 
         v.setStatus(VacationStatus.REJECTED);
         e.removeVacation(id);
         e.addVacation(v);
-        Assertions.assertFalse(service.rejectVacation(id));
+        Assertions.assertFalse(service.rejectVacationForEmployee(id));
     }
 
 

@@ -1,6 +1,5 @@
 package com.bamboo.employee.service.commandstrategy.vacation;
 
-import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.service.commandstrategy.Command;
 import com.bamboo.employee.service.employee.EmployeeService;
@@ -23,6 +22,6 @@ final class VacationApprovalCommand implements Command {
         Integer id = Integer.parseInt(params.get("uniqueId"));
         VacationId vacationId = new VacationId(empId, id);
 
-        return service.approveVacation(vacationId);
+        return service.approveVacationForEmployee(vacationId);
     }
 }

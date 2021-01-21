@@ -9,11 +9,10 @@ public enum SupportedCommands {
 
     public static boolean isSupportedCommand(final String command) {
         try {
-            SupportedCommands.valueOf(command != null ?
-                    command.toUpperCase() : "");
-        } catch (IllegalArgumentException e) {
+            SupportedCommands.valueOf(command.toUpperCase());
+            return true;
+        } catch (IllegalArgumentException | NullPointerException e) {
             return false;
         }
-        return true;
     }
 }

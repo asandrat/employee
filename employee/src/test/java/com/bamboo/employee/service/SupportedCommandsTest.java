@@ -29,5 +29,7 @@ class SupportedCommandsTest {
                 "VACATION_ADDITION"));
         Assertions.assertTrue(SupportedCommands.isSupportedCommand(
                 "HELP"));
+        Assertions.assertTrue(SupportedCommands.isSupportedCommand(
+                "HeLP"));
     }
 }

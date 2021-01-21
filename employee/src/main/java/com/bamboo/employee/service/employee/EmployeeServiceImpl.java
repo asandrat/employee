@@ -51,7 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public boolean approveVacation(final VacationId vacationId) {
+    public boolean approveVacationForEmployee(final VacationId vacationId) {
         VacationStatus status = repository.read(vacationId.getEmployeeId())
                 .getVacation(vacationId)
                 .getStatus();
@@ -70,7 +70,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public boolean rejectVacation(final VacationId vacationId) {
+    public boolean rejectVacationForEmployee(final VacationId vacationId) {
         VacationStatus status = repository.read(vacationId.getEmployeeId())
                 .getVacation(vacationId)
                 .getStatus();
