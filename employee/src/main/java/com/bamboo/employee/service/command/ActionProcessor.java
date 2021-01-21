@@ -11,10 +11,6 @@ public class ActionProcessor {
 
     private final Map<String, Command> commands;
 
-//    public ActionProcessor(Map<String, Command> commands) {
-//        this.commands = commands;
-//    }
-
     public ActionProcessor(List<Command> commands) {
         this.commands = commands.stream()
                 .collect(Collectors.toMap(
