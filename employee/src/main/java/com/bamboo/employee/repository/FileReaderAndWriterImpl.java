@@ -63,8 +63,7 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
         return map;
     }
 
-    @Override
-    public Map<String, Vacation> readVacationsFromFile
+    private Map<String, Vacation> readVacationsFromFile
             (ObjectInputStream objectInputStream)
             throws IOException, ClassNotFoundException {
 
@@ -77,8 +76,7 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
         return resultMap;
     }
 
-    @Override
-    public Map<String, Employee> readEmployeesFromFile
+    private Map<String, Employee> readEmployeesFromFile
             (ObjectInputStream objectInputStream)
             throws IOException, ClassNotFoundException {
 
@@ -101,6 +99,7 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
 
         } catch (IOException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException("Can't write to file " + fileNameEmployees);
         }
     }
 
@@ -113,6 +112,7 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
 
         } catch (IOException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException("Can't write to file " + fileNameVacations);
         }
     }
 
@@ -136,13 +136,11 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
 
 
     @Override
-    public boolean isFileEmpty(File file) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        return br.readLine() == null;
+    public boolean isFileEmpty(File file) {
+        return file.length() == 0;
     }
 
-    @Override
-    public ObjectInputStream createObjectInputStream(String fileName)
+    private ObjectInputStream createObjectInputStream(String fileName)
             throws IOException {
 
         if (isFileEmpty(new File(fileName))) {
@@ -154,8 +152,7 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
         return new ObjectInputStream(fileInputStream);
     }
 
-    @Override
-    public ObjectOutputStream createObjectOutputStream(String fileName)
+    private ObjectOutputStream createObjectOutputStream(String fileName)
             throws IOException {
 
         FileOutputStream fileOutputStream = new FileOutputStream(fileName);

@@ -20,18 +20,4 @@ public interface FileReaderAndWriter {
     void saveAllVacations(Map<String, Vacation> map);
 
     boolean isFileEmpty(File file) throws IOException;
-
-    ObjectInputStream createObjectInputStream(String fileName)
-            throws IOException;
-
-    ObjectOutputStream createObjectOutputStream(String fileName)
-            throws IOException;
-
-    Map<String, Employee> readEmployeesFromFile
-            (ObjectInputStream objectInputStream)
-            throws IOException, ClassNotFoundException;
-
-    Map<String, Vacation> readVacationsFromFile
-            (ObjectInputStream objectInputStream)
-            throws IOException, ClassNotFoundException;
 }
