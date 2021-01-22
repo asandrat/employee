@@ -1,11 +1,10 @@
 package com.bamboo.employee.repository;
 
 import com.bamboo.employee.custom.exception.EmployeeFileNotFoundException;
-import com.bamboo.employee.custom.exception.EmployeeNotFoundException;
 import com.bamboo.employee.custom.exception.EmployeeStorageException;
 import com.bamboo.employee.custom.exception.VacationNotFoundException;
-import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.Vacation;
+import com.bamboo.employee.entities.Employee;
+import com.bamboo.employee.entities.Vacation;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -49,7 +48,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             );
         } catch (IOException e) {
             throw new EmployeeFileNotFoundException(
-                    "Could not read employees from file " + fileName, e
+                    "Could not read employees from file " + fileName
             );
         }
         return employeeList;
@@ -65,26 +64,21 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             );
         } catch (IOException e) {
             throw new EmployeeStorageException(
-                    "Could not save changes to file " + fileName, e
+                    "Could not save changes to file " + fileName
             );
         }
     }
 
     @Override
-    public void addEmployee(Employee emp) {
+    public Employee addEmployee(Employee emp) {
         employeeList.put(emp.getUniqueId(), emp);
         saveAll(employeeList);
+        return emp;
     }
 
     @Override
     public Employee findEmployee(String uniqueId) {
-        Employee employee = employeeList.get(uniqueId);
-        if (employee == null) {
-            throw new EmployeeNotFoundException(
-                    "Could not find employee with id: " + uniqueId
-            );
-        }
-        return employee;
+        return employeeList.get(uniqueId);
     }
 
     @Override
@@ -103,7 +97,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public void removeVacation(String vacationId, String employeeUniqueId) {
         Employee employee = findEmployee(employeeUniqueId);
-        Vacation vacation = findVacation(employee, vacationId);
+        Vacation vacation = findVacation(employeeUniqueId, vacationId);
         employee.removeVacation(vacation);
         saveAll(employeeList);
     }
@@ -120,7 +114,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         saveAll(employeeList);
     }
 
-    public Vacation findVacation(Employee employee, String vacationId) {
+    public Vacation findVacation(String employeeId, String vacationId) {
+        Employee employee = findEmployee(employeeId);
         return employee.getVacations().stream()
                 .filter(
                         vacation -> vacation.getUniqueId().equals(vacationId)

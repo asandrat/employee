@@ -1,4 +1,4 @@
-package com.bamboo.employee.model;
+package com.bamboo.employee.entities;
 
 import java.util.Arrays;
 

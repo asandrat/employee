@@ -1,7 +1,8 @@
-package com.bamboo.employee.model;
+package com.bamboo.employee.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Employee {
     private String uniqueId;
@@ -11,8 +12,8 @@ public class Employee {
 
     public Employee() { }
 
-    public Employee(String uniqueId, String name, String surname) {
-        this.uniqueId = uniqueId;
+    public Employee(String name, String surname) {
+        this.uniqueId = UUID.randomUUID().toString();
         this.name = name;
         this.surname = surname;
     }

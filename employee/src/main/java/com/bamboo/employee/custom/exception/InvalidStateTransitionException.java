@@ -1,8 +1,11 @@
 package com.bamboo.employee.custom.exception;
 
-public class InvalidStateTransitionException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class InvalidStateTransitionException extends ApplicationException {
 
     public InvalidStateTransitionException(String message) {
-        super(message);
+
+        super(message, HttpStatus.BAD_REQUEST);
     }
 }

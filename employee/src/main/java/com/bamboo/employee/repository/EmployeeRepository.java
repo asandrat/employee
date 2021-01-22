@@ -1,7 +1,7 @@
 package com.bamboo.employee.repository;
 
-import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.Vacation;
+import com.bamboo.employee.entities.Employee;
+import com.bamboo.employee.entities.Vacation;
 
 import java.util.Map;
 
@@ -10,7 +10,7 @@ public interface EmployeeRepository {
 
     void saveAll(Map<String, Employee> employees);
 
-    void addEmployee(Employee emp);
+    Employee addEmployee(Employee emp);
 
     Employee findEmployee(String uniqueId);
 
@@ -18,7 +18,7 @@ public interface EmployeeRepository {
 
     void addVacationToEmployee(String employeeId, Vacation vacation);
 
-    Vacation findVacation(Employee employee, String vacationId);
+    Vacation findVacation(String employeeId, String vacationId);
 
     void removeVacation(String vacationId, String employeeUniqueId);
 

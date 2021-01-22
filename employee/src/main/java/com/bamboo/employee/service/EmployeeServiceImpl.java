@@ -1,22 +1,29 @@
 package com.bamboo.employee.service;
 
-import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationStatus;
+import com.bamboo.employee.custom.exception.VacationNotFoundException;
+import com.bamboo.employee.entities.Employee;
+import com.bamboo.employee.entities.Vacation;
+import com.bamboo.employee.entities.VacationStatus;
+import com.bamboo.employee.model.EmployeeDTO;
+import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.repository.EmployeeRepository;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-
     private final EmployeeRepository employeeRepository;
     private final VacationValidator vacationValidator;
+    private final ModelMapper modelMapper;
 
     public EmployeeServiceImpl(
             EmployeeRepository employeeRepository,
@@ -24,12 +31,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     ) {
         this.employeeRepository = employeeRepository;
         this.vacationValidator = vacationValidator;
+        this.modelMapper = new ModelMapper();
     }
 
     @Override
-    public void addEmployee(String name, String surname) {
-        Employee employee = createEmployee(name, surname);
+    public EmployeeDTO addEmployee(String name, String surname) {
+        Employee employee = new Employee(name, surname);
         employeeRepository.addEmployee(employee);
+        return modelMapper.map(employee, EmployeeDTO.class);
     }
 
     @Override
@@ -38,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void addVacation(
+    public VacationDTO addVacation(
             String employeeId,
             String dateFrom,
             String dateTo,
@@ -46,6 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     ) {
         Vacation vacation = createVacation(dateFrom, dateTo, status);
         employeeRepository.addVacationToEmployee(employeeId, vacation);
+        return modelMapper.map(vacation, VacationDTO.class);
     }
 
     @Override
@@ -55,8 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void approveVacation(String vacationId, String employeeUniqueId) {
-        Employee employee = employeeRepository.findEmployee(employeeUniqueId);
-        Vacation vacation = employeeRepository.findVacation(employee, vacationId);
+        Vacation vacation = employeeRepository.findVacation(employeeUniqueId, vacationId);
         vacationValidator.validateVacationTransitionStatus(
                 vacation,
                 VacationStatus.APPROVED);
@@ -65,17 +74,52 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void rejectVacation(String vacationId, String employeeUniqueId) {
-        Employee employee = employeeRepository.findEmployee(employeeUniqueId);
-        Vacation vacation = employeeRepository.findVacation(employee, vacationId);
+        Vacation vacation = employeeRepository.findVacation(employeeUniqueId, vacationId);
         vacationValidator.validateVacationTransitionStatus(
                 vacation,
                 VacationStatus.REJECTED);
         employeeRepository.rejectVacation(vacation);
     }
 
-    private Employee createEmployee(String name, String surname) {
-        String employeeId = UUID.randomUUID().toString();
-        return new Employee(employeeId, name, surname);
+    @Override
+    public List<EmployeeDTO> findAllEmployees() {
+        List<Employee> employeeList = new ArrayList<>(employeeRepository.findAll().values());
+        Type listType = new TypeToken<List<EmployeeDTO>>(){}.getType();
+        return modelMapper.map(employeeList,listType);
+    }
+
+    @Override
+    public EmployeeDTO getEmployee(String id) {
+        return modelMapper.map(
+                employeeRepository.findEmployee(id),
+                EmployeeDTO.class
+        );
+    }
+
+    @Override
+    public Employee findEmployee(String employeeId) {
+        return employeeRepository.findEmployee(employeeId);
+    }
+
+    @Override
+    public VacationDTO findVacation(String employeeId, String vacationId) {
+        return modelMapper.map(employeeRepository.findVacation(
+                employeeId,
+                vacationId
+        ), VacationDTO.class);
+    }
+
+    @Override
+    public List<VacationDTO> getVacations(String employeeId) {
+        Employee employee = employeeRepository.findEmployee(employeeId);
+        List<Vacation> vacationList = employee.getVacations();
+        if (vacationList == null) {
+            throw new VacationNotFoundException(
+                    "There is no vacations for employee with id " + employeeId
+            );
+        }
+        Type listType = new TypeToken<List<VacationDTO>>(){}.getType();
+        return modelMapper.map(vacationList,listType);
     }
 
     private Vacation createVacation(
@@ -83,8 +127,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             String dateTo,
             String status
     ) {
-        final String vacationId = UUID.randomUUID().toString();
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDateFrom =  LocalDate.parse(dateFrom, formatter);
         LocalDate localDateTo = LocalDate.parse(dateTo, formatter);
@@ -92,7 +134,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 localDateTo.atStartOfDay()).toDays();
 
         return new Vacation(
-                vacationId,
                 localDateFrom,
                 localDateTo,
                 duration,

@@ -1,8 +1,8 @@
 package com.bamboo.employee.service;
 
 import com.bamboo.employee.custom.exception.InvalidStateTransitionException;
-import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationStatus;
+import com.bamboo.employee.entities.Vacation;
+import com.bamboo.employee.entities.VacationStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
