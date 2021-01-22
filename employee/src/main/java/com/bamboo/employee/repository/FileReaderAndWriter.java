@@ -1,12 +1,10 @@
 package com.bamboo.employee.repository;
 
-import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.Vacation;
+import com.bamboo.employee.entities.Employee;
+import com.bamboo.employee.entities.Vacation;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Map;
 
 public interface FileReaderAndWriter {

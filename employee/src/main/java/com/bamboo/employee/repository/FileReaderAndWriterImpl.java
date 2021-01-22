@@ -1,15 +1,17 @@
 package com.bamboo.employee.repository;
 
-import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.Vacation;
+import com.bamboo.employee.entities.Employee;
+import com.bamboo.employee.entities.Vacation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class FileReaderAndWriterImpl implements FileReaderAndWriter {
@@ -24,114 +26,87 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
 
     @Override
     public Map<String, Employee> findAllEmployees() {
-        //read from file
-        Map<String, Employee> map = new HashMap<>();
-        try (ObjectInputStream objectInputStream =
-                     createObjectInputStream(fileNameEmployees)) {
+        Map<String, Employee> map;
+        List<Employee> employeeList = findAll(fileNameEmployees);
 
-            if (objectInputStream == null) {
-                return map;
-            }
+        map = employeeList.stream().collect(Collectors.toMap(Employee::getId,
+                employee -> employee));
 
-            map = readEmployeesFromFile(objectInputStream);
-
-        } catch (EOFException eofException) {
-            logger.fatal("Can't read employees from file", eofException);
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException("File employees.txt not found.");
-        }
         return map;
     }
 
     @Override
     public Map<String, Vacation> findAllVacations() {
-        Map<String, Vacation> map = new HashMap<>();
-        try (ObjectInputStream objectInputStream =
-                     createObjectInputStream(fileNameVacations)) {
+        Map<String, Vacation> map;
+        List<Vacation> vacationList = findAll(fileNameVacations);
 
-            if (objectInputStream == null) {
-                return map;
-            }
+        map = vacationList.stream().collect(Collectors.toMap(Vacation::getId,
+                vacation -> vacation));
 
-            map = readVacationsFromFile(objectInputStream);
-
-        } catch (EOFException eofException) {
-            logger.fatal("Can't read vacations from file", eofException);
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException("File vacations.txt not found.");
-        }
         return map;
     }
 
-    private Map<String, Vacation> readVacationsFromFile
-            (ObjectInputStream objectInputStream)
-            throws IOException, ClassNotFoundException {
-
-        Map<String, Vacation> resultMap = new HashMap<>();
-        Vacation vacation = (Vacation) objectInputStream.readObject();
-        while (vacation != null) {
-            resultMap.put(vacation.getId(), vacation);
-            vacation = (Vacation) objectInputStream.readObject();
+    private <T> List<T> findAll(String file) {
+        List<T> list = new ArrayList<>();
+        try (ObjectInputStream objectInputStream =
+                     createObjectInputStream(file)) {
+            if (objectInputStream == null) {
+                return list;
+            }
+            list = readFromFile(objectInputStream);
+        } catch (EOFException eofException) {
+            logger.fatal(
+                    "Can't read "
+                            + file.substring(0, file.indexOf('.'))
+                            + " from file", eofException);
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("File " + file + " not found.");
         }
-        return resultMap;
+        return list;
     }
 
-    private Map<String, Employee> readEmployeesFromFile
-            (ObjectInputStream objectInputStream)
+    private <T> List<T> readFromFile(ObjectInputStream objectInputStream)
             throws IOException, ClassNotFoundException {
+        List<T> resultList = new ArrayList<>();
+        T objectInFile = (T) objectInputStream.readObject();
 
-        Map<String, Employee> resultMap = new HashMap<>();
-        Employee employee = (Employee) objectInputStream.readObject();
-        while (employee != null) {
-            resultMap.put(employee.getId(), employee);
-            employee = (Employee) objectInputStream.readObject();
+        while (objectInFile != null) {
+            resultList.add(objectInFile);
+            objectInFile = (T) objectInputStream.readObject();
         }
-        return resultMap;
+        return resultList;
     }
 
     @Override
     public void saveAllEmployees(Map<String, Employee> employeeMap) {
-        //write to file
-        try (ObjectOutputStream objectOutputStream =
-                     createObjectOutputStream(fileNameEmployees)) {
-
-            writeEmployeesToFile(employeeMap, objectOutputStream);
-
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Can't write to file " + fileNameEmployees);
-        }
+        saveAll(employeeMap, fileNameEmployees);
     }
 
     @Override
     public void saveAllVacations(Map<String, Vacation> vacationMap) {
-        try (ObjectOutputStream objectOutputStream =
-                     createObjectOutputStream(fileNameVacations)) {
+        saveAll(vacationMap, fileNameVacations);
+    }
 
-            writeVacationsToFile(vacationMap, objectOutputStream);
+    private <T> void saveAll(Map<String, T> map, String file) {
+        try (ObjectOutputStream objectOutputStream =
+                     createObjectOutputStream(file)) {
+
+            writeToFile(map, objectOutputStream);
 
         } catch (IOException e) {
-            throw new IllegalArgumentException("Can't write to file " + fileNameVacations);
+            throw new IllegalArgumentException("Can't write to file " + file);
         }
     }
 
-    public void writeEmployeesToFile(Map<String, Employee> employeeMap,
-                                     ObjectOutputStream objectOutputStream) throws IOException {
-        for (String id : employeeMap.keySet()) {
-            objectOutputStream.writeObject(employeeMap.get(id));
-        }
-        objectOutputStream.writeObject(null);
-        objectOutputStream.flush();
-    }
-
-    public void writeVacationsToFile(Map<String, Vacation> vacationMap,
-                                     ObjectOutputStream objectOutputStream) throws IOException {
-        for (String id : vacationMap.keySet()) {
-            objectOutputStream.writeObject(vacationMap.get(id));
+    private <T> void writeToFile(Map<String, T> map,
+                                 ObjectOutputStream objectOutputStream)
+            throws IOException {
+        for (String id : map.keySet()) {
+            objectOutputStream.writeObject(map.get(id));
         }
         objectOutputStream.writeObject(null);
         objectOutputStream.flush();
     }
-
 
     @Override
     public boolean isFileEmpty(File file) {
