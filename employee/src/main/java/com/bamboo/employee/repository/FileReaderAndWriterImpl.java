@@ -98,7 +98,6 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
             writeEmployeesToFile(employeeMap, objectOutputStream);
 
         } catch (IOException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException("Can't write to file " + fileNameEmployees);
         }
     }
@@ -111,7 +110,6 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
             writeVacationsToFile(vacationMap, objectOutputStream);
 
         } catch (IOException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException("Can't write to file " + fileNameVacations);
         }
     }
