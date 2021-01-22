@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public interface VacationRepository {
-    void addVacationToEmployee(String employeeId, Vacation vacation);
+    void addVacationToEmployee(Vacation vacation);
 
     Map<String, Vacation> findAll();
 
@@ -20,4 +20,6 @@ public interface VacationRepository {
     void rejectVacation(String id);
 
     boolean isFileEmpty(File file) throws IOException;
+
+    Vacation findVacation(String id);
 }

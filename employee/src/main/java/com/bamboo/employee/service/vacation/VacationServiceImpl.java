@@ -34,7 +34,7 @@ public class VacationServiceImpl implements VacationService {
         Vacation vacation = new Vacation(id, employeeId, dateFrom, dateTo,
                 duration, vacationStatus);
 
-        vacationRepository.addVacationToEmployee(employeeId, vacation);
+        vacationRepository.addVacationToEmployee(vacation);
     }
 
     @Override
@@ -55,5 +55,10 @@ public class VacationServiceImpl implements VacationService {
     @Override
     public Map<String, Vacation> findAll() {
         return vacationRepository.findAll();
+    }
+
+    @Override
+    public void saveAllVacations(Map<String, Vacation> vacationMap) {
+        vacationRepository.saveAllVacations(vacationMap);
     }
 }

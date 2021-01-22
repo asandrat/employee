@@ -16,4 +16,6 @@ public interface VacationService {
     void rejectVacation(String vacationId);
 
     Map<String, Vacation> findAll();
+
+    void saveAllVacations(Map<String, Vacation> vacationMap);
 }

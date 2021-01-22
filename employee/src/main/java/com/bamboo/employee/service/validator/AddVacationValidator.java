@@ -13,7 +13,7 @@ import java.util.Optional;
 @Component("vacation_addition")
 public class AddVacationValidator implements Validator {
     @Override
-    public boolean validate(Map<String, String> data) {
+    public boolean validate(Map<String, String> data)  {
         if (data.size() != 4) {
             return false;
         }
@@ -33,7 +33,7 @@ public class AddVacationValidator implements Validator {
                 return false;
             }
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("input data not valid");
         }
         //vacation status check: status should be SUBMITTED
         Optional<VacationStatus> status = Optional.ofNullable(

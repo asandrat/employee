@@ -5,6 +5,8 @@ import com.bamboo.employee.service.validator.CustomValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -12,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
+@ConditionalOnProperty(value="spring.main.web-application-type", havingValue = "none")
 public class CommandLineAppRunner implements CommandLineRunner {
     private final ActionExecutor actionExecutor; // to reduce if/else for
     // command line arguments
