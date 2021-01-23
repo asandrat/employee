@@ -1,6 +1,6 @@
 package com.bamboo.employee.repository.employee;
 
-import com.bamboo.employee.model.Employee;
+import com.bamboo.employee.entities.Employee;
 import com.bamboo.employee.repository.FileReaderAndWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

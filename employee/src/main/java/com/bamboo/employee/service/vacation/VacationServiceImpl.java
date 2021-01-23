@@ -1,14 +1,20 @@
 package com.bamboo.employee.service.vacation;
 
-import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationStatus;
+import com.bamboo.employee.entities.Vacation;
+import com.bamboo.employee.entities.VacationStatus;
+import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.repository.vacation.VacationRepository;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -17,9 +23,15 @@ public class VacationServiceImpl implements VacationService {
     @Autowired
     private VacationRepository vacationRepository;
 
+    private final ModelMapper modelMapper;
+
+    public VacationServiceImpl() {
+        this.modelMapper = new ModelMapper();
+    }
+
     @Override
-    public void addVacation(String employeeId, String dateFromString,
-                            String dateToString, String status) {
+    public VacationDTO addVacation(String employeeId, String dateFromString,
+                                   String dateToString, String status) {
         final String id = UUID.randomUUID().toString();
         System.out.println("service vacation: " + id);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
@@ -35,6 +47,7 @@ public class VacationServiceImpl implements VacationService {
                 duration, vacationStatus);
 
         vacationRepository.addVacationToEmployee(vacation);
+        return modelMapper.map(vacation, VacationDTO.class);
     }
 
     @Override
@@ -53,8 +66,11 @@ public class VacationServiceImpl implements VacationService {
     }
 
     @Override
-    public Map<String, Vacation> findAll() {
-        return vacationRepository.findAll();
+    public List<VacationDTO> findAll() {
+        List<Vacation> list =
+                new ArrayList<>(vacationRepository.findAll().values());
+        Type listType = new TypeToken<List<VacationDTO>>(){}.getType();
+        return modelMapper.map(list, listType);
     }
 
     @Override

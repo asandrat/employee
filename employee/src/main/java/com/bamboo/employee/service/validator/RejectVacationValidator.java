@@ -1,6 +1,6 @@
 package com.bamboo.employee.service.validator;
 
-import com.bamboo.employee.model.VacationStatus;
+import com.bamboo.employee.entities.VacationStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;

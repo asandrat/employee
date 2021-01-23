@@ -1,6 +1,6 @@
 package com.bamboo.employee.repository.vacation;
 
-import com.bamboo.employee.model.Vacation;
+import com.bamboo.employee.entities.Vacation;
 
 import java.io.File;
 import java.io.IOException;

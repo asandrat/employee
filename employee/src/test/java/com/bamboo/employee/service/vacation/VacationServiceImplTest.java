@@ -1,7 +1,7 @@
 package com.bamboo.employee.service.vacation;
 
-import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationStatus;
+import com.bamboo.employee.entities.Vacation;
+import com.bamboo.employee.entities.VacationStatus;
 import com.bamboo.employee.repository.vacation.VacationRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
