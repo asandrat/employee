@@ -13,7 +13,7 @@ public interface VacationRepository {
 
     void saveAllVacations(Map<String, Vacation> map);
 
-    void removeVacation(String id);
+    boolean removeVacation(String id);
 
     void approveVacation(String id);
 

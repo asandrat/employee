@@ -51,8 +51,8 @@ public class VacationServiceImpl implements VacationService {
     }
 
     @Override
-    public void removeVacation(String id) {
-        vacationRepository.removeVacation(id);
+    public boolean removeVacation(String id) {
+        return vacationRepository.removeVacation(id);
     }
 
     @Override

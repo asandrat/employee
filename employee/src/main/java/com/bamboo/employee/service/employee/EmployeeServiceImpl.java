@@ -28,27 +28,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO addEmployee(String name, String surname) {
         final String id = UUID.randomUUID().toString();
-        System.out.println("service: "+id);
+        System.out.println("service: " + id);
         Employee employee = new Employee(id, name, surname);
         employeeRepository.addEmployee(employee);
-        return modelMapper.map(employee,EmployeeDTO.class);
+        return modelMapper.map(employee, EmployeeDTO.class);
     }
 
     @Override
-    public void removeEmployee(String id) {
-        employeeRepository.removeEmployee(id);
+    public boolean removeEmployee(String id) {
+        return employeeRepository.removeEmployee(id);
     }
 
     @Override
     public void saveAll(Map<String, Employee> map) {
-        //write to file
         employeeRepository.saveAll(map);
     }
 
     @Override
     public List<EmployeeDTO> findAll() {
-        List<Employee> list = new ArrayList<>(employeeRepository.findAll().values());
-        Type listType = new TypeToken<List<EmployeeDTO>>(){}.getType();
-        return modelMapper.map(list,listType);
+        List<Employee> list =
+                new ArrayList<>(employeeRepository.findAll().values());
+        Type listType = new TypeToken<List<EmployeeDTO>>() {
+        }.getType();
+        return modelMapper.map(list, listType);
     }
 }

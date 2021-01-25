@@ -2,6 +2,8 @@ package com.bamboo.employee.controllers;
 
 import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.service.vacation.VacationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,22 +29,36 @@ public class VacationController {
         String dateFrom = vacationDTO.getDateFrom().toString();
         String dateTo = vacationDTO.getDateTo().toString();
         String status = vacationDTO.getStatus().toString();
-        return vacationService.addVacation(employeeId, dateFrom, dateTo, status);
+        return vacationService.addVacation(employeeId, dateFrom, dateTo,
+                status);
     }
 
     @DeleteMapping("{id}")
-    public void deleteVacationById(@PathVariable String id) {
-        vacationService.removeVacation(id);
+    public ResponseEntity<String> deleteVacationById(@PathVariable String id) {
+        if (vacationService.removeVacation(id)) {
+            return new ResponseEntity<>("" +
+                    "vacation with id: " + id + " deleted.",
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(
+                "vacation not found.",
+                HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("{id}/approve")
-    public void approveVacation(@PathVariable String id){
+    public ResponseEntity<String> approveVacation(@PathVariable String id) {
         vacationService.approveVacation(id);
+        return new ResponseEntity<>(
+                "vacation with id: " + id + " approved.",
+                HttpStatus.OK);
     }
 
     @PutMapping("{id}/reject")
-    public void rejectVacation(@PathVariable String id){
+    public ResponseEntity<String> rejectVacation(@PathVariable String id) {
         vacationService.rejectVacation(id);
+        return new ResponseEntity<>(
+                "vacation with id: " + id + " rejected.",
+                HttpStatus.OK);
     }
 
 

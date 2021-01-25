@@ -38,9 +38,12 @@ public class VacationRepositoryImpl implements VacationRepository {
     }
 
     @Override
-    public void removeVacation(String id) {
-        vacationsMap.remove(id);
+    public boolean removeVacation(String id) {
+        if(vacationsMap.remove(id)==null) {
+            return false;
+        }
         fileReaderAndWriter.saveAllVacations(vacationsMap);
+        return true;
     }
 
     @Override

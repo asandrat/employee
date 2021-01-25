@@ -11,7 +11,7 @@ public interface VacationService {
     VacationDTO addVacation(String employeeId, String dateFrom, String dateTo,
                             String status);
 
-    void removeVacation(String id);
+    boolean removeVacation(String id);
 
     void approveVacation(String vacationId);
 

@@ -9,7 +9,7 @@ import java.util.Map;
 public interface EmployeeService {
     EmployeeDTO addEmployee(String name, String surname);
 
-    void removeEmployee(String id);
+    boolean removeEmployee(String id);
 
     void saveAll(Map<String, Employee> map);
 

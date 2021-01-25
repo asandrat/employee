@@ -16,9 +16,6 @@ public interface EmployeeRepository {
 
     Employee findEmployee(String id);
 
-    void removeEmployee(String id);
-
-    boolean isFileEmpty(File file) throws IOException;
-
+    boolean removeEmployee(String id);
 
 }

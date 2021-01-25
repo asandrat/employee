@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.io.*;
 import java.util.Map;
 
 @Repository
@@ -46,19 +45,16 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
 
     @Override
-    public void removeEmployee(String id) {
-        employeeMap.remove(id);
+    public boolean removeEmployee(String id) {
+        if(employeeMap.remove(id) == null){
+            return false;
+        }
         fileReaderAndWriter.saveAllEmployees(employeeMap);
+        return true;
     }
-
     @Override
     public Employee findEmployee(String id) {
         return employeeMap.get(id);
-    }
-
-    @Override
-    public boolean isFileEmpty(File file) throws IOException {
-        return fileReaderAndWriter.isFileEmpty(file);
     }
 
 }
