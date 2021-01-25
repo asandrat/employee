@@ -1,18 +1,15 @@
 package com.bamboo.employee.controller;
 
-import com.bamboo.employee.custom.exception.EmployeeNotFoundException;
-import com.bamboo.employee.custom.exception.VacationNotFoundException;
-import com.bamboo.employee.entities.Employee;
-import com.bamboo.employee.model.EmployeeDTO;
+import com.bamboo.employee.model.ServerResponse;
 import com.bamboo.employee.model.VacationDTO;
+import com.bamboo.employee.model.VacationStatusDTO;
 import com.bamboo.employee.service.EmployeeService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("/employees/{employeeId}")
 public class VacationController {
 
     private final EmployeeService employeeService;
@@ -21,50 +18,24 @@ public class VacationController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping("/{employeeId}/vacations")
+    @GetMapping("/vacations")
     public List<VacationDTO> getAllVacations(@PathVariable String employeeId) {
-
-        Employee employee = employeeService.findEmployee(employeeId);
-
-        if (employee == null) {
-            throw new EmployeeNotFoundException(
-                    "Could not find employee with id " + employeeId
-            );
-        }
         return employeeService.getVacations(employeeId);
     }
 
-    @GetMapping("{employeeId}/vacations/{vacationId}")
+    @GetMapping("/vacations/{vacationId}")
     public VacationDTO getVacation(
             @PathVariable String employeeId,
             @PathVariable String vacationId
     ) {
-        EmployeeDTO employee = employeeService.getEmployee(employeeId);
-        if (employee == null) {
-            throw new EmployeeNotFoundException(
-                    "Could not find employee with id " + employeeId
-            );
-        }
-        VacationDTO vacation = employeeService.findVacation(employeeId, vacationId);
-        if (vacation == null) {
-            throw new VacationNotFoundException(
-                    "Could not vacation with id " + vacationId
-            );
-        }
-        return vacation;
+        return employeeService.findVacation(employeeId, vacationId);
     }
 
-    @PostMapping("/{employeeId}/vacations")
+    @PostMapping("/vacations")
     public VacationDTO createVacation(
             @PathVariable String employeeId,
             @RequestBody VacationDTO vacation) {
-        EmployeeDTO employee = employeeService.getEmployee(employeeId);
 
-        if (employee == null) {
-            throw new EmployeeNotFoundException(
-                    "Could not find employee with id " + employeeId
-            );
-        }
         return employeeService.addVacation(
                 employeeId,
                 vacation.getDateFrom(),
@@ -73,44 +44,38 @@ public class VacationController {
         );
     }
 
-    @PatchMapping("/{employeeId}/vacations/{vacationId}/approve")
-    public ResponseEntity<?> approveVacationStatus(
+    @PatchMapping("/vacations")
+    public String changeVacationStatus(
             @PathVariable String employeeId,
-            @PathVariable String vacationId
-    ) {
-        EmployeeDTO employee = employeeService.getEmployee(employeeId);
-        if (employee == null) {
-            throw new EmployeeNotFoundException(
-                    "Could not find employee with id " + employeeId
+            @RequestBody VacationStatusDTO vacationStatus
+            ) {
+        String vacationId = vacationStatus.getVacationId();
+
+        if (vacationStatus.getVacationStatus().equalsIgnoreCase(
+                "Approved"
+        )) {
+            employeeService.approveVacation(vacationId, employeeId);
+        } else if (vacationStatus.getVacationStatus().equalsIgnoreCase(
+                "Rejected"
+        )) {
+            employeeService.rejectVacation(vacationId, employeeId);
+        } else {
+            throw new IllegalArgumentException(
+                    "Vacation state is invalid"
             );
         }
-        employeeService.approveVacation(vacationId, employeeId);
-        return ResponseEntity.ok("Vacation status is updated");
+        return new ServerResponse(
+                "Vacation with id " + vacationId + " is successfully updated."
+        ).getMessage();
     }
 
-    @PatchMapping("/{employeeId}/vacations/{vacationId}/reject")
-    public ResponseEntity<?> rejectVacationStatus(
-            @PathVariable String employeeId,
-            @PathVariable String vacationId
-    ) {
-        EmployeeDTO employee = employeeService.getEmployee(employeeId);
-        if (employee == null) {
-            throw new EmployeeNotFoundException(
-                    "Could not find employee with id " + employeeId
-            );
-        }
-        employeeService.rejectVacation(vacationId, employeeId);
-        return ResponseEntity.ok("Vacation status is updated");
-    }
-
-
-    @DeleteMapping("{employeeId}/vacations/{vacationId}")
-    public ResponseEntity<?>  deleteVacation(
+    @DeleteMapping("/vacations/{vacationId}")
+    public String deleteVacation(
             @PathVariable String employeeId,
             @PathVariable String vacationId) {
         employeeService.removeVacation(vacationId, employeeId);
-        return ResponseEntity.ok(
-                "Vacation with id " + vacationId + "is successfully deleted"
-        );
+        return new ServerResponse(
+                "Vacation with id " + vacationId + " is successfully deleted"
+        ).getMessage();
     }
 }

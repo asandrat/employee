@@ -1,5 +1,6 @@
 package com.bamboo.employee.service;
 
+import com.bamboo.employee.custom.exception.EmployeeNotFoundException;
 import com.bamboo.employee.custom.exception.VacationNotFoundException;
 import com.bamboo.employee.entities.Employee;
 import com.bamboo.employee.entities.Vacation;
@@ -90,15 +91,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO getEmployee(String id) {
+        Employee employee = employeeRepository.findEmployee(id);
+        if (employee == null) {
+            throw new EmployeeNotFoundException(
+                    "Could not find employee with id: " + id
+            );
+        }
         return modelMapper.map(
-                employeeRepository.findEmployee(id),
+                employee,
                 EmployeeDTO.class
         );
-    }
-
-    @Override
-    public Employee findEmployee(String employeeId) {
-        return employeeRepository.findEmployee(employeeId);
     }
 
     @Override

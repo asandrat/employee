@@ -10,11 +10,11 @@ public interface EmployeeRepository {
 
     void saveAll(Map<String, Employee> employees);
 
-    Employee addEmployee(Employee emp);
+    Employee addEmployee(Employee employee);
 
     Employee findEmployee(String uniqueId);
 
-    void deleteEmployee(String employee);
+    void deleteEmployee(String employeeId);
 
     void addVacationToEmployee(String employeeId, Vacation vacation);
 

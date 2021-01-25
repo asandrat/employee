@@ -1,6 +1,7 @@
 package com.bamboo.employee.repository;
 
 import com.bamboo.employee.custom.exception.EmployeeFileNotFoundException;
+import com.bamboo.employee.custom.exception.EmployeeNotFoundException;
 import com.bamboo.employee.custom.exception.EmployeeStorageException;
 import com.bamboo.employee.custom.exception.VacationNotFoundException;
 import com.bamboo.employee.entities.Employee;
@@ -70,10 +71,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public Employee addEmployee(Employee emp) {
-        employeeList.put(emp.getUniqueId(), emp);
+    public Employee addEmployee(Employee employee) {
+        employeeList.put(employee.getUniqueId(), employee);
         saveAll(employeeList);
-        return emp;
+        return employee;
     }
 
     @Override
@@ -116,13 +117,23 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     public Vacation findVacation(String employeeId, String vacationId) {
         Employee employee = findEmployee(employeeId);
+        if (employee == null) {
+            throw new EmployeeNotFoundException(
+                    "Could not find employee with id: " + employeeId
+            );
+        }
+        if (employee.getVacations() == null) {
+            throw new VacationNotFoundException(
+                    "There is no vacations for the given employee"
+            );
+        }
         return employee.getVacations().stream()
                 .filter(
                         vacation -> vacation.getUniqueId().equals(vacationId)
                 ).findFirst()
                 .orElseThrow(() -> new VacationNotFoundException(
                         "Could not find vacation with id " + vacationId
-                                + "for the given employee"
+                                + " for the given employee"
                 ));
     }
 }

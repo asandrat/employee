@@ -1,6 +1,5 @@
 package com.bamboo.employee.service;
 
-import com.bamboo.employee.entities.Employee;
 import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.model.VacationDTO;
 
@@ -26,8 +25,6 @@ public interface EmployeeService {
     List<EmployeeDTO> findAllEmployees();
 
     EmployeeDTO getEmployee(String id);
-
-    Employee findEmployee(String employeeId);
 
     VacationDTO findVacation(String employeeId, String vacationId);
 

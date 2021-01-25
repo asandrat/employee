@@ -25,7 +25,6 @@ public class VacationDTO {
         this.vacationStatus = vacationStatus;
     }
 
-
     public String getId() {
         return id;
     }
