@@ -6,12 +6,13 @@ import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface EmployeeRepository {
 
     Collection<Employee> findAll();
 
-    Employee read(int employeeId);
+    Optional<Employee> read(int employeeId);
 
     boolean create(Employee employee);
 
@@ -19,7 +20,7 @@ public interface EmployeeRepository {
 
     void addVacationToEmployee(Vacation vacation);
 
-    Employee delete(Integer id);
+    Optional<Employee> delete(int id);
 
     Vacation deleteVacation(VacationId id);
 

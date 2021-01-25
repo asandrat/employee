@@ -1,16 +1,15 @@
 package com.bamboo.employee.model;
 
-
 import java.util.*;
 
 public class Employee {
 
-    private Integer uniqueId; // todo change autogenerating with uuid
+    private int uniqueId;
     private String name;
     private String surname;
     private final Map<VacationId, Vacation> vacations = new HashMap<>();
 
-    public Employee(final Integer uniqueId,
+    public Employee(final int uniqueId,
                     final String name,
                     final String surname) {
         this.uniqueId = uniqueId;
@@ -34,7 +33,7 @@ public class Employee {
         return new HashMap<>(vacations).values();
     }
 
-    public void setUniqueId(final Integer uniqueId) {
+    public void setUniqueId(final int uniqueId) {
         this.uniqueId = uniqueId;
     }
 
@@ -50,18 +49,17 @@ public class Employee {
         return vacations.put(vacation.getId(), new Vacation(vacation));
     }
 
-    public Vacation getVacation(final VacationId id) {
-        return vacations.get(id);
+    public Optional<Vacation> getVacation(final VacationId id) {
+        return Optional.ofNullable(vacations.get(id));
     }
 
     public Vacation removeVacation(final VacationId id) {
         return vacations.remove(id);
     }
 
-    // todo move to service
     public void updateVacation(final VacationId id,
                                final VacationStatus status) {
-        Vacation v = getVacation(id);
+        Vacation v = getVacation(id).get();
         v.setStatus(status);
     }
 
@@ -74,7 +72,7 @@ public class Employee {
             return false;
         }
         Employee employee = (Employee) o;
-        return uniqueId.equals(employee.uniqueId);
+        return uniqueId == employee.uniqueId;
     }
 
     @Override

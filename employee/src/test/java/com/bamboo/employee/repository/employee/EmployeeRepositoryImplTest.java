@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class EmployeeRepositoryImplTest {
 
@@ -75,9 +74,11 @@ class EmployeeRepositoryImplTest {
         Vacation v = new Vacation(new VacationId(1, 1));
         Employee e = new Employee(1, "asd", "asd");
         Assertions.assertTrue(repository.create(e));
-        Assertions.assertEquals(0, repository.read(1).getVacations().size());
+        Assertions.assertEquals(0,
+                repository.read(1).get().getVacations().size());
         repository.addVacationToEmployee(v);
-        Assertions.assertEquals(1, repository.read(1).getVacations().size());
+        Assertions.assertEquals(1,
+                repository.read(1).get().getVacations().size());
     }
 
     @Test
@@ -86,9 +87,11 @@ class EmployeeRepositoryImplTest {
         Employee e = new Employee(1, "asd", "asd");
         Assertions.assertTrue(repository.create(e));
         repository.addVacationToEmployee(v);
-        Assertions.assertEquals(1, repository.read(1).getVacations().size());
+        Assertions.assertEquals(1,
+                repository.read(1).get().getVacations().size());
         Assertions.assertEquals(v, repository.deleteVacation(v.getId()));
-        Assertions.assertEquals(0, repository.read(1).getVacations().size());
+        Assertions.assertEquals(0,
+                repository.read(1).get().getVacations().size());
     }
 
 

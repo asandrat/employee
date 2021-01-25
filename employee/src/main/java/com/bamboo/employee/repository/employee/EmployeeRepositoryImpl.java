@@ -6,9 +6,7 @@ import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 @Repository
@@ -24,23 +22,14 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public boolean create(final Employee employee) {
-        Integer key = employee.getUniqueId();
-        if (employees.containsKey(key)) {
-            System.out.println("Employee with key: " + key + " already exists");
-            return false;
-        } else {
-            System.out.println("Successfully added employee");
-            employees.put(key, employee);
-            return true;
-        }
+        int key = employee.getUniqueId();
+        employees.put(key, employee);
+        return true;
     }
 
     @Override
-    public Employee read(final int employeeId) {
-        if (employees.containsKey(employeeId)) {
-            return employees.get(employeeId);
-        }
-        throw new IllegalArgumentException("No such employee with id: " + employeeId);
+    public Optional<Employee> read(final int employeeId) {
+        return Optional.ofNullable(employees.get(employeeId));
     }
 
     @Override
@@ -51,25 +40,19 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public void addVacationToEmployee(Vacation vacation) {
-        Integer employeeId = vacation.getId().getEmployeeId();
+        int employeeId = vacation.getId().getEmployeeId();
         Employee employee = employees.get(employeeId);
         employee.addVacation(vacation);
     }
 
     @Override
-    public Employee delete(Integer id) {
-        return employees.remove(id);
+    public Optional<Employee> delete(final int id) {
+        return Optional.ofNullable(employees.remove(id));
     }
 
     @Override
     public Vacation deleteVacation(final VacationId id) {
-        Vacation v = employees.get(id.getEmployeeId()).removeVacation(id);
-        if (v != null) {
-            System.out.println("Successfully removed vacation with id: " + id);
-        } else {
-            System.out.println("Failed to remove vacation with id: " + id);
-        }
-        return v;
+        return employees.get(id.getEmployeeId()).removeVacation(id);
     }
 
     @Override
