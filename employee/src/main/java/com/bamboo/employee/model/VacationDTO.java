@@ -1,22 +1,36 @@
 package com.bamboo.employee.model;
 
-import com.bamboo.employee.entities.VacationStatus;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
-import java.time.LocalDate;
-
+@Entity
 public class VacationDTO {
+    @Id
     private String id;
+
+    @NotBlank(message = "employeeId is required")
     private String employeeId;
-    private LocalDate dateFrom;
-    private LocalDate dateTo;
+
+    @NotBlank(message = "dateFrom is required")
+    @Pattern(regexp = "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$")
+    private String dateFrom;
+
+    @NotBlank(message = "dateTo is required")
+    @Pattern(regexp = "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$")
+    private String dateTo;
+
     private int duration;
-    private VacationStatus status;
+
+    @NotBlank(message = "status is required")
+    private String status;
 
     public VacationDTO() {
     }
 
-    public VacationDTO(String id, String employeeId, LocalDate dateFrom,
-                       LocalDate dateTo, int duration, VacationStatus status) {
+    public VacationDTO(String id, String employeeId, String dateFrom,
+                       String dateTo, int duration, String status) {
         this.id = id;
         this.employeeId = employeeId;
         this.dateFrom = dateFrom;
@@ -41,19 +55,19 @@ public class VacationDTO {
         this.employeeId = employeeId;
     }
 
-    public LocalDate getDateFrom() {
+    public String getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(LocalDate dateFrom) {
+    public void setDateFrom(String dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public LocalDate getDateTo() {
+    public String getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(LocalDate dateTo) {
+    public void setDateTo(String dateTo) {
         this.dateTo = dateTo;
     }
 
@@ -65,11 +79,11 @@ public class VacationDTO {
         this.duration = duration;
     }
 
-    public VacationStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(VacationStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }
