@@ -1,10 +1,11 @@
 package com.bamboo.employee.repository.vacation;
 
-import com.bamboo.employee.model.Vacation;
+import com.bamboo.employee.entities.Vacation;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 public interface VacationRepository {
     void addVacationToEmployee(Vacation vacation);
@@ -13,7 +14,7 @@ public interface VacationRepository {
 
     void saveAllVacations(Map<String, Vacation> map);
 
-    void removeVacation(String id);
+    Optional<Vacation> removeVacation(String id);
 
     void approveVacation(String id);
 

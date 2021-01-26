@@ -1,7 +1,7 @@
 package com.bamboo.employee.repository.vacation;
 
-import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationStatus;
+import com.bamboo.employee.entities.Vacation;
+import com.bamboo.employee.entities.VacationStatus;
 import com.bamboo.employee.repository.FileReaderAndWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class VacationRepositoryImpl implements VacationRepository {
@@ -20,7 +21,6 @@ public class VacationRepositoryImpl implements VacationRepository {
     private String fileNameVacations;
 
     private Map<String, Vacation> vacationsMap;
-    //map: (vacationId,vacation)
 
     @PostConstruct
     public void init() {
@@ -29,7 +29,6 @@ public class VacationRepositoryImpl implements VacationRepository {
     }
 
     public Map<String, Vacation> findAll() {
-        //read from file
        return fileReaderAndWriter.findAllVacations();
     }
 
@@ -40,10 +39,19 @@ public class VacationRepositoryImpl implements VacationRepository {
     }
 
     @Override
-    public void removeVacation(String id) {
-        vacationsMap.remove(id);
+    public Optional<Vacation> removeVacation(String id) {
+        Optional<Vacation> vacation = Optional.ofNullable(vacationsMap.remove(id));
         fileReaderAndWriter.saveAllVacations(vacationsMap);
+        return vacation;
     }
+    //  @Override
+    //    public Optional<Employee> removeEmployee(String id) {
+    //        Optional<Employee> employee = Optional.ofNullable(employeeMap
+    //        .remove(id));
+    //
+    //        fileReaderAndWriter.saveAllEmployees(employeeMap);
+    //        return employee;
+    //    }
 
     @Override
     public void approveVacation(String id) {
@@ -66,12 +74,9 @@ public class VacationRepositoryImpl implements VacationRepository {
         vacation.setStatus(vacationStatus);
 
         removeVacation(id);
-        fileReaderAndWriter.saveAllVacations(vacationsMap);
     }
 
     public void saveAllVacations(Map<String, Vacation> map) {
-        //map: (id,vacation)
-        //write to file
         fileReaderAndWriter.saveAllVacations(map);
     }
 

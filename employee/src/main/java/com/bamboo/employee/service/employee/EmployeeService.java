@@ -1,15 +1,18 @@
 package com.bamboo.employee.service.employee;
 
-import com.bamboo.employee.model.Employee;
+import com.bamboo.employee.entities.Employee;
+import com.bamboo.employee.model.EmployeeDTO;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface EmployeeService {
-    void addEmployee(String name, String surname);
+    EmployeeDTO addEmployee(String name, String surname);
 
-    void removeEmployee(String id);
+    Optional<Employee> removeEmployee(String id);
 
     void saveAll(Map<String, Employee> map);
 
-    Map<String, Employee> findAll();
+    List<EmployeeDTO> findAll();
 }

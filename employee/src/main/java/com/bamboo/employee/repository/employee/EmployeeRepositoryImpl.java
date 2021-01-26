@@ -1,14 +1,15 @@
 package com.bamboo.employee.repository.employee;
 
-import com.bamboo.employee.model.Employee;
+import com.bamboo.employee.entities.Employee;
+import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.repository.FileReaderAndWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.io.*;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class EmployeeRepositoryImpl implements EmployeeRepository {
@@ -46,19 +47,16 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
 
     @Override
-    public void removeEmployee(String id) {
-        employeeMap.remove(id);
+    public Optional<Employee> removeEmployee(String id) {
+        Optional<Employee> employee = Optional.ofNullable(employeeMap.remove(id));
+
         fileReaderAndWriter.saveAllEmployees(employeeMap);
+        return employee;
     }
 
     @Override
     public Employee findEmployee(String id) {
         return employeeMap.get(id);
-    }
-
-    @Override
-    public boolean isFileEmpty(File file) throws IOException {
-        return fileReaderAndWriter.isFileEmpty(file);
     }
 
 }
