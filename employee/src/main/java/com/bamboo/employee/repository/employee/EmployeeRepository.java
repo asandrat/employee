@@ -5,6 +5,7 @@ import com.bamboo.employee.entities.Employee;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 public interface EmployeeRepository {
 
@@ -16,6 +17,6 @@ public interface EmployeeRepository {
 
     Employee findEmployee(String id);
 
-    boolean removeEmployee(String id);
+    Optional<Employee> removeEmployee(String id);
 
 }

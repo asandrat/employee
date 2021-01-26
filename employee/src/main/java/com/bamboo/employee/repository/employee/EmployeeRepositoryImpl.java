@@ -1,6 +1,7 @@
 package com.bamboo.employee.repository.employee;
 
 import com.bamboo.employee.entities.Employee;
+import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.repository.FileReaderAndWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class EmployeeRepositoryImpl implements EmployeeRepository {
@@ -45,13 +47,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
 
     @Override
-    public boolean removeEmployee(String id) {
-        if(employeeMap.remove(id) == null){
-            return false;
-        }
+    public Optional<Employee> removeEmployee(String id) {
+        Optional<Employee> employee = Optional.ofNullable(employeeMap.remove(id));
+
         fileReaderAndWriter.saveAllEmployees(employeeMap);
-        return true;
+        return employee;
     }
+
     @Override
     public Employee findEmployee(String id) {
         return employeeMap.get(id);

@@ -1,11 +1,12 @@
 package com.bamboo.employee.controllers;
 
 import com.bamboo.employee.model.VacationDTO;
+import com.bamboo.employee.model.VacationStatusDTO;
 import com.bamboo.employee.service.vacation.VacationService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,47 +20,47 @@ public class VacationController {
     }
 
     @GetMapping
-    public List<VacationDTO> getAllVacations() {
-        return vacationService.findAll();
+    public ResponseEntity<List<VacationDTO>> getAllVacations() {
+        return ResponseEntity.ok(vacationService.findAll());
     }
 
     @PostMapping
-    public VacationDTO addVacationToEmployee(@RequestBody VacationDTO vacationDTO) {
+    public ResponseEntity<VacationDTO> addVacationToEmployee(@Valid @RequestBody VacationDTO vacationDTO) {
         String employeeId = vacationDTO.getEmployeeId();
         String dateFrom = vacationDTO.getDateFrom().toString();
         String dateTo = vacationDTO.getDateTo().toString();
         String status = vacationDTO.getStatus().toString();
-        return vacationService.addVacation(employeeId, dateFrom, dateTo,
-                status);
+        return ResponseEntity.ok(vacationService.addVacation(employeeId,
+                dateFrom, dateTo, status));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteVacationById(@PathVariable String id) {
-        if (vacationService.removeVacation(id)) {
-            return new ResponseEntity<>("" +
-                    "vacation with id: " + id + " deleted.",
-                    HttpStatus.OK);
+        if (vacationService.removeVacation(id).isPresent()) {
+            return ResponseEntity.ok("vacation with id: " + id + " deleted.");
         }
-        return new ResponseEntity<>(
-                "vacation not found.",
-                HttpStatus.NOT_FOUND);
+        return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("{id}/approve")
-    public ResponseEntity<String> approveVacation(@PathVariable String id) {
-        vacationService.approveVacation(id);
-        return new ResponseEntity<>(
-                "vacation with id: " + id + " approved.",
-                HttpStatus.OK);
-    }
+    @PutMapping("/changeStatus")
+    public ResponseEntity<String> changeVacationStatus(
+            @RequestBody VacationStatusDTO vacationStatusDTO) {
+        String id = vacationStatusDTO.getVacationId();
+        String status = vacationStatusDTO.getStatus();
 
-    @PutMapping("{id}/reject")
-    public ResponseEntity<String> rejectVacation(@PathVariable String id) {
-        vacationService.rejectVacation(id);
-        return new ResponseEntity<>(
-                "vacation with id: " + id + " rejected.",
-                HttpStatus.OK);
-    }
+        if (!status.equalsIgnoreCase("approved")
+                && !status.equalsIgnoreCase("rejected")) {
+            return ResponseEntity.badRequest().build();
+        }
 
+        if (status.equalsIgnoreCase("approved")) {
+            vacationService.approveVacation(id);
+        } else {
+            vacationService.rejectVacation(id);
+        }
+
+        return ResponseEntity.ok(
+                "vacation with id: " + id + " " + status.toLowerCase());
+    }
 
 }

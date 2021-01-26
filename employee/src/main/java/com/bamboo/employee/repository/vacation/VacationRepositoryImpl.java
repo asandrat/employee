@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class VacationRepositoryImpl implements VacationRepository {
@@ -38,13 +39,19 @@ public class VacationRepositoryImpl implements VacationRepository {
     }
 
     @Override
-    public boolean removeVacation(String id) {
-        if(vacationsMap.remove(id)==null) {
-            return false;
-        }
+    public Optional<Vacation> removeVacation(String id) {
+        Optional<Vacation> vacation = Optional.ofNullable(vacationsMap.remove(id));
         fileReaderAndWriter.saveAllVacations(vacationsMap);
-        return true;
+        return vacation;
     }
+    //  @Override
+    //    public Optional<Employee> removeEmployee(String id) {
+    //        Optional<Employee> employee = Optional.ofNullable(employeeMap
+    //        .remove(id));
+    //
+    //        fileReaderAndWriter.saveAllEmployees(employeeMap);
+    //        return employee;
+    //    }
 
     @Override
     public void approveVacation(String id) {

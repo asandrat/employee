@@ -5,13 +5,14 @@ import com.bamboo.employee.model.VacationDTO;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface VacationService {
 
     VacationDTO addVacation(String employeeId, String dateFrom, String dateTo,
                             String status);
 
-    boolean removeVacation(String id);
+    Optional<Vacation> removeVacation(String id);
 
     void approveVacation(String vacationId);
 

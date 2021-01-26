@@ -2,10 +2,11 @@ package com.bamboo.employee.controllers;
 
 import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.service.employee.EmployeeService;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,27 +20,23 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<EmployeeDTO> getAllEmployees() {
-        return employeeService.findAll();
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+        return ResponseEntity.ok(employeeService.findAll());
     }
 
     @PostMapping
-    public EmployeeDTO addNewEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<EmployeeDTO> addNewEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         String name = employeeDTO.getName();
         String surname = employeeDTO.getSurname();
 
-        return employeeService.addEmployee(name, surname);
+        return ResponseEntity.ok(employeeService.addEmployee(name, surname));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEmployeeById(@PathVariable String id) {
-        if (employeeService.removeEmployee(id)) {
-            return new ResponseEntity<>(
-                    "employee with id: " + id + " deleted.",
-                    HttpStatus.OK);
+    public ResponseEntity<?> deleteEmployeeById(@PathVariable String id) {
+        if (employeeService.removeEmployee(id).isPresent()) {
+            return ResponseEntity.ok("employee with id: " + id + " deleted.");
         }
-        return new ResponseEntity<>(
-                "employee not found.",
-                HttpStatus.NOT_FOUND);
+        return ResponseEntity.notFound().build();
     }
 }

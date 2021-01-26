@@ -5,24 +5,19 @@ import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.repository.employee.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
+    private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
 
-    public EmployeeServiceImpl() {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
         this.modelMapper = new ModelMapper();
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -35,7 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public boolean removeEmployee(String id) {
+    public Optional<Employee> removeEmployee(String id) {
         return employeeRepository.removeEmployee(id);
     }
 
@@ -48,8 +43,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeDTO> findAll() {
         List<Employee> list =
                 new ArrayList<>(employeeRepository.findAll().values());
-        Type listType = new TypeToken<List<EmployeeDTO>>() {
-        }.getType();
+        Type listType = new TypeToken<List<EmployeeDTO>>() {}.getType();
         return modelMapper.map(list, listType);
     }
 }

@@ -6,26 +6,22 @@ import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.repository.vacation.VacationRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class VacationServiceImpl implements VacationService {
-    @Autowired
-    private VacationRepository vacationRepository;
+    private final VacationRepository vacationRepository;
 
     private final ModelMapper modelMapper;
 
-    public VacationServiceImpl() {
+    public VacationServiceImpl(VacationRepository vacationRepository) {
+        this.vacationRepository = vacationRepository;
         this.modelMapper = new ModelMapper();
     }
 
@@ -51,7 +47,7 @@ public class VacationServiceImpl implements VacationService {
     }
 
     @Override
-    public boolean removeVacation(String id) {
+    public Optional<Vacation> removeVacation(String id) {
         return vacationRepository.removeVacation(id);
     }
 
