@@ -40,11 +40,11 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUserById(@PathVariable("id") String id) {
+    public ServerResponse deleteUserById(@PathVariable("id") String id) {
         employeeService.removeEmployee(id);
         return new ServerResponse(
-                "Employee with id " + id + " is successfully deleted"
-        ).getMessage();
+                "Employee with id: " + id + " is successfully deleted"
+        );
     }
 
 }

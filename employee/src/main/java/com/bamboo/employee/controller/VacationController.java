@@ -47,7 +47,7 @@ public class VacationController {
     }
 
     @PatchMapping("/vacations")
-    public String changeVacationStatus(
+    public ServerResponse changeVacationStatus(
             @PathVariable String employeeId,
             @RequestBody VacationStatusDTO vacationStatus
             ) {
@@ -67,17 +67,17 @@ public class VacationController {
             );
         }
         return new ServerResponse(
-                "Vacation with id " + vacationId + " is successfully updated."
-        ).getMessage();
+                "Vacation with id: " + vacationId + " is successfully updated."
+        );
     }
 
     @DeleteMapping("/vacations/{vacationId}")
-    public String deleteVacation(
+    public ServerResponse deleteVacation(
             @PathVariable String employeeId,
             @PathVariable String vacationId) {
         employeeService.removeVacation(vacationId, employeeId);
         return new ServerResponse(
-                "Vacation with id " + vacationId + " is successfully deleted"
-        ).getMessage();
+                "Vacation with id: " + vacationId + " is successfully deleted"
+        );
     }
 }
