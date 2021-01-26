@@ -5,6 +5,7 @@ import com.bamboo.employee.model.ServerResponse;
 import com.bamboo.employee.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,10 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public EmployeeDTO createEmployee(@RequestBody EmployeeDTO employee) {
+    public EmployeeDTO createEmployee(
+            @Valid
+            @RequestBody EmployeeDTO employee
+    ) {
         return employeeService.addEmployee(
                 employee.getName(),
                 employee.getSurname()

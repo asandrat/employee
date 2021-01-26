@@ -4,6 +4,7 @@ import com.bamboo.employee.custom.exception.ApplicationException;
 import com.bamboo.employee.entities.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GeneralExceptionHandler {
 
-    public ResponseEntity<ErrorResponse> handleException(
+    public ResponseEntity<ErrorResponse> handleApplicationException(
             ApplicationException exc
     ) {
         ErrorResponse error = new ErrorResponse(
@@ -29,6 +30,17 @@ public class GeneralExceptionHandler {
                 exc.getMessage()
         );
 
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException exception
+    ) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage()
+        );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

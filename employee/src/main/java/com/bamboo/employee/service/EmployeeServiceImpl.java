@@ -1,5 +1,6 @@
 package com.bamboo.employee.service;
 
+import com.bamboo.employee.custom.exception.ApplicationException;
 import com.bamboo.employee.custom.exception.EmployeeNotFoundException;
 import com.bamboo.employee.custom.exception.VacationNotFoundException;
 import com.bamboo.employee.entities.Employee;
@@ -10,6 +11,7 @@ import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.repository.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -132,6 +134,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDateFrom =  LocalDate.parse(dateFrom, formatter);
         LocalDate localDateTo = LocalDate.parse(dateTo, formatter);
+        if (localDateFrom.isAfter(localDateTo)) {
+            throw new ApplicationException(
+                    "Date to must be after Date from", HttpStatus.BAD_REQUEST
+            );
+        }
         long duration = Duration.between(localDateFrom.atStartOfDay(),
                 localDateTo.atStartOfDay()).toDays();
 

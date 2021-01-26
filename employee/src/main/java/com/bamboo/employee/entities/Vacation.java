@@ -22,6 +22,7 @@ public class Vacation {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateTo;
+
     private long duration;
 
     @JsonIgnore

@@ -6,6 +6,7 @@ import com.bamboo.employee.model.VacationStatusDTO;
 import com.bamboo.employee.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,6 +34,7 @@ public class VacationController {
 
     @PostMapping("/vacations")
     public VacationDTO createVacation(
+            @Valid
             @PathVariable String employeeId,
             @RequestBody VacationDTO vacation) {
 
