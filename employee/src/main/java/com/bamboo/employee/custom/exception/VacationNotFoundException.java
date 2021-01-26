@@ -1,8 +1,11 @@
 package com.bamboo.employee.custom.exception;
 
-public class VacationNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class VacationNotFoundException extends ApplicationException {
 
     public VacationNotFoundException(String message) {
-        super(message);
+
+        super(message, HttpStatus.NOT_FOUND);
     }
 }

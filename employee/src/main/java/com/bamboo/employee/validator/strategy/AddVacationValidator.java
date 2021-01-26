@@ -1,6 +1,6 @@
 package com.bamboo.employee.validator.strategy;
 
-import com.bamboo.employee.model.VacationStatus;
+import com.bamboo.employee.entities.VacationStatus;
 import com.bamboo.employee.validator.AbstractValidator;
 import org.springframework.stereotype.Component;
 

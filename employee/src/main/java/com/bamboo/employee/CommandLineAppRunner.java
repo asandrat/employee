@@ -1,19 +1,22 @@
 package com.bamboo.employee;
 
-import com.bamboo.employee.model.UserAction;
+import com.bamboo.employee.entities.UserAction;
 import com.bamboo.employee.parser.InputParser;
 import com.bamboo.employee.service.command.ActionProcessor;
 import com.bamboo.employee.validator.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Map;
 
 @Component
+@ConditionalOnProperty(value="spring.main.web-application-type", havingValue = "none")
 public class CommandLineAppRunner implements CommandLineRunner {
+
     private final Validator validator;
     private final ActionProcessor processor;
 
@@ -45,6 +48,6 @@ public class CommandLineAppRunner implements CommandLineRunner {
         else {
             throw new IllegalArgumentException("Parameters are not valid");
         }
-        }
     }
+}
 

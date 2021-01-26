@@ -1,8 +1,10 @@
 package com.bamboo.employee.custom.exception;
 
-public class EmployeeFileNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
-    public EmployeeFileNotFoundException(String message, Throwable err) {
-        super(message, err);
+public class EmployeeFileNotFoundException extends ApplicationException {
+
+    public EmployeeFileNotFoundException(String message) {
+        super(message, HttpStatus.NOT_FOUND);
     }
 }

@@ -1,12 +1,14 @@
-package com.bamboo.employee.model;
+package com.bamboo.employee.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class Vacation {
 
@@ -20,20 +22,23 @@ public class Vacation {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateTo;
+
     private long duration;
+
+    @JsonIgnore
+    private Employee employee;
 
     VacationStatus vacationStatus;
 
     public Vacation() { }
 
     public Vacation(
-            String uniqueId,
             LocalDate dateFrom,
             LocalDate dateTo,
             long duration,
             VacationStatus vacationStatus
     ) {
-        this.uniqueId = uniqueId;
+        this.uniqueId = UUID.randomUUID().toString();
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.duration = duration;
@@ -86,5 +91,13 @@ public class Vacation {
 
     public void setVacationStatus(VacationStatus vacationStatus) {
         this.vacationStatus = vacationStatus;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }

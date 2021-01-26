@@ -1,8 +1,10 @@
 package com.bamboo.employee.custom.exception;
 
-public class EmployeeStorageException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
-    public EmployeeStorageException(String message, Throwable err) {
-        super(message, err);
+public class EmployeeStorageException extends ApplicationException {
+
+    public EmployeeStorageException(String message) {
+        super(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
