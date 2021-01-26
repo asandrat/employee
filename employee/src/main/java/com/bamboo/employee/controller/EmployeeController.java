@@ -14,14 +14,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 /*
 Dataflow
-    dto -> controler -> entity -> service -> ...
-    dto <- controler <- entity <- service <- ...
+    dto -> controler -> domain object -> service -> entity -> repo
+    dto <- controler <- domain object <- service <- entity <- repo
  */
 
 @RestController
@@ -37,47 +39,47 @@ public class EmployeeController {
     }
 
     @PostMapping
-    ResponseEntity<?> addEmployee(@RequestBody final EmployeeDTO employeeDTO) {
+    ResponseEntity<?> addEmployee(@RequestBody final EmployeeDTO employeeDTO,
+                                  HttpServletRequest request) {
         Employee e = new Employee(
                 Integer.parseInt(employeeDTO.getUniqueId()),
                 employeeDTO.getName(),
                 employeeDTO.getSurname());
 
         if (service.addEmployee(e)) {
-            return new ResponseEntity<>(
-                    "Successfully added employee with id " + employeeDTO.getUniqueId(),
-                    HttpStatus.CREATED);
+            return ResponseEntity
+                    .created(URI.create(request.getRequestURI()))
+                    .body(employeeDTO);
         }
-        return new ResponseEntity<>(
-                "Employee with id " + employeeDTO.getUniqueId() + " already exists",
-                HttpStatus.CONFLICT);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(employeeDTO);
     }
 
     @GetMapping
-    Collection<EmployeeDTO> allEmployees() {
-         return service.findAll().stream()
+    ResponseEntity<?> allEmployees() {
+         Collection<EmployeeDTO> employees = service.findAll().stream()
                  .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
                  .collect(Collectors.toList());
+         return ResponseEntity.ok(employees);
     }
 
     @GetMapping("/{id}")
-    EmployeeDTO getEmployeeById(@PathVariable final int id) {
+    ResponseEntity<?> getEmployeeById(@PathVariable final int id) {
         Employee employee = service.getEmployee(id);
-        return modelMapper.map(employee, EmployeeDTO.class);
+        return ResponseEntity.ok(modelMapper.map(employee, EmployeeDTO.class));
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<String> removeEmployeeById(@PathVariable final int id) {
-        service.removeEmployee(id);
-        return new ResponseEntity<>(
-                "Successfully deleted employee with id: " + id,
-                HttpStatus.OK);
+    ResponseEntity<?> removeEmployeeById(@PathVariable final int id) {
+        return ResponseEntity.ok(modelMapper.map(
+                service.removeEmployee(id),
+                EmployeeDTO.class));
     }
 
     @PostMapping("/{id}/vacations/")
-    ResponseEntity<String> addVacationToEmployee(
+    ResponseEntity<?> addVacationToEmployee(
             @PathVariable final int id,
-            @RequestBody final VacationDTO vacationDTO) {
+            @RequestBody final VacationDTO vacationDTO,
+            HttpServletRequest request) {
 
         Vacation v = new Vacation(id,
                 Integer.parseInt(vacationDTO.getUniqueId()),
@@ -87,39 +89,35 @@ public class EmployeeController {
                 VacationStatus.valueOf(vacationDTO.getStatus()));
 
         service.addVacationToEmployee(v);
-        return new ResponseEntity<>(
-                "Successfully added vacation with id: "
-                        + vacationDTO.getUniqueId()
-                        + " to employee with id " + id,
-                HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create(request.getRequestURI()))
+                .body(vacationDTO);
     }
 
     @GetMapping("/{employeeId}/vacations/{id}")
-    VacationDTO getVacationById(@PathVariable int employeeId,
-                                @PathVariable int id) {
+    ResponseEntity<?> getVacationById(@PathVariable int employeeId,
+                                                @PathVariable int id) {
         VacationId vacationId = new VacationId(employeeId, id);
         Vacation v = service.getVacationFromEmployee(vacationId);
-        return modelMapper.map(v, VacationDTO.class);
+        return ResponseEntity.ok(modelMapper.map(v, VacationDTO.class));
     }
 
     @DeleteMapping("/{employeeId}/vacations/{id}")
-    ResponseEntity<VacationDTO> removeVacationById(
+    ResponseEntity<?> removeVacationById(
             @PathVariable int employeeId,
             @PathVariable int id) {
 
         VacationId vacationId = new VacationId(employeeId, id);
         Vacation v = service.removeVacationFromEmployee(vacationId);
-        return new ResponseEntity<>(
-                modelMapper.map(v, VacationDTO.class),
-                HttpStatus.OK);
+        return ResponseEntity.ok(modelMapper.map(v, VacationDTO.class));
     }
 
     @GetMapping("/{id}/vacations")
-    Collection<VacationDTO> allVacationsOfEmployee(@PathVariable final int id) {
-        return service.getEmployee(id)
+    ResponseEntity<?> allVacationsOfEmployee(@PathVariable final int id) {
+        Collection<VacationDTO> vacations =  service.getEmployee(id)
                 .getVacations().stream()
                 .map(vacation -> modelMapper.map(vacation, VacationDTO.class))
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(vacations);
     }
 
     @PatchMapping("/{employeeId}/vacations/")
