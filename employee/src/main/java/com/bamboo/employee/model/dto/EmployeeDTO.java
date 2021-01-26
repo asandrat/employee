@@ -1,9 +1,17 @@
 package com.bamboo.employee.model.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class EmployeeDTO {
 
+    @NotNull
     private String uniqueId;
+    @NotNull
+    @Size(min=2, max=80)
     private String name;
+    @NotNull
+    @Size(min=2, max=80)
     private String surname;
 
     public String getUniqueId() {

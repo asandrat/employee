@@ -1,6 +1,7 @@
 package com.bamboo.employee.controller;
 
 
+import com.bamboo.employee.exceptions.InvalidStateTransitionException;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -39,7 +41,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    ResponseEntity<?> addEmployee(@RequestBody final EmployeeDTO employeeDTO,
+    ResponseEntity<?> addEmployee(@RequestBody @Valid final EmployeeDTO employeeDTO,
                                   HttpServletRequest request) {
         Employee e = new Employee(
                 Integer.parseInt(employeeDTO.getUniqueId()),
@@ -56,10 +58,10 @@ public class EmployeeController {
 
     @GetMapping
     ResponseEntity<?> allEmployees() {
-         Collection<EmployeeDTO> employees = service.findAll().stream()
-                 .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
-                 .collect(Collectors.toList());
-         return ResponseEntity.ok(employees);
+        Collection<EmployeeDTO> employees = service.findAll().stream()
+                .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(employees);
     }
 
     @GetMapping("/{id}")
@@ -78,7 +80,7 @@ public class EmployeeController {
     @PostMapping("/{id}/vacations/")
     ResponseEntity<?> addVacationToEmployee(
             @PathVariable final int id,
-            @RequestBody final VacationDTO vacationDTO,
+            @RequestBody @Valid final VacationDTO vacationDTO,
             HttpServletRequest request) {
 
         Vacation v = new Vacation(id,
@@ -95,7 +97,7 @@ public class EmployeeController {
 
     @GetMapping("/{employeeId}/vacations/{id}")
     ResponseEntity<?> getVacationById(@PathVariable int employeeId,
-                                                @PathVariable int id) {
+                                      @PathVariable int id) {
         VacationId vacationId = new VacationId(employeeId, id);
         Vacation v = service.getVacationFromEmployee(vacationId);
         return ResponseEntity.ok(modelMapper.map(v, VacationDTO.class));
@@ -113,7 +115,7 @@ public class EmployeeController {
 
     @GetMapping("/{id}/vacations")
     ResponseEntity<?> allVacationsOfEmployee(@PathVariable final int id) {
-        Collection<VacationDTO> vacations =  service.getEmployee(id)
+        Collection<VacationDTO> vacations = service.getEmployee(id)
                 .getVacations().stream()
                 .map(vacation -> modelMapper.map(vacation, VacationDTO.class))
                 .collect(Collectors.toList());
@@ -121,16 +123,16 @@ public class EmployeeController {
     }
 
     @PatchMapping("/{employeeId}/vacations/")
-    void updateVacationOfEmployee(@PathVariable final int employeeId,
-                                    @RequestBody final VacationStatusDTO statusDTO) {
-        int id = Integer.parseInt(statusDTO.getUniqueId());
-        if (statusDTO.getStatus().equals("approve")) {
-            service.approveVacationForEmployee(new VacationId(employeeId, id));
-        } else if (statusDTO.getStatus().equals("reject")) {
-            service.rejectVacationForEmployee(new VacationId(employeeId, id));
-        }
-        // todo
-        // should throw -> bad client input
-    }
+    ResponseEntity<?> updateVacationOfEmployee(
+            @PathVariable final int employeeId,
+            @RequestBody final VacationStatusDTO statusDTO)
+            throws InvalidStateTransitionException {
 
+        VacationId id = new VacationId(
+                employeeId,
+                Integer.parseInt(statusDTO.getUniqueId()));
+        VacationStatus status = VacationStatus.valueOf(statusDTO.getStatus());
+        Vacation v = service.updateVacationForEmployee(id, status);
+        return ResponseEntity.ok(modelMapper.map(v, VacationDTO.class));
+    }
 }

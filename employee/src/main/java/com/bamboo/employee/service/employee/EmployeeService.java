@@ -1,8 +1,10 @@
 package com.bamboo.employee.service.employee;
 
+import com.bamboo.employee.exceptions.InvalidStateTransitionException;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
+import com.bamboo.employee.model.VacationStatus;
 
 import java.util.Collection;
 
@@ -23,6 +25,8 @@ public interface EmployeeService {
     Vacation removeVacationFromEmployee(VacationId id);
 
     boolean approveVacationForEmployee(VacationId vacationId);
+
+    Vacation updateVacationForEmployee(VacationId id, VacationStatus status) throws InvalidStateTransitionException;
 
     boolean rejectVacationForEmployee(VacationId vacationId);
 }
