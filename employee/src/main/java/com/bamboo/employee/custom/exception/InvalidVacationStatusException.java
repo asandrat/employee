@@ -2,9 +2,9 @@ package com.bamboo.employee.custom.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class InvalidStateTransitionException extends ApplicationException {
+public class InvalidVacationStatusException extends ApplicationException {
 
-    public InvalidStateTransitionException(String message) {
+    public InvalidVacationStatusException(String message) {
         super(message, HttpStatus.BAD_REQUEST);
     }
 }

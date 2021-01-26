@@ -1,44 +1,44 @@
 package com.bamboo.employee.controller;
 
+import com.bamboo.employee.entity.VacationStatus;
 import com.bamboo.employee.model.ServerResponse;
 import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.model.VacationStatusDTO;
-import com.bamboo.employee.service.EmployeeService;
+import com.bamboo.employee.service.VacationService;
+import com.bamboo.employee.validator.VacationStatusValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/employees/{employeeId}")
 public class VacationController {
 
-    private final EmployeeService employeeService;
-
-    public VacationController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
+    private final VacationService vacationService;
 
     @GetMapping("/vacations")
-    public List<VacationDTO> getAllVacations(@PathVariable String employeeId) {
-        return employeeService.getVacations(employeeId);
+    public List<VacationDTO> getAllVacations(@PathVariable int employeeId) {
+        return vacationService.getVacations(employeeId);
     }
 
     @GetMapping("/vacations/{vacationId}")
     public VacationDTO getVacation(
-            @PathVariable String employeeId,
-            @PathVariable String vacationId
+            @PathVariable int employeeId,
+            @PathVariable int vacationId
     ) {
-        return employeeService.findVacation(employeeId, vacationId);
+        return vacationService.findVacation(employeeId, vacationId);
     }
 
     @PostMapping("/vacations")
     public VacationDTO createVacation(
             @Valid
-            @PathVariable String employeeId,
+            @PathVariable int employeeId,
             @RequestBody VacationDTO vacation) {
 
-        return employeeService.addVacation(
+        return vacationService.addVacation(
                 employeeId,
                 vacation.getDateFrom(),
                 vacation.getDateTo(),
@@ -48,24 +48,17 @@ public class VacationController {
 
     @PatchMapping("/vacations")
     public ServerResponse changeVacationStatus(
-            @PathVariable String employeeId,
-            @RequestBody VacationStatusDTO vacationStatus
+            @PathVariable int employeeId,
+            @RequestBody VacationStatusDTO vacationStatusDTO
             ) {
-        String vacationId = vacationStatus.getVacationId();
+        int vacationId = vacationStatusDTO.getVacationId();
+        String status = vacationStatusDTO.getVacationStatus();
+        VacationStatus vacationStatus= VacationStatusValidator.isValid(status);
 
-        if (vacationStatus.getVacationStatus().equalsIgnoreCase(
-                "Approved"
-        )) {
-            employeeService.approveVacation(vacationId, employeeId);
-        } else if (vacationStatus.getVacationStatus().equalsIgnoreCase(
-                "Rejected"
-        )) {
-            employeeService.rejectVacation(vacationId, employeeId);
-        } else {
-            throw new IllegalArgumentException(
-                    "Vacation state is invalid"
-            );
-        }
+        vacationService.changeVacationStatus(
+                vacationId,
+                employeeId,
+                vacationStatus);
         return new ServerResponse(
                 "Vacation with id: " + vacationId + " is successfully updated."
         );
@@ -73,9 +66,9 @@ public class VacationController {
 
     @DeleteMapping("/vacations/{vacationId}")
     public ServerResponse deleteVacation(
-            @PathVariable String employeeId,
-            @PathVariable String vacationId) {
-        employeeService.removeVacation(vacationId, employeeId);
+            @PathVariable int employeeId,
+            @PathVariable int vacationId) {
+        vacationService.removeVacation(vacationId, employeeId);
         return new ServerResponse(
                 "Vacation with id: " + vacationId + " is successfully deleted"
         );

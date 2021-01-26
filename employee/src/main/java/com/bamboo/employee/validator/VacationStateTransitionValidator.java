@@ -1,14 +1,14 @@
-package com.bamboo.employee.service;
+package com.bamboo.employee.validator;
 
 import com.bamboo.employee.custom.exception.InvalidStateTransitionException;
-import com.bamboo.employee.entities.Vacation;
-import com.bamboo.employee.entities.VacationStatus;
+import com.bamboo.employee.entity.Vacation;
+import com.bamboo.employee.entity.VacationStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
-public class VacationValidator {
+public class VacationStateTransitionValidator {
 
     private static final Map<VacationStatus, List<VacationStatus>> VALID_TRANSITIONS;
 
