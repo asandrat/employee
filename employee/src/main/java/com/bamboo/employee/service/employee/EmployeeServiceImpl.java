@@ -34,10 +34,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public boolean addEmployee(final Employee employee) {
-        if (repository.read(employee.getUniqueId()).isPresent()) {
-            return false;
-        }
+    public Employee addEmployee(final Employee employee) {
         return repository.create(employee);
     }
 
@@ -54,7 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void addVacationToEmployee(final Vacation vacation) {
+    public Vacation addVacationToEmployee(final Vacation vacation) {
         Optional<Employee> maybeEmployee =
                 repository.read(vacation.getId().getEmployeeId());
 
@@ -69,7 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new IllegalArgumentException("Employee already contains "
                     + "vacation with id: " + vacation.getId().getUniqueId());
         }
-        repository.addVacationToEmployee(vacation);
+        return repository.addVacationToEmployee(vacation);
     }
 
     @Override
@@ -82,6 +79,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Vacation removeVacationFromEmployee(final VacationId id) {
         Vacation v = repository.deleteVacation(id);
 
+        //todo zamentiti sout sa Logger-om
         if (v != null) {
             System.out.println("Successfully removed vacation with id: " + id);
         } else {
@@ -92,43 +90,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Vacation updateVacationForEmployee(final VacationId id,
-                                              final VacationStatus target) throws InvalidStateTransitionException {
+                                              final VacationStatus target) {
         Vacation v = getVacationFromEmployee(id);
         VacationStatus status = v.getStatus();
         repository.update(id, vacationStateManager.getValidStatus(status,
                 target));
         return v;
-    }
-
-    @Override
-    public boolean approveVacationForEmployee(final VacationId vacationId) {
-        VacationStatus status = getVacationFromEmployee(vacationId).getStatus();
-        switch (status) {
-            case APPROVED:
-                throw new IllegalArgumentException("Can't approve already " +
-                        "approved vacation");
-            case REJECTED:
-                throw new IllegalArgumentException("Can't approve rejected " +
-                        "vacation");
-            default:
-                repository.update(vacationId, VacationStatus.APPROVED);
-                return true;
-        }
-    }
-
-    @Override
-    public boolean rejectVacationForEmployee(final VacationId vacationId) {
-        VacationStatus status = getVacationFromEmployee(vacationId).getStatus();
-        switch (status) {
-            case APPROVED:
-                throw new IllegalArgumentException("Can't reject already " +
-                        "approved vacation");
-            case REJECTED:
-                throw new IllegalArgumentException("Can't reject already " +
-                        "rejected vacation");
-            default:
-                repository.update(vacationId, VacationStatus.REJECTED);
-                return true;
-        }
     }
 }

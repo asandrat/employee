@@ -12,21 +12,18 @@ public interface EmployeeService {
 
     Collection<Employee> findAll();
 
-    boolean addEmployee(Employee employee);
+    Employee addEmployee(Employee employee);
 
     Employee getEmployee(int id);
 
     Employee removeEmployee(int id);
 
-    void addVacationToEmployee(Vacation vacation);
+    Vacation addVacationToEmployee(Vacation vacation);
 
     Vacation getVacationFromEmployee(VacationId vacationId);
 
     Vacation removeVacationFromEmployee(VacationId id);
 
-    boolean approveVacationForEmployee(VacationId vacationId);
+    Vacation updateVacationForEmployee(VacationId id, VacationStatus status);
 
-    Vacation updateVacationForEmployee(VacationId id, VacationStatus status) throws InvalidStateTransitionException;
-
-    boolean rejectVacationForEmployee(VacationId vacationId);
 }

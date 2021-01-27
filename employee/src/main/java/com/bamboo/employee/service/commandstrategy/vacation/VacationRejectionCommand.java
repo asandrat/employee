@@ -1,6 +1,7 @@
 package com.bamboo.employee.service.commandstrategy.vacation;
 
 import com.bamboo.employee.model.VacationId;
+import com.bamboo.employee.model.VacationStatus;
 import com.bamboo.employee.service.commandstrategy.Command;
 import com.bamboo.employee.service.employee.EmployeeService;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,6 @@ final class VacationRejectionCommand implements Command {
         Integer id = Integer.parseInt(params.get("uniqueId"));
         VacationId vacationId = new VacationId(empId, id);
 
-        return service.rejectVacationForEmployee(vacationId);
+        return service.updateVacationForEmployee(vacationId, VacationStatus.REJECTED);
     }
 }

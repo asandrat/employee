@@ -46,7 +46,8 @@ public class Employee {
     }
 
     public Vacation addVacation(final Vacation vacation) {
-        return vacations.put(vacation.getId(), new Vacation(vacation));
+        vacations.put(vacation.getId(), new Vacation(vacation));
+        return vacations.get(vacation.getId());
     }
 
     public Optional<Vacation> getVacation(final VacationId id) {
@@ -59,7 +60,7 @@ public class Employee {
 
     public void updateVacation(final VacationId id,
                                final VacationStatus status) {
-        Vacation v = getVacation(id).get();
+        Vacation v = vacations.get(id);
         v.setStatus(status);
     }
 

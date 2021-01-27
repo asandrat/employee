@@ -21,10 +21,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
 
     @Override
-    public boolean create(final Employee employee) {
+    public Employee create(final Employee employee) {
         int key = employee.getUniqueId();
         employees.put(key, employee);
-        return true;
+        return employees.get(key);
     }
 
     @Override
@@ -39,10 +39,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void addVacationToEmployee(Vacation vacation) {
+    public Vacation addVacationToEmployee(Vacation vacation) {
         int employeeId = vacation.getId().getEmployeeId();
         Employee employee = employees.get(employeeId);
-        employee.addVacation(vacation);
+        return employee.addVacation(vacation);
     }
 
     @Override
