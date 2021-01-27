@@ -6,10 +6,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Data
+@NoArgsConstructor
 public class Vacation {
 
     private String uniqueId;
@@ -28,9 +32,7 @@ public class Vacation {
     @JsonIgnore
     private Employee employee;
 
-    VacationStatus vacationStatus;
-
-    public Vacation() { }
+    private VacationStatus vacationStatus;
 
     public Vacation(
             LocalDate dateFrom,
@@ -53,51 +55,4 @@ public class Vacation {
         vacationStatus = VacationStatus.REJECTED;
     }
 
-    public String getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
-    public LocalDate getDateFrom() {
-        return dateFrom;
-    }
-
-    public void setDateFrom(LocalDate dateFrom) {
-        this.dateFrom = dateFrom;
-    }
-
-    public LocalDate getDateTo() {
-        return dateTo;
-    }
-
-    public void setDateTo(LocalDate dateTo) {
-        this.dateTo = dateTo;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
-    public VacationStatus getVacationStatus() {
-        return vacationStatus;
-    }
-
-    public void setVacationStatus(VacationStatus vacationStatus) {
-        this.vacationStatus = vacationStatus;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
 }
