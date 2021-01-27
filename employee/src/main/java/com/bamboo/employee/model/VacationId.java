@@ -4,16 +4,20 @@ import java.util.Objects;
 
 public final class VacationId {
     private Integer employeeId;
-    private Integer vacationId;
+    private Integer uniqueId;
 
-    public VacationId(final Integer employeeId,
+    public VacationId(final int employeeId,
                       final Integer vacationId) {
         this.employeeId = employeeId;
-        this.vacationId = vacationId;
+        this.uniqueId = vacationId;
     }
 
-    public Integer getEmployeeId() {
+    public int getEmployeeId() {
         return employeeId;
+    }
+
+    public Integer getUniqueId() {
+        return uniqueId;
     }
 
     @Override
@@ -26,19 +30,19 @@ public final class VacationId {
         }
         VacationId that = (VacationId) o;
         return employeeId.equals(that.employeeId)
-                && vacationId.equals(that.vacationId);
+                && uniqueId.equals(that.uniqueId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(employeeId, vacationId);
+        return Objects.hash(employeeId, uniqueId);
     }
 
     @Override
     public String toString() {
         return "VacationId{"
                 + "employeeId=" + employeeId
-                + ", vacationId=" + vacationId
+                + ", vacationId=" + uniqueId
                 + '}';
     }
 }

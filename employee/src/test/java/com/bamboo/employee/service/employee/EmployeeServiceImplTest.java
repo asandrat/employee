@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -43,7 +44,7 @@ class EmployeeServiceImplTest {
         int id = 1;
         Employee e = new Employee(id, "Petar", "Petrovski");
 
-        when(repository.read(id)).thenReturn(e);
+        when(repository.read(id)).thenReturn(Optional.of(e));
 
         Assertions.assertEquals(e, service.getEmployee(id));
         Assertions.assertNotEquals(e, service.getEmployee(2));
@@ -76,9 +77,9 @@ class EmployeeServiceImplTest {
     @Test
     void removeEmployeeShouldDelegateToRepositoryDelete() {
         Employee e = new Employee(1, "Petar", "Petrovski");
-        when(repository.delete(1)).thenReturn(e);
+        when(repository.delete(1)).thenReturn(Optional.of(e));
 
-        Assertions.assertEquals(e, service.removeEmployee(1));
+        Assertions.assertEquals(Optional.of(e).get(), service.removeEmployee(1));
 
     }
 
@@ -86,7 +87,7 @@ class EmployeeServiceImplTest {
     void addVacationShouldDelegateToRepository() {
         Employee e = new Employee(1, "as", "asd");
         doNothing().when(repository).addVacationToEmployee(v);
-        when(repository.read(1)).thenReturn(e);
+        when(repository.read(1)).thenReturn(Optional.of(e));
         Assertions.assertDoesNotThrow(() -> service.addVacationToEmployee(v));
         verify(repository).addVacationToEmployee(any(Vacation.class));
     }
@@ -105,7 +106,7 @@ class EmployeeServiceImplTest {
         VacationId id = new VacationId(1, 1);
         Employee e = new Employee(1, "petar", "testovski");
         e.addVacation(v);
-        when(repository.read(1)).thenReturn(e);
+        when(repository.read(1)).thenReturn(Optional.of(e));
 
         Assertions.assertTrue(service.approveVacationForEmployee(id));
         verify(repository).update(id, VacationStatus.APPROVED);
@@ -116,7 +117,7 @@ class EmployeeServiceImplTest {
         VacationId id = new VacationId(1, 1);
         Employee e = new Employee(1, "petar", "testovski");
         e.addVacation(v);
-        when(repository.read(1)).thenReturn(e);
+        when(repository.read(1)).thenReturn(Optional.of(e));
 
         Assertions.assertTrue(service.rejectVacationForEmployee(id));
         verify(repository, never()).update(id, VacationStatus.APPROVED);
@@ -128,7 +129,7 @@ class EmployeeServiceImplTest {
         v.setStatus(VacationStatus.APPROVED);
         Employee e = new Employee(1, "petar", "testovski");
         e.addVacation(v);
-        when(repository.read(1)).thenReturn(e);
+        when(repository.read(1)).thenReturn(Optional.of(e));
 
         Assertions.assertFalse(service.approveVacationForEmployee(id));
 
