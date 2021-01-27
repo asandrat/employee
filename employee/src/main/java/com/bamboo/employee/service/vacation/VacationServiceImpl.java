@@ -30,11 +30,11 @@ public class VacationServiceImpl implements VacationService {
                                    String dateToString, String status) {
         final String id = UUID.randomUUID().toString();
         System.out.println("service vacation: " + id);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-                "yyyy-MM-dd");
-        LocalDate dateFrom = LocalDate.parse(dateFromString,
-                formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate dateFrom = LocalDate.parse(dateFromString, formatter);
         LocalDate dateTo = LocalDate.parse(dateToString, formatter);
+
         int duration = (int) Duration.between(dateFrom.atStartOfDay(),
                 dateTo.atStartOfDay()).toDays();
         VacationStatus vacationStatus = VacationStatus.fromString
@@ -65,7 +65,8 @@ public class VacationServiceImpl implements VacationService {
     public List<VacationDTO> findAll() {
         List<Vacation> list =
                 new ArrayList<>(vacationRepository.findAll().values());
-        Type listType = new TypeToken<List<VacationDTO>>(){}.getType();
+        Type listType = new TypeToken<List<VacationDTO>>() {
+        }.getType();
         return modelMapper.map(list, listType);
     }
 

@@ -25,7 +25,8 @@ public class VacationController {
     }
 
     @PostMapping
-    public ResponseEntity<VacationDTO> addVacationToEmployee(@Valid @RequestBody VacationDTO vacationDTO) {
+    public ResponseEntity<VacationDTO> addVacationToEmployee(
+            @Valid @RequestBody VacationDTO vacationDTO) {
         String employeeId = vacationDTO.getEmployeeId();
         String dateFrom = vacationDTO.getDateFrom();
         String dateTo = vacationDTO.getDateTo();
@@ -34,7 +35,7 @@ public class VacationController {
                 dateFrom, dateTo, status));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteVacationById(@PathVariable String id) {
         if (vacationService.removeVacation(id).isPresent()) {
             return ResponseEntity.ok(id);
