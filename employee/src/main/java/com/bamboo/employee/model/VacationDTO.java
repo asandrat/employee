@@ -1,13 +1,9 @@
 package com.bamboo.employee.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Entity
 public class VacationDTO {
-    @Id
     private String id;
 
     @NotBlank(message = "employeeId is required")
