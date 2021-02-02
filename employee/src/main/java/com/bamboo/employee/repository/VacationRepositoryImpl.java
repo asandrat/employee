@@ -18,8 +18,7 @@ public class VacationRepositoryImpl implements VacationRepository {
     private final EntityManager entityManager;
 
     @Override
-    public Vacation save(Employee employee, Vacation vacation) {
-        employee.addVacation(vacation);
+    public Vacation save(Vacation vacation) {
         entityManager.persist(vacation);
         return vacation;
     }

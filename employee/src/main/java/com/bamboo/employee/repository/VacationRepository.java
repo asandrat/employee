@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface VacationRepository {
 
-    Vacation save(Employee employee, Vacation vacation);
+    Vacation save(Vacation vacation);
 
     Vacation findById(int vacationId);
 

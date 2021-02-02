@@ -40,7 +40,8 @@ public class VacationServiceImpl implements VacationService {
     ) {
         Employee employee = employeeService.checkIfEmployeeExists(employeeId);
         Vacation vacation = createVacation(dateFrom, dateTo, status);
-        Vacation dbVacation = vacationRepository.save(employee, vacation);
+        employee.addVacation(vacation);
+        Vacation dbVacation = vacationRepository.save(vacation);
         return modelMapper.map(dbVacation, VacationDTO.class);
     }
 
@@ -128,7 +129,7 @@ public class VacationServiceImpl implements VacationService {
         return checkIfVacationBelongsToTheEmployee(employee, vacationId);
     }
 
-    private Vacation checkIfVacationBelongsToTheEmployee(
+    public Vacation checkIfVacationBelongsToTheEmployee(
             Employee employee,
             int vacationId
     ) {
