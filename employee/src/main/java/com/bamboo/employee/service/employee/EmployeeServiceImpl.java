@@ -1,49 +1,61 @@
 package com.bamboo.employee.service.employee;
 
-import com.bamboo.employee.entities.Employee;
+import com.bamboo.employee.entitiesDB.Employee;
+import com.bamboo.employee.entitiesFile.EmployeeFile;
 import com.bamboo.employee.model.EmployeeDTO;
-import com.bamboo.employee.repository.employee.EmployeeRepository;
+import com.bamboo.employee.repositoryDB.employee.EmployeeRepositoryDB;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.lang.reflect.Type;
 import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeRepositoryDB employeeRepositoryDB;
     private final ModelMapper modelMapper;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepositoryDB employeeRepositoryDB) {
         this.modelMapper = new ModelMapper();
-        this.employeeRepository = employeeRepository;
+        this.employeeRepositoryDB = employeeRepositoryDB;
     }
 
     @Override
+    @Transactional
     public EmployeeDTO addEmployee(String name, String surname) {
-        final String id = UUID.randomUUID().toString();
-        System.out.println("service: " + id);
-        Employee employee = new Employee(id, name, surname);
-        employeeRepository.addEmployee(employee);
-        return modelMapper.map(employee, EmployeeDTO.class);
+        Employee employeeDB = new Employee(name, surname);
+        employeeRepositoryDB.addEmployee(employeeDB);
+        return modelMapper.map(employeeDB, EmployeeDTO.class);
     }
 
     @Override
-    public Optional<Employee> removeEmployee(String id) {
-        return employeeRepository.removeEmployee(id);
+    @Transactional
+    public void removeEmployee(String id) {
+        long longId = Long.parseLong(id);
+        System.out.println("BRISANJE "+id+" SERVIS");
+        Employee employee = employeeRepositoryDB.findEmployeeById(longId);
+        if (employee == null) {
+            System.out.println("ID NIJE NADJENN SERVIS");
+            throw new IllegalArgumentException(
+                    "Employee with id " + id + " not found.");
+        }
+        employeeRepositoryDB.deleteEmployeeById(longId);
     }
 
     @Override
-    public void saveAll(Map<String, Employee> map) {
-        employeeRepository.saveAll(map);
+    public void saveAll(Map<String, EmployeeFile> map) {
+        //employeeRepository.saveAll(map);
     }
 
     @Override
-    public List<EmployeeDTO> findAll() {
+    @Transactional
+    public Collection<EmployeeDTO> findAll() {
         List<Employee> list =
-                new ArrayList<>(employeeRepository.findAll().values());
-        Type listType = new TypeToken<List<EmployeeDTO>>() {}.getType();
+                new ArrayList<>(employeeRepositoryDB.findAllEmployees());
+        Type listType = new TypeToken<List<EmployeeDTO>>() {
+        }.getType();
         return modelMapper.map(list, listType);
     }
 }

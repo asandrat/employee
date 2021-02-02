@@ -1,6 +1,6 @@
 package com.bamboo.employee.service.validator;
 
-import com.bamboo.employee.entities.VacationStatus;
+import com.bamboo.employee.entitiesFile.VacationStatusFile;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -36,8 +36,8 @@ public class AddVacationValidator implements Validator {
             throw new IllegalArgumentException("input data not valid");
         }
         //vacation status check: status should be SUBMITTED
-        Optional<VacationStatus> status = Optional.ofNullable(
-                VacationStatus.fromString(data.get("status")));
+        Optional<VacationStatusFile> status = Optional.ofNullable(
+                VacationStatusFile.fromString(data.get("status")));
         //if status is empty or != SUBMITTED: return false
         return status
                 .map(vacationStatus -> vacationStatus.name()

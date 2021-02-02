@@ -1,8 +1,8 @@
-package com.bamboo.employee.repository.employee;
+package com.bamboo.employee.repositoryFile.employee;
 
-import com.bamboo.employee.entities.Employee;
+import com.bamboo.employee.entitiesFile.EmployeeFile;
 
-import com.bamboo.employee.repository.FileReaderAndWriter;
+import com.bamboo.employee.repositoryFile.FileReaderAndWriter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class EmployeeRepositoryImplTest {
 
     @Test
     void addEmployee() {
-        Employee employee = new Employee("123", "Frank", "Sinatra");
+        EmployeeFile employee = new EmployeeFile("123", "Frank", "Sinatra");
         employeeRepositoryImpl.addEmployee(employee);
         Assertions.assertEquals("Frank",
                 employeeRepositoryImpl.findEmployee("123").getName());
@@ -41,7 +41,7 @@ class EmployeeRepositoryImplTest {
 
     @Test
     void findEmployee() {
-        Employee employee = new Employee("456", "Dolly", "Parton");
+        EmployeeFile employee = new EmployeeFile("456", "Dolly", "Parton");
         employeeRepositoryImpl.addEmployee(employee);
         Assertions.assertEquals("Parton",
                 employeeRepositoryImpl.findEmployee("456").getSurname());

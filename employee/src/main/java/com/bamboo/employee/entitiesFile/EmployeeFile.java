@@ -1,4 +1,4 @@
-package com.bamboo.employee.entities;
+package com.bamboo.employee.entitiesFile;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NotNull
-public class Employee implements Serializable {
+public class EmployeeFile implements Serializable {
 
-    private String id; //required
-    private String name; //required
-    private String surname; //required
-    private List<Vacation> vacations;
+    private String id;
+    private String name;
+    private String surname;
+    private List<VacationFile> vacations;
 
-    public Employee(final String id, final String name, final String surname) {
+    public EmployeeFile(final String id, final String name, final String surname) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -44,14 +44,14 @@ public class Employee implements Serializable {
         this.surname = surname;
     }
 
-    public List<Vacation> getVacations() {
+    public List<VacationFile> getVacations() {
         if (vacations == null) {
             vacations = new ArrayList<>();
         }
         return vacations;
     }
 
-    public void setVacations(final List<Vacation> vacations) {
+    public void setVacations(final List<VacationFile> vacations) {
         if (this.vacations.size() == 0) {
             this.vacations.addAll(vacations);
         } else {

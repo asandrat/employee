@@ -56,6 +56,7 @@
             <version>2.2.6.RELEASE</version>
         </dependency>
         <!--added for spring boot validation-->
+
     </dependencies>
 
     <build>

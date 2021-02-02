@@ -1,8 +1,8 @@
-package com.bamboo.employee.repository.vacation;
+package com.bamboo.employee.repositoryFile.vacation;
 
-import com.bamboo.employee.entities.Vacation;
-import com.bamboo.employee.entities.VacationStatus;
-import com.bamboo.employee.repository.FileReaderAndWriter;
+import com.bamboo.employee.entitiesFile.VacationFile;
+import com.bamboo.employee.entitiesFile.VacationStatusFile;
+import com.bamboo.employee.repositoryFile.FileReaderAndWriter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +28,12 @@ class VacationRepositoryImplTest {
 
     @Test
     void addVacationToEmployee() {
-        Vacation vacation = new Vacation("10", "20",
+        VacationFile vacation = new VacationFile("10", "20",
                 LocalDate.of(2021, 3, 1),
                 LocalDate.of(2021, 3, 5),
-                5, VacationStatus.fromString("submitted"));
+                5, VacationStatusFile.fromString("submitted"));
         vacationRepositoryImpl.addVacationToEmployee(vacation);
-        Assertions.assertEquals(VacationStatus.fromString("SUBMITTED"),
+        Assertions.assertEquals(VacationStatusFile.fromString("SUBMITTED"),
                 vacationRepositoryImpl.findVacation("10").getStatus());
     }
 
@@ -45,10 +45,10 @@ class VacationRepositoryImplTest {
 
     @Test
     void findVacation() {
-        Vacation vacation = new Vacation("30", "40",
+        VacationFile vacation = new VacationFile("30", "40",
                 LocalDate.of(2022, 3, 1),
                 LocalDate.of(2022, 3, 10),
-                10, VacationStatus.fromString("submitted"));
+                10, VacationStatusFile.fromString("submitted"));
         vacationRepositoryImpl.addVacationToEmployee(vacation);
         Assertions.assertEquals(10,
                 vacationRepositoryImpl.findVacation("30").getDuration());
@@ -56,22 +56,22 @@ class VacationRepositoryImplTest {
 
     @Test
     void approveVacation() {
-        Vacation vacation = new Vacation("50", "60",
+        VacationFile vacation = new VacationFile("50", "60",
                 LocalDate.of(2021, 7, 1),
                 LocalDate.of(2021, 7, 10),
-                10, VacationStatus.fromString("submitted"));
+                10, VacationStatusFile.fromString("submitted"));
         vacationRepositoryImpl.addVacationToEmployee(vacation);
         vacationRepositoryImpl.approveVacation("50");
-        Assertions.assertEquals(VacationStatus.fromString("APPROVED"),
+        Assertions.assertEquals(VacationStatusFile.fromString("APPROVED"),
                 vacationRepositoryImpl.findVacation("50").getStatus());
     }
 
     @Test
     void rejectVacation() {
-        Vacation vacation = new Vacation("70", "80",
+        VacationFile vacation = new VacationFile("70", "80",
                 LocalDate.of(2023, 7, 1),
                 LocalDate.of(2023, 7, 10),
-                10, VacationStatus.fromString("submitted"));
+                10, VacationStatusFile.fromString("submitted"));
         vacationRepositoryImpl.addVacationToEmployee(vacation);
         vacationRepositoryImpl.rejectVacation("70");
         Assertions.assertNull(vacationRepositoryImpl.findVacation("70"));

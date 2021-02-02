@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/vacations")
@@ -20,7 +20,7 @@ public class VacationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VacationDTO>> getAllVacations() {
+    public ResponseEntity<Collection<VacationDTO>> getAllVacations() {
         return ResponseEntity.ok(vacationService.findAll());
     }
 
@@ -37,10 +37,8 @@ public class VacationController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteVacationById(@PathVariable String id) {
-        if (vacationService.removeVacation(id).isPresent()) {
-            return ResponseEntity.ok(id);
-        }
-        return ResponseEntity.notFound().build();
+        vacationService.removeVacation(id);
+        return ResponseEntity.ok(id);
     }
 
     @PutMapping("/changeStatus")
