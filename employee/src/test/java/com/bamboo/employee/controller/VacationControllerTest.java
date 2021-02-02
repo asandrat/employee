@@ -1,5 +1,6 @@
 package com.bamboo.employee.controller;
 
+import com.bamboo.employee.custom.exception.VacationNotFoundException;
 import com.bamboo.employee.model.ServerResponse;
 import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.model.VacationStatusDTO;
@@ -109,5 +110,19 @@ class VacationControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/employees/2/vacations/3"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(serverResponse.getMessage()));
+    }
+
+    @Test
+    public void getVacationByIdWhenIdIsInvalidTest() throws Exception {
+
+        String message = "Could not find vacation with provided id";
+
+        when(vacationService.findVacation(anyInt(), anyInt()))
+                .thenThrow(new VacationNotFoundException(message));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/employees/1/vacations/1"))
+                .andExpect(status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(message));
     }
 }

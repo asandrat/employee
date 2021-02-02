@@ -1,5 +1,6 @@
 package com.bamboo.employee.controller;
 
+import com.bamboo.employee.custom.exception.EmployeeNotFoundException;
 import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.model.ServerResponse;
 import com.bamboo.employee.service.EmployeeService;
@@ -88,5 +89,19 @@ class EmployeeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/employees/12"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(serverResponse.getMessage()))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getEmployeeByIdWhenIdIsInvalidTest() throws Exception {
+
+        String message = "Could not find employee with provided id";
+
+        when(employeeService.getEmployee(anyInt()))
+                .thenThrow(new EmployeeNotFoundException(message));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/employees/13"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(message))
+                .andExpect(status().is4xxClientError());
     }
 }
