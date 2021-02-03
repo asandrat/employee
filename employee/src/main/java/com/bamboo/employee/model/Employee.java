@@ -7,7 +7,12 @@ public class Employee {
     private int uniqueId;
     private String name;
     private String surname;
-    private final Map<VacationId, Vacation> vacations = new HashMap<>();
+
+    // todo is this neccessary in DO ?
+    private final Map<Integer, Vacation> vacations = new HashMap<>();
+
+    public Employee() {
+    }
 
     public Employee(final int uniqueId,
                     final String name,

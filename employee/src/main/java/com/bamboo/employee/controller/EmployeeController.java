@@ -2,6 +2,7 @@ package com.bamboo.employee.controller;
 
 
 import com.bamboo.employee.model.Employee;
+import com.bamboo.employee.model.EmployeeEntity;
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -42,12 +44,9 @@ public class EmployeeController {
     @PostMapping
     ResponseEntity<EmployeeDTO> addEmployee(
             @RequestBody @Valid final EmployeeDTO employeeDTO) {
-        Employee e = new Employee(
-                Integer.parseInt(employeeDTO.getUniqueId()),
-                employeeDTO.getName(),
-                employeeDTO.getSurname());
-
-        return ResponseEntity.ok(modelMapper.map(service.addEmployee(e), EmployeeDTO.class));
+        Employee employee = modelMapper.map(employeeDTO, Employee.class);
+        return ResponseEntity.ok(modelMapper.map(service.addEmployee(employee),
+                EmployeeDTO.class));
     }
 
     @GetMapping
@@ -76,56 +75,51 @@ public class EmployeeController {
             @RequestBody @Valid final VacationDTO vacationDTO,
             HttpServletRequest request) {
 
-        // todo videti kako direktno mapovati sa modelMapperom
-        Vacation vacation = new Vacation(employeeId,
-                Integer.parseInt(vacationDTO.getUniqueId()),
-                LocalDate.parse(vacationDTO.getFrom()),
-                LocalDate.parse(vacationDTO.getTo()),
-                vacationDTO.getDuration(),
-                VacationStatus.valueOf(vacationDTO.getStatus()));
-
-        Vacation v = service.addVacationToEmployee(vacation);
-        System.out.println(v);
-        return ResponseEntity.ok(modelMapper.map(v, VacationDTO.class));
+        Vacation vacation = modelMapper.map(vacationDTO, Vacation.class);
+        Vacation responseBody = service.addVacationToEmployee(employeeId,
+                vacation);
+        return ResponseEntity.ok(modelMapper.map(responseBody,
+                VacationDTO.class));
     }
 
-    @GetMapping("/{employeeId}/vacations/{id}")
+    @GetMapping("/{employeeId}/vacations/{vacationId}")
     ResponseEntity<VacationDTO> getVacationById(@PathVariable int employeeId,
-                                      @PathVariable int vacationId) {
-        VacationId id = new VacationId(employeeId, vacationId);
-        Vacation vacation = service.getVacationFromEmployee(id);
+                                                @PathVariable int vacationId) {
+        Vacation vacation = service.getVacationFromEmployee(employeeId, vacationId);
         return ResponseEntity.ok(modelMapper.map(vacation, VacationDTO.class));
     }
 
-    @DeleteMapping("/{employeeId}/vacations/{id}")
-    ResponseEntity<VacationDTO> removeVacationById(
+    @DeleteMapping("/{employeeId}/vacations/{vacationId}")
+    ResponseEntity<String> removeVacationById(
             @PathVariable int employeeId,
             @PathVariable int vacationId) {
 
-        VacationId id = new VacationId(employeeId, vacationId);
-        Vacation vacation = service.removeVacationFromEmployee(id);
-        return ResponseEntity.ok(modelMapper.map(vacation, VacationDTO.class));
+        int numberOfEntriesDeleted =
+                service.removeVacationFromEmployee(employeeId, vacationId);
+        return ResponseEntity.ok("Number of vacations deleted " + numberOfEntriesDeleted);
     }
 
     @GetMapping("/{employeeId}/vacations")
     ResponseEntity<Collection<VacationDTO>> getAllVacationsOfEmployee(@PathVariable final int employeeId) {
-        Collection<VacationDTO> vacations = service.getEmployee(employeeId)
-                .getVacations().stream()
-                .map(vacation -> modelMapper.map(vacation, VacationDTO.class))
-                .collect(Collectors.toList());
+        Collection<VacationDTO> vacations =
+                service.findAllEmployeesVacations(employeeId)
+                        .stream()
+                        .map(vacation -> modelMapper.map(vacation,
+                                VacationDTO.class))
+                        .collect(Collectors.toList());
         return ResponseEntity.ok(vacations);
     }
 
     @PatchMapping("/{employeeId}/vacations/")
-    ResponseEntity<VacationDTO> updateVacationOfEmployee(
+    ResponseEntity<Integer> updateVacationOfEmployee(
             @PathVariable final int employeeId,
             @RequestBody final VacationStatusDTO statusDTO) {
 
-        VacationId id = new VacationId(
-                employeeId,
-                Integer.parseInt(statusDTO.getUniqueId()));
+        int vacationId = Integer.parseInt(statusDTO.getUniqueId());
         VacationStatus status = VacationStatus.valueOf(statusDTO.getStatus());
-        Vacation v = service.updateVacationForEmployee(id, status);
-        return ResponseEntity.ok(modelMapper.map(v, VacationDTO.class));
+        return ResponseEntity.ok(
+                service.updateVacationForEmployee(employeeId,
+                        vacationId,
+                        status));
     }
 }

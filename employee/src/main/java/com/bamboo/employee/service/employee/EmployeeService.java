@@ -18,12 +18,27 @@ public interface EmployeeService {
 
     Employee removeEmployee(int id);
 
+    @Deprecated
     Vacation addVacationToEmployee(Vacation vacation);
 
+    Vacation addVacationToEmployee(int employeeId, Vacation vacation);
+
+    @Deprecated
     Vacation getVacationFromEmployee(VacationId vacationId);
 
+    Vacation getVacationFromEmployee(int employeeId, int vacationId);
+
+    @Deprecated
     Vacation removeVacationFromEmployee(VacationId id);
 
+    int removeVacationFromEmployee(int employeeId, int vacationId);
+
     Vacation updateVacationForEmployee(VacationId id, VacationStatus status);
+
+    int updateVacationForEmployee(int employeeId,
+                                  int vacationId,
+                                  VacationStatus status);
+
+    Collection<Vacation> findAllEmployeesVacations(int employeeId);
 
 }
