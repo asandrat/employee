@@ -13,15 +13,16 @@ import com.bamboo.employee.exceptions.EmployeeNotFoundException;
 import com.bamboo.employee.service.vacationstate.VacationStateManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.parser.Entity;
-import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository repository;
@@ -37,6 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<Employee> findAll() {
         return repository.findAll().stream()
                 .map(employeeEntity -> mapper.map(employeeEntity, Employee.class))
@@ -44,7 +46,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
     public Employee addEmployee(final Employee employee) {
         EmployeeEntity employeeEntity = mapper.map(employee,
                 EmployeeEntity.class);
@@ -52,6 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Employee getEmployee(final int id) {
         EmployeeEntity employeeEntity = repository.read(id)
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
@@ -89,7 +91,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
     public Vacation addVacationToEmployee(final int employeeId,
                                           final Vacation vacation) {
         Optional<EmployeeEntity> optionalEmployeeEntity = repository.read(employeeId);
@@ -106,12 +107,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Vacation getVacationFromEmployee(final VacationId vacationId) {
         Employee e = this.getEmployee(vacationId.getEmployeeId());
         return e.getVacation(vacationId).orElseThrow(() -> new VacationNotFoundException(vacationId));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Vacation getVacationFromEmployee(final int employeeId,
                                             final int vacationId) {
         Optional<VacationEntity> vacationEntity =
@@ -136,7 +139,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
     public int removeVacationFromEmployee(final int employeeId,
                                           final int vacationId) {
         return repository.deleteVacation(employeeId, vacationId);
@@ -153,7 +155,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
     public int updateVacationForEmployee(final int employeeId,
                                          final int vacationId,
                                          final VacationStatus target) {
@@ -163,6 +164,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<Vacation> findAllEmployeesVacations(final int employeeId) {
         return repository.findAllEmployeesVacations(employeeId).stream()
                 .map(vacationEntity -> mapper.map(vacationEntity, Vacation.class))
