@@ -1,6 +1,5 @@
 package com.bamboo.employee.service.employee;
 
-import com.bamboo.employee.exceptions.InvalidStateTransitionException;
 import com.bamboo.employee.exceptions.VacationNotFoundException;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.EmployeeEntity;
@@ -13,9 +12,9 @@ import com.bamboo.employee.exceptions.EmployeeNotFoundException;
 import com.bamboo.employee.service.vacationstate.VacationStateManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,7 +37,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(
+            readOnly = true,
+            isolation = Isolation.SERIALIZABLE)
     public Collection<Employee> findAll() {
         return repository.findAll().stream()
                 .map(employeeEntity -> mapper.map(employeeEntity, Employee.class))
