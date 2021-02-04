@@ -24,7 +24,7 @@ public class VacationRepositoryImpl implements VacationRepository {
 
     @PostConstruct
     public void init() {
-        System.out.println("init: " + fileNameVacations);
+        //System.out.println("init: " + fileNameVacations);
         vacationsMap = findAll();
     }
 

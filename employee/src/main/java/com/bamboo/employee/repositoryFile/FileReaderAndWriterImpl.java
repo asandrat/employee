@@ -118,7 +118,7 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
             throws IOException {
 
         if (isFileEmpty(new File(fileName))) {
-            System.out.println(fileName + " is empty");
+            //System.out.println(fileName + " is empty");
             return null;
         }
 

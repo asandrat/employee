@@ -26,16 +26,11 @@ public class VacationRepositoryDBImpl implements VacationRepositoryDB {
     public void addVacationToEmployee(Vacation vacation) {
         System.out.println(vacation);
         entityManager.persist(vacation);
-        entityManager.flush();
-        entityManager.clear();
     }
 
     @Override
-    public void deleteVacationById(long id) {
-        Vacation vacation = findVacationById(id);
+    public void deleteVacationById(Vacation vacation) {
         entityManager.remove(vacation);
-        entityManager.flush();
-        entityManager.clear();
     }
 
     @Override
@@ -45,6 +40,9 @@ public class VacationRepositoryDBImpl implements VacationRepositoryDB {
 
     @Override
     public void approveVacation(Vacation vacation) {
+        if (vacation == null) {
+            throw new IllegalArgumentException("Vacation not found.");
+        }
         Query query = entityManager.createQuery("update Vacation v " +
                 "set v.status = 'APPROVED' " +
                 "where v.id = :id");
@@ -56,13 +54,16 @@ public class VacationRepositoryDBImpl implements VacationRepositoryDB {
 
     @Override
     public void rejectVacation(Vacation vacation) {
+        if (vacation == null) {
+            throw new IllegalArgumentException("Vacation not found.");
+        }
         Query query = entityManager.createQuery("update Vacation v " +
                 "set v.status = 'REJECTED' " +
                 "where v.id = :id");
         long id = vacation.getId();
         query.setParameter("id", id);
         query.executeUpdate();
-        deleteVacationById(id);
+        deleteVacationById(vacation);
         System.out.println("vacation rejected and deleted.");
     }
 }

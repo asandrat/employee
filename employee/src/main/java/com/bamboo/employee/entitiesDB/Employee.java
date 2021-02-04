@@ -1,11 +1,11 @@
 package com.bamboo.employee.entitiesDB;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "Employee")
-public class Employee implements Serializable {
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,13 +17,10 @@ public class Employee implements Serializable {
     @Column(name = "surname")
     private String surname;
 
-    public Employee() {
-    }
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<Vacation> vacations;
 
-    public Employee(long id, String name, String surname) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
+    public Employee() {
     }
 
     public Employee(String name, String surname) {
@@ -53,5 +50,13 @@ public class Employee implements Serializable {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public List<Vacation> getVacations() {
+        return vacations;
+    }
+
+    public void setVacations(List<Vacation> vacations) {
+        this.vacations = vacations;
     }
 }

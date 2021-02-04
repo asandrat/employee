@@ -1,20 +1,16 @@
 package com.bamboo.employee.entitiesDB;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "Vacation")
-public class Vacation implements Serializable {
+public class Vacation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(name = "employee_id")
-    private long employeeId;
 
     @Column(name = "date_from")
     private LocalDate dateFrom;
@@ -23,29 +19,34 @@ public class Vacation implements Serializable {
     private LocalDate dateTo;
 
     @Transient
+   // @Column(name="duration")
     private int duration;
 
     @Column(name = "status")
     private String status;
 
+    @ManyToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
+    private Employee employee;
+
     public Vacation() {
     }
 
-    public Vacation(long id, long employeeId, LocalDate dateFrom,
-                      LocalDate dateTo, String status) {
-        this.id = id;
-        this.employeeId = employeeId;
+    public Vacation(Employee employee, LocalDate dateFrom,
+                    LocalDate dateTo, String status) {
+        this.employee = employee;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.status = status;
     }
 
-    public Vacation(long employeeId, LocalDate dateFrom,
-                      LocalDate dateTo, String status) {
-        this.employeeId = employeeId;
+    public Vacation(Employee employee, LocalDate dateFrom,
+                    LocalDate dateTo, String status, int duration) {
+        this.employee = employee;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.status = status;
+        this.duration = duration;
     }
 
     public long getId() {
@@ -56,12 +57,12 @@ public class Vacation implements Serializable {
         this.id = id;
     }
 
-    public long getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(long employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public LocalDate getDateFrom() {

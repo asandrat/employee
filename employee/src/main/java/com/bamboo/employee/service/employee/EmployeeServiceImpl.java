@@ -1,8 +1,10 @@
 package com.bamboo.employee.service.employee;
 
 import com.bamboo.employee.entitiesDB.Employee;
+import com.bamboo.employee.entitiesDB.Vacation;
 import com.bamboo.employee.entitiesFile.EmployeeFile;
 import com.bamboo.employee.model.EmployeeDTO;
+import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.repositoryDB.employee.EmployeeRepositoryDB;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -13,6 +15,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 @Service
+@Transactional
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepositoryDB employeeRepositoryDB;
     private final ModelMapper modelMapper;
@@ -23,7 +26,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
     public EmployeeDTO addEmployee(String name, String surname) {
         Employee employeeDB = new Employee(name, surname);
         employeeRepositoryDB.addEmployee(employeeDB);
@@ -31,17 +33,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
     public void removeEmployee(String id) {
         long longId = Long.parseLong(id);
-        System.out.println("BRISANJE "+id+" SERVIS");
         Employee employee = employeeRepositoryDB.findEmployeeById(longId);
         if (employee == null) {
-            System.out.println("ID NIJE NADJENN SERVIS");
             throw new IllegalArgumentException(
                     "Employee with id " + id + " not found.");
         }
-        employeeRepositoryDB.deleteEmployeeById(longId);
+        employeeRepositoryDB.deleteEmployeeById(employee);
     }
 
     @Override
@@ -50,7 +49,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
     public Collection<EmployeeDTO> findAll() {
         List<Employee> list =
                 new ArrayList<>(employeeRepositoryDB.findAllEmployees());
@@ -58,4 +56,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         }.getType();
         return modelMapper.map(list, listType);
     }
+
+    @Override
+    public Collection<VacationDTO> findAllVacationsOfEmployee(String id) {
+        long longId = Long.parseLong(id);
+        List<Vacation> list = new ArrayList<>(
+                employeeRepositoryDB.findAllVacationsOfEmployee(longId));
+        Type listType = new TypeToken<List<VacationDTO>>() {
+        }.getType();
+        return modelMapper.map(list, listType);
+    }
+
 }
