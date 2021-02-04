@@ -1,10 +1,10 @@
 package com.bamboo.employee.service;
 
-import com.bamboo.employee.custom.exception.InvalidStateTransitionException;
-import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationStatus;
+import com.bamboo.employee.custom.exception.EmployeeNotFoundException;
+import com.bamboo.employee.entity.Employee;
+import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.repository.EmployeeRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -12,15 +12,13 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.util.List;
+import org.modelmapper.ModelMapper;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
-
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceImplTest {
@@ -29,149 +27,104 @@ class EmployeeServiceImplTest {
     private EmployeeRepository employeeRepository;
 
     @Mock
-    private VacationValidator vacationValidator;
+    private ModelMapper modelMapper;
 
     @InjectMocks
     private EmployeeServiceImpl employeeService;
 
-    @Captor
-    ArgumentCaptor<String> stringArgumentCaptor;
+    private final EmployeeDTO employeeDTO = new EmployeeDTO();
+    private final Employee employee = new Employee(
+            "Rachel", "Thomas"
+    );
 
     @Captor
-    ArgumentCaptor<Vacation> vacationArgumentCaptor;
+    ArgumentCaptor<Integer> integerArgumentCaptor;
 
     @Captor
     ArgumentCaptor<Employee> employeeArgumentCaptor;
 
-    @Test
-    void Should_DelegateAddEmployeeMethodToEmployeeRepository() {
-        employeeService.addEmployee("Jovana", "Jovic");
-        verify(employeeRepository).addEmployee(
-                employeeArgumentCaptor.capture()
-        );
-        Employee employee = employeeArgumentCaptor.getValue();
-        assertThat(employee.getName()).isEqualTo("Jovana");
-        assertThat(employee.getSurname()).isEqualTo("Jovic");
+    @BeforeEach
+    void setUp() {
+        employeeDTO.setId("1");
+        employeeDTO.setName("Rachel");
+        employeeDTO.setSurname("Thomas");
     }
 
     @Test
-    void Should_DelegateRemoveEmployeeMethodToEmployeeRepository() {
-        String employeeId = "3f6600da-275b-4b51-9105-ed24fcc650bb";
-        employeeService.removeEmployee(employeeId);
-        verify(employeeRepository).deleteEmployee(
-                stringArgumentCaptor.capture()
+    void addEmployeeTest() {
+
+        doNothing().when(employeeRepository).save(any(Employee.class));
+        when(modelMapper.map(any(), any())).thenReturn(employeeDTO);
+        EmployeeDTO employeeDTO = employeeService.addEmployee(
+                "Monica",
+                "Geller"
         );
-        assertThat(stringArgumentCaptor.getValue()).isEqualTo(employeeId);
+
+        verify(employeeRepository).save(employeeArgumentCaptor.capture());
+
+        assertThat(employeeDTO).isNotNull();
+        assertThat(employeeArgumentCaptor.getValue().getName()).isEqualTo(
+                "Monica"
+        );
     }
 
     @Test
-    void Should_DelegateAddVacationMethodToEmployeeRepository() {
-        String employeeId = "3f6600da-275b-4b51-9105-ed24fcc650bb";
-        employeeService.addVacation(
-                employeeId,
-                "12/06/2021",
-                "18/06/2021",
-                "APPROVED"
-        );
-        verify(employeeRepository).addVacationToEmployee(
-                stringArgumentCaptor.capture(),
-                vacationArgumentCaptor.capture()
-        );
+    void removeEmployeeTest() {
 
-        Vacation vacation = vacationArgumentCaptor.getValue();
-        assertThat(stringArgumentCaptor.getValue()).isEqualTo(employeeId);
-        assertThat(vacation.getVacationStatus())
-                .isEqualTo(VacationStatus.APPROVED);
+        doNothing().when(employeeRepository).deleteById(2);
+
+        when(employeeRepository.findById(anyInt())).thenReturn(employee);
+
+        employeeService.removeEmployee(2);
+
+        verify(employeeRepository).deleteById(integerArgumentCaptor.capture());
+
+        assertThat(integerArgumentCaptor.getValue()).isEqualTo(2);
     }
 
     @Test
-    void Should_DelegateRemoveVacationMethodToEmployeeRepository() {
-        String vacationId = "3f6600da-275b-4b51-9105-ed24fcc650bb";
-        String employeeId = "3f6600da-275b-4b51-9105-ed24fcc650cc";
-        employeeService.removeVacation(vacationId, employeeId);
-        verify(employeeRepository).removeVacation(
-                stringArgumentCaptor.capture(),
-                stringArgumentCaptor.capture()
-        );
-        List<String> capturedValues = stringArgumentCaptor.getAllValues();
-        assertThat(capturedValues.get(0)).isEqualTo(vacationId);
-        assertThat(capturedValues.get(1)).isEqualTo(employeeId);
+    void getEmployeeTest() {
+
+        when(modelMapper.map(any(), any())).thenReturn(employeeDTO);
+
+        when(employeeRepository.findById(anyInt())).thenReturn(employee);
+
+        EmployeeDTO employeeDTO = employeeService.getEmployee(2);
+
+        verify(employeeRepository).findById(integerArgumentCaptor.capture());
+
+        assertThat(employeeDTO).isNotNull();
+        assertThat(employeeDTO.getName()).isEqualTo("Rachel");
+        assertThat(integerArgumentCaptor.getValue()).isEqualTo(2);
     }
 
     @Test
-    void Should_DelegateApproveVacationActionToEmployeeRepository() {
-        String employeeUniqueId = "123AA-bH0A-BBB";
-        String vacationId = "aFG-778-iio-9AA";
-        Employee employee = new Employee(
-                employeeUniqueId,
-                "",
-                ""
-        );
-        when(employeeRepository.findEmployee(employeeUniqueId))
-                .thenReturn(employee);
-        when(employeeRepository.findVacation(employee, vacationId))
-                .thenReturn(new Vacation(
-                        vacationId,
-                        LocalDate.now(),
-                        LocalDate.now(),
-                        2L,
-                        VacationStatus.APPROVED));
-        employeeService.approveVacation(vacationId, employeeUniqueId);
-        verify(employeeRepository).approveVacation(
-                vacationArgumentCaptor.capture()
-        );
-        Vacation vacation = vacationArgumentCaptor.getValue();
-        assertThat(vacation.getUniqueId()).isEqualTo(vacationId);
-        assertThat(vacation.getVacationStatus())
-                .isEqualTo(VacationStatus.APPROVED);
+    void checkIfEmployeeExistsTest() {
 
+        when(employeeRepository.findById(anyInt())).thenReturn(employee);
+
+        Employee employee = employeeService.checkIfEmployeeExists(3);
+
+        verify(employeeRepository).findById(integerArgumentCaptor.capture());
+
+        assertThat(employee).isNotNull();
+        assertThat(integerArgumentCaptor.getValue()).isEqualTo(3);
     }
 
     @Test
-    void Should_DelegateRejectVacationActionToEmployeeRepository() {
-        String employeeUniqueId = "BB677-HHH8-BBB";
-        String vacationId = "ujh-jk88-BBB-9AA";
-        Employee employee = new Employee(
-                employeeUniqueId,
-                "",
-                ""
-        );
-        when(employeeRepository.findEmployee(employeeUniqueId))
-                .thenReturn(employee);
-        when(employeeRepository.findVacation(employee, vacationId))
-                .thenReturn(new Vacation(
-                        vacationId,
-                        LocalDate.now(),
-                        LocalDate.now().plusDays(3),
-                        3L,
-                        VacationStatus.REJECTED));
-        employeeService.rejectVacation(vacationId, employeeUniqueId);
-        verify(employeeRepository).rejectVacation(
-                vacationArgumentCaptor.capture()
-        );
-        Vacation vacation = vacationArgumentCaptor.getValue();
-        assertThat(vacation.getUniqueId()).isEqualTo(vacationId);
-        assertThat(vacation.getVacationStatus())
-                .isEqualTo(VacationStatus.REJECTED);
-    }
+    void checkIfEmployeeExistsThrowsExceptionTest() {
 
-    @Test
-    void Should_ThrowInvalidStateTransitionException() {
-        doThrow(new InvalidStateTransitionException(
-                "Could not transfer to that state"
-        )).when(vacationValidator).validateVacationTransitionStatus(
-                        any(Vacation.class),
-                        any(VacationStatus.class)
-                );
-        assertThrows(InvalidStateTransitionException.class,
-                () -> vacationValidator.validateVacationTransitionStatus(
-                        new Vacation(),
-                        VacationStatus.APPROVED
-                ));
-        verify(vacationValidator).validateVacationTransitionStatus(
-                any(Vacation.class),
-                any(VacationStatus.class)
-        );
-    }
+        when(employeeRepository.findById(anyInt())).thenReturn(null);
 
+        Exception exception = assertThrows(
+                EmployeeNotFoundException.class,
+                () ->
+                        employeeService.checkIfEmployeeExists(2)
+        );
+
+        String expectedMessage = "Could not find employee with id: 2";
+        String actualMessage = exception.getMessage();
+
+        assertThat(expectedMessage).isEqualTo(actualMessage);
+    }
 }

@@ -35,16 +35,15 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public EmployeeDTO getEmployee(@PathVariable String id) {
+    public EmployeeDTO getEmployee(@PathVariable int id) {
         return employeeService.getEmployee(id);
     }
 
     @DeleteMapping("/{id}")
-    public ServerResponse deleteUserById(@PathVariable("id") String id) {
+    public ServerResponse deleteUserById(@PathVariable("id") int id) {
         employeeService.removeEmployee(id);
         return new ServerResponse(
                 "Employee with id: " + id + " is successfully deleted"
         );
     }
-
 }

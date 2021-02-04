@@ -9,7 +9,7 @@ import javax.validation.constraints.Positive;
 @Data
 public class VacationDTO {
 
-    private String id;
+    private int id;
 
     @NotBlank(message = "Date from is required")
     @Pattern(regexp = "([0-9]{2})\\([0-9]{2}\\([0-9]{4}")

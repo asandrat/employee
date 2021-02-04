@@ -1,7 +1,7 @@
 package com.bamboo.employee.exception.handler;
 
 import com.bamboo.employee.custom.exception.ApplicationException;
-import com.bamboo.employee.entities.ErrorResponse;
+import com.bamboo.employee.entity.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

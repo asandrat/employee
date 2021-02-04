@@ -1,28 +1,17 @@
 package com.bamboo.employee.repository;
 
-import com.bamboo.employee.entities.Employee;
-import com.bamboo.employee.entities.Vacation;
+import com.bamboo.employee.entity.Employee;
 
-import java.util.Map;
+import java.util.List;
 
 public interface EmployeeRepository {
-    Map<String, Employee> findAll();
 
-    void saveAll(Map<String, Employee> employees);
+    List<Employee> findAll();
 
-    Employee addEmployee(Employee employee);
+    Employee findById(int theId);
 
-    Employee findEmployee(String uniqueId);
+    void save(Employee employee);
 
-    void deleteEmployee(String employeeId);
+    void deleteById(int theId);
 
-    void addVacationToEmployee(String employeeId, Vacation vacation);
-
-    Vacation findVacation(String employeeId, String vacationId);
-
-    void removeVacation(String vacationId, String employeeUniqueId);
-
-    void approveVacation(Vacation vacation);
-
-    void rejectVacation(Vacation vacation);
 }

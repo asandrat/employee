@@ -1,4 +1,4 @@
-package com.bamboo.employee.entities;
+package com.bamboo.employee.entity;
 
 import lombok.Data;
 
