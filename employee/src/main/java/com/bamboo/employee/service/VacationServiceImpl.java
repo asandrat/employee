@@ -6,11 +6,13 @@ import com.bamboo.employee.entity.Employee;
 import com.bamboo.employee.entity.Vacation;
 import com.bamboo.employee.entity.VacationStatus;
 import com.bamboo.employee.model.VacationDTO;
+import com.bamboo.employee.repository.EntityRepository;
 import com.bamboo.employee.repository.VacationRepository;
 import com.bamboo.employee.validator.VacationStateTransitionValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,14 @@ public class VacationServiceImpl implements VacationService {
     private final VacationRepository vacationRepository;
     private final VacationStateTransitionValidator vacationStateTransitionValidator;
     private final ModelMapper modelMapper;
+
+    EntityRepository<Vacation> dao;
+
+    @Autowired
+    public void setDao(EntityRepository<Vacation> daoToSet) {
+        dao = daoToSet;
+        dao.setEntityType(Vacation.class);
+    }
 
     @Override
     @Transactional
