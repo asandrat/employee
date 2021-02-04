@@ -4,9 +4,11 @@ import com.bamboo.employee.custom.exception.EmployeeNotFoundException;
 import com.bamboo.employee.entity.Employee;
 import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.repository.EmployeeRepository;
+import com.bamboo.employee.repository.EntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,15 +20,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
+    EntityRepository<Employee> dao;
+
     private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
+
+    @Autowired
+    public void setDao(EntityRepository<Employee> daoToSet) {
+        dao = daoToSet;
+        dao.setEntityType(Employee.class);
+    }
 
     @Override
     @Transactional
     public EmployeeDTO addEmployee(String name, String surname) {
         Employee employee = new Employee(name, surname);
-        employeeRepository.save(employee);
-        return modelMapper.map(employee, EmployeeDTO.class);
+        Employee dbEmployee = employeeRepository.save(employee);
+        return modelMapper.map(dbEmployee, EmployeeDTO.class);
     }
 
     @Override

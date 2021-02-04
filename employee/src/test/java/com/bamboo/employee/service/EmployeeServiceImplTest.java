@@ -53,7 +53,7 @@ class EmployeeServiceImplTest {
     @Test
     void addEmployeeTest() {
 
-        doNothing().when(employeeRepository).save(any(Employee.class));
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
         when(modelMapper.map(any(), any())).thenReturn(employeeDTO);
         EmployeeDTO employeeDTO = employeeService.addEmployee(
                 "Monica",
