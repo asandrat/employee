@@ -2,23 +2,18 @@ package com.bamboo.employee.controller;
 
 
 import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.EmployeeEntity;
 import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
 import com.bamboo.employee.model.dto.EmployeeDTO;
 import com.bamboo.employee.model.dto.VacationDTO;
-import com.bamboo.employee.model.dto.VacationStatusDTO;
+import com.bamboo.employee.model.dto.VacationUpdateDTO;
 import com.bamboo.employee.service.employee.EmployeeService;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -44,16 +39,17 @@ public class EmployeeController {
     @PostMapping
     ResponseEntity<EmployeeDTO> addEmployee(
             @RequestBody @Valid final EmployeeDTO employeeDTO) {
-        Employee employee = modelMapper.map(employeeDTO, Employee.class);
-        return ResponseEntity.ok(modelMapper.map(service.addEmployee(employee),
-                EmployeeDTO.class));
+        Employee inputEmployee = modelMapper.map(employeeDTO, Employee.class);
+        Employee outputEmployee = service.addEmployee(inputEmployee);
+        return ResponseEntity.ok(modelMapper.map(outputEmployee, EmployeeDTO.class));
     }
 
     @GetMapping
     ResponseEntity<Collection<EmployeeDTO>> allEmployees() {
-        Collection<EmployeeDTO> employees = service.findAll().stream()
-                .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
-                .collect(Collectors.toList());
+        Collection<EmployeeDTO> employees =
+                service.findAll().stream()
+                        .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
+                        .collect(Collectors.toList());
         return ResponseEntity.ok(employees);
     }
 
@@ -65,8 +61,8 @@ public class EmployeeController {
 
     @DeleteMapping("/{id}")
     ResponseEntity<EmployeeDTO> removeEmployeeById(@PathVariable final int id) {
-        return ResponseEntity.ok(
-                modelMapper.map(service.removeEmployee(id), EmployeeDTO.class));
+        Employee employee = service.removeEmployee(id);
+        return ResponseEntity.ok(modelMapper.map(employee, EmployeeDTO.class));
     }
 
     @PostMapping("/{employeeId}/vacations/")
@@ -76,10 +72,8 @@ public class EmployeeController {
             HttpServletRequest request) {
 
         Vacation vacation = modelMapper.map(vacationDTO, Vacation.class);
-        Vacation responseBody = service.addVacationToEmployee(employeeId,
-                vacation);
-        return ResponseEntity.ok(modelMapper.map(responseBody,
-                VacationDTO.class));
+        Vacation outputVacation = service.addVacationToEmployee(employeeId, vacation);
+        return ResponseEntity.ok(modelMapper.map(outputVacation, VacationDTO.class));
     }
 
     @GetMapping("/{employeeId}/vacations/{vacationId}")
@@ -90,13 +84,11 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{employeeId}/vacations/{vacationId}")
-    ResponseEntity<String> removeVacationById(
+    ResponseEntity<Void> removeVacationById(
             @PathVariable int employeeId,
             @PathVariable int vacationId) {
-
-        int numberOfEntriesDeleted =
-                service.removeVacationFromEmployee(employeeId, vacationId);
-        return ResponseEntity.ok("Number of vacations deleted " + numberOfEntriesDeleted);
+        service.removeVacationFromEmployee(employeeId, vacationId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{employeeId}/vacations")
@@ -111,15 +103,13 @@ public class EmployeeController {
     }
 
     @PatchMapping("/{employeeId}/vacations/")
-    ResponseEntity<Integer> updateVacationOfEmployee(
+    ResponseEntity<Void> updateVacationOfEmployee(
             @PathVariable final int employeeId,
-            @RequestBody final VacationStatusDTO statusDTO) {
+            @RequestBody final VacationUpdateDTO statusDTO) {
 
         int vacationId = Integer.parseInt(statusDTO.getUniqueId());
         VacationStatus status = VacationStatus.valueOf(statusDTO.getStatus());
-        return ResponseEntity.ok(
-                service.updateVacationForEmployee(employeeId,
-                        vacationId,
-                        status));
+        service.updateVacationForEmployee(employeeId, vacationId, status);
+        return ResponseEntity.ok().build();
     }
 }

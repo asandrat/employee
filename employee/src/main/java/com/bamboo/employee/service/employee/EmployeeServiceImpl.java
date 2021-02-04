@@ -2,9 +2,9 @@ package com.bamboo.employee.service.employee;
 
 import com.bamboo.employee.exceptions.VacationNotFoundException;
 import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.EmployeeEntity;
+import com.bamboo.employee.entity.EmployeeEntity;
 import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationEntity;
+import com.bamboo.employee.entity.VacationEntity;
 import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
 import com.bamboo.employee.repository.employee.EmployeeRepository;
@@ -96,15 +96,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                                           final Vacation vacation) {
         Optional<EmployeeEntity> optionalEmployeeEntity = repository.read(employeeId);
         if (!optionalEmployeeEntity.isPresent()) {
-            throw new IllegalArgumentException(
-                    "No such employee " + employeeId + " to associate"
-                    + " vacation with");
+            throw new EmployeeNotFoundException(employeeId);
         }
 
-        VacationEntity vacationEntity = repository.addVacationToEmployee(
-                optionalEmployeeEntity.get(),
-                mapper.map(vacation, VacationEntity.class));
-        return mapper.map(vacationEntity, Vacation.class);
+        optionalEmployeeEntity.get()
+                .addVacation(mapper.map(vacation, VacationEntity.class));
+
+        return vacation;
     }
 
     @Override
@@ -140,9 +138,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public int removeVacationFromEmployee(final int employeeId,
+    public void removeVacationFromEmployee(final int employeeId,
                                           final int vacationId) {
-        return repository.deleteVacation(employeeId, vacationId);
+        EmployeeEntity employeeEntity = repository.read(employeeId)
+                .orElseThrow(() -> new EmployeeNotFoundException(employeeId));
+        VacationEntity vacationEntity = repository.findEmployeesVacationById(employeeId, vacationId)
+                .orElseThrow(() -> new VacationNotFoundException(employeeId, vacationId));
+
+        employeeEntity.removeVacation(vacationEntity);
     }
 
     @Override
@@ -156,12 +159,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public int updateVacationForEmployee(final int employeeId,
+    public void updateVacationForEmployee(final int employeeId,
                                          final int vacationId,
                                          final VacationStatus target) {
-        Vacation vacation = getVacationFromEmployee(employeeId, vacationId);
-        return repository.update(employeeId, vacationId,
-                vacationStateManager.getValidStatus(vacation.getStatus(), target));
+        VacationEntity vacationEntity = repository.findEmployeesVacationById(employeeId, vacationId)
+                .orElseThrow(() -> new VacationNotFoundException(employeeId, vacationId));
+
+        vacationEntity.setStatus(target);
     }
 
     @Override

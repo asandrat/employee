@@ -31,11 +31,11 @@ public interface EmployeeService {
     @Deprecated
     Vacation removeVacationFromEmployee(VacationId id);
 
-    int removeVacationFromEmployee(int employeeId, int vacationId);
+    void removeVacationFromEmployee(int employeeId, int vacationId);
 
     Vacation updateVacationForEmployee(VacationId id, VacationStatus status);
 
-    int updateVacationForEmployee(int employeeId,
+    void updateVacationForEmployee(int employeeId,
                                   int vacationId,
                                   VacationStatus status);
 

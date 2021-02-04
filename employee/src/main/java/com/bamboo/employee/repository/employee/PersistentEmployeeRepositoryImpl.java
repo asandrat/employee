@@ -1,15 +1,14 @@
 package com.bamboo.employee.repository.employee;
 
 import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.EmployeeEntity;
+import com.bamboo.employee.entity.EmployeeEntity;
 import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationEntity;
+import com.bamboo.employee.entity.VacationEntity;
 import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -17,7 +16,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Repository
-public class PresistentEmployeeRepositoryImpl implements EmployeeRepository {
+public class PersistentEmployeeRepositoryImpl implements EmployeeRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -68,34 +67,8 @@ public class PresistentEmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public int deleteVacation(final int employeeId,
-                              final int vacationId) {
-        String hql = "delete from VacationEntity where employee_id = " +
-                ":employeeId and id = :vacationId";
-        Query query = entityManager.createQuery(hql);
-        query.setParameter("employeeId", employeeId);
-        query.setParameter("vacationId", vacationId);
-        return query.executeUpdate();
-    }
-
-    @Override
     public void update(final VacationId vacationId, final VacationStatus status) {
         // legacy method
-    }
-
-    @Override
-    public int update(final int employeeId,
-                      final int vacationId,
-                      final VacationStatus status) {
-        String hql = "update VacationEntity "
-                + "set status = :status "
-                + "where employee_id = :employeeId "
-                + "and id = :vacationId";
-        Query query = entityManager.createQuery(hql);
-        query.setParameter("employeeId", employeeId);
-        query.setParameter("vacationId", vacationId);
-        query.setParameter("status", status);
-        return query.executeUpdate();
     }
 
     @Override

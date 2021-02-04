@@ -1,12 +1,14 @@
-package com.bamboo.employee.model;
+package com.bamboo.employee.entity;
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -24,12 +26,21 @@ public class EmployeeEntity {
     private String surname;
 
 
-    @OneToMany(mappedBy = "employee")
-    private Collection<VacationEntity> vacations;
+    @OneToMany(
+            mappedBy = "employee",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private final Collection<VacationEntity> vacations = new ArrayList<>();
 
-    public void addVacation(VacationEntity vacation) {
-        vacations.add(vacation);
-        vacation.setEmployee(this);
+    public void addVacation(VacationEntity vacationEntity) {
+        vacations.add(vacationEntity);
+        vacationEntity.setEmployee(this);
+    }
+
+    public void removeVacation(VacationEntity vacationEntity) {
+        vacations.remove(vacationEntity);
+        vacationEntity.setEmployee(null);
     }
 
 

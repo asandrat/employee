@@ -1,4 +1,6 @@
-package com.bamboo.employee.model;
+package com.bamboo.employee.entity;
+
+import com.bamboo.employee.model.VacationStatus;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,16 +43,6 @@ public class VacationEntity {
     private EmployeeEntity employee;
 
     public VacationEntity() {
-    }
-
-    public VacationEntity(final int id,
-                          final LocalDate from,
-                          final LocalDate to,
-                          final VacationStatus status) {
-        this.id = id;
-        this.from = from;
-        this.to = to;
-        this.status = status;
     }
 
     public int getId() {

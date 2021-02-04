@@ -1,6 +1,6 @@
 package com.bamboo.employee.model.dto;
 
-public class VacationStatusDTO {
+public class VacationUpdateDTO {
     private String uniqueId;
     private String status;
 

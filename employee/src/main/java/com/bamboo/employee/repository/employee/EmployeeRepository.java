@@ -1,9 +1,9 @@
 package com.bamboo.employee.repository.employee;
 
 import com.bamboo.employee.model.Employee;
-import com.bamboo.employee.model.EmployeeEntity;
+import com.bamboo.employee.entity.EmployeeEntity;
 import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationEntity;
+import com.bamboo.employee.entity.VacationEntity;
 import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
 import org.jetbrains.annotations.NotNull;
@@ -30,11 +30,7 @@ public interface EmployeeRepository {
 
     Vacation deleteVacation(VacationId id);
 
-    int deleteVacation(int employeeId, int vacationId);
-
     void update(VacationId vacationId, VacationStatus status);
-
-    int update(int employeeId, int vacationId, VacationStatus status);
 
     Collection<VacationEntity> findAllEmployeesVacations(int employeeId);
 
