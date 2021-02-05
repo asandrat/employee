@@ -37,9 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional(
-            readOnly = true,
-            isolation = Isolation.SERIALIZABLE)
+    @Transactional(readOnly = true)
     public Collection<Employee> findAll() {
         return repository.findAll().stream()
                 .map(employeeEntity -> mapper.map(employeeEntity, Employee.class))
