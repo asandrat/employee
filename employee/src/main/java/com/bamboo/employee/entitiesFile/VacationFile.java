@@ -1,4 +1,4 @@
-package com.bamboo.employee.entities;
+package com.bamboo.employee.entitiesFile;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -6,17 +6,17 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @NotNull
-public class Vacation implements Serializable {
-    private String id; //required
-    private String employeeId; //required
-    private LocalDate dateFrom; //required
-    private LocalDate dateTo; //required
-    private int duration; //number of days
-    private VacationStatus status; //required
+public class VacationFile implements Serializable {
+    private String id;
+    private String employeeId;
+    private LocalDate dateFrom;
+    private LocalDate dateTo;
+    private int duration;
+    private VacationStatusFile status;
 
-    public Vacation(final String id, final String employeeId, final LocalDate dateFrom,
+    public VacationFile(final String id, final String employeeId, final LocalDate dateFrom,
                     final LocalDate dateTo, final int duration,
-                    final VacationStatus status) {
+                    final VacationStatusFile status) {
         this.id = id;
         this.employeeId = employeeId;
         this.dateFrom = dateFrom;
@@ -65,11 +65,11 @@ public class Vacation implements Serializable {
         this.duration = duration;
     }
 
-    public VacationStatus getStatus() {
+    public VacationStatusFile getStatus() {
         return status;
     }
 
-    public void setStatus(final VacationStatus status) {
+    public void setStatus(final VacationStatusFile status) {
         this.status = status;
     }
 }

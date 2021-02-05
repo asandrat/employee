@@ -1,8 +1,8 @@
 package com.bamboo.employee.service.vacation;
 
-import com.bamboo.employee.entities.Vacation;
-import com.bamboo.employee.entities.VacationStatus;
-import com.bamboo.employee.repository.vacation.VacationRepository;
+import com.bamboo.employee.entitiesFile.VacationFile;
+import com.bamboo.employee.entitiesFile.VacationStatusFile;
+import com.bamboo.employee.repositoryFile.vacation.VacationRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ class VacationServiceImplTest {
     ArgumentCaptor<String> argumentCaptorString;
 
     @Captor
-    ArgumentCaptor<Vacation> argumentCaptorVacation;
+    ArgumentCaptor<VacationFile> argumentCaptorVacation;
 
     @Test
     void addVacationToRepository() {
@@ -40,9 +40,9 @@ class VacationServiceImplTest {
         verify(vacationRepository).addVacationToEmployee(
                 argumentCaptorVacation.capture());
 
-        Vacation vacation = argumentCaptorVacation.getValue();
+        VacationFile vacation = argumentCaptorVacation.getValue();
         Assertions.assertEquals("123", vacation.getEmployeeId());
-        Assertions.assertEquals(VacationStatus.fromString("SUBMITTED"),
+        Assertions.assertEquals(VacationStatusFile.fromString("SUBMITTED"),
                 vacation.getStatus());
     }
 
@@ -69,12 +69,12 @@ class VacationServiceImplTest {
 
     @Test
     void saveAllVacationsToRepository() {
-        Map<String, Vacation> vacationMap = new HashMap<>();
+        Map<String, VacationFile> vacationMap = new HashMap<>();
         vacationMap.put("456",
-                new Vacation("456", "123",
+                new VacationFile("456", "123",
                 LocalDate.of(2021, 3, 1),
                 LocalDate.of(2021, 3, 5),
-                5, VacationStatus.fromString("submitted")));
+                5, VacationStatusFile.fromString("submitted")));
         vacationServiceImpl.saveAllVacations(vacationMap);
         verify(vacationRepository).saveAllVacations(vacationMap);
     }

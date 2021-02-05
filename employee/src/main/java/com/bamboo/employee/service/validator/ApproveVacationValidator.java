@@ -1,6 +1,6 @@
 package com.bamboo.employee.service.validator;
 
-import com.bamboo.employee.entities.VacationStatus;
+import com.bamboo.employee.entitiesFile.VacationStatusFile;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -19,8 +19,8 @@ public class ApproveVacationValidator implements Validator {
             return false;
         }
         //vacation status check: status should be APPROVED
-        Optional<VacationStatus> status = Optional.ofNullable(
-                VacationStatus.fromString(data.get("status")));
+        Optional<VacationStatusFile> status = Optional.ofNullable(
+                VacationStatusFile.fromString(data.get("status")));
         //if status is empty or != APPROVED: return false
         return status
                 .map(vacationStatus -> vacationStatus.name()

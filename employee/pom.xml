@@ -42,10 +42,6 @@
         <!--added for spring boot validation-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
@@ -59,12 +55,8 @@
             <artifactId>spring-boot-starter-validation</artifactId>
             <version>2.2.6.RELEASE</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-
         <!--added for spring boot validation-->
+
     </dependencies>
 
     <build>

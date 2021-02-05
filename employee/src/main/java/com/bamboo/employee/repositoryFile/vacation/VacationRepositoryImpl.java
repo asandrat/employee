@@ -1,8 +1,8 @@
-package com.bamboo.employee.repository.vacation;
+package com.bamboo.employee.repositoryFile.vacation;
 
-import com.bamboo.employee.entities.Vacation;
-import com.bamboo.employee.entities.VacationStatus;
-import com.bamboo.employee.repository.FileReaderAndWriter;
+import com.bamboo.employee.entitiesFile.VacationFile;
+import com.bamboo.employee.entitiesFile.VacationStatusFile;
+import com.bamboo.employee.repositoryFile.FileReaderAndWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -20,43 +20,34 @@ public class VacationRepositoryImpl implements VacationRepository {
     @Value("${spring.file.name.vacations}")
     private String fileNameVacations;
 
-    private Map<String, Vacation> vacationsMap;
+    private Map<String, VacationFile> vacationsMap;
 
     @PostConstruct
     public void init() {
-        System.out.println("init: " + fileNameVacations);
+        //System.out.println("init: " + fileNameVacations);
         vacationsMap = findAll();
     }
 
-    public Map<String, Vacation> findAll() {
+    public Map<String, VacationFile> findAll() {
        return fileReaderAndWriter.findAllVacations();
     }
 
     @Override
-    public void addVacationToEmployee(Vacation vacation) {
+    public void addVacationToEmployee(VacationFile vacation) {
         vacationsMap.put(vacation.getId(), vacation);
         fileReaderAndWriter.saveAllVacations(vacationsMap);
     }
 
     @Override
-    public Optional<Vacation> removeVacation(String id) {
-        Optional<Vacation> vacation = Optional.ofNullable(vacationsMap.remove(id));
+    public Optional<VacationFile> removeVacation(String id) {
+        Optional<VacationFile> vacation = Optional.ofNullable(vacationsMap.remove(id));
         fileReaderAndWriter.saveAllVacations(vacationsMap);
         return vacation;
     }
-    //  @Override
-    //    public Optional<Employee> removeEmployee(String id) {
-    //        Optional<Employee> employee = Optional.ofNullable(employeeMap
-    //        .remove(id));
-    //
-    //        fileReaderAndWriter.saveAllEmployees(employeeMap);
-    //        return employee;
-    //    }
-
     @Override
     public void approveVacation(String id) {
-        VacationStatus vacationStatus = VacationStatus.fromString("APPROVED");
-        Vacation vacation = vacationsMap.get(id);
+        VacationStatusFile vacationStatus = VacationStatusFile.fromString("APPROVED");
+        VacationFile vacation = vacationsMap.get(id);
         if (vacation == null) {
             return;
         }
@@ -66,8 +57,8 @@ public class VacationRepositoryImpl implements VacationRepository {
 
     @Override
     public void rejectVacation(String id) {
-        VacationStatus vacationStatus = VacationStatus.fromString("REJECTED");
-        Vacation vacation = vacationsMap.get(id);
+        VacationStatusFile vacationStatus = VacationStatusFile.fromString("REJECTED");
+        VacationFile vacation = vacationsMap.get(id);
         if (vacation == null) {
             return;
         }
@@ -76,7 +67,7 @@ public class VacationRepositoryImpl implements VacationRepository {
         removeVacation(id);
     }
 
-    public void saveAllVacations(Map<String, Vacation> map) {
+    public void saveAllVacations(Map<String, VacationFile> map) {
         fileReaderAndWriter.saveAllVacations(map);
     }
 
@@ -86,7 +77,7 @@ public class VacationRepositoryImpl implements VacationRepository {
     }
 
     @Override
-    public Vacation findVacation(String id) {
+    public VacationFile findVacation(String id) {
         return vacationsMap.get(id);
     }
 }

@@ -1,7 +1,6 @@
-package com.bamboo.employee.repository;
-
-import com.bamboo.employee.entities.Employee;
-import com.bamboo.employee.entities.Vacation;
+package com.bamboo.employee.repositoryFile;
+import com.bamboo.employee.entitiesFile.EmployeeFile;
+import com.bamboo.employee.entitiesFile.VacationFile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,22 +24,22 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
             LogManager.getLogger(FileReaderAndWriter.class.getName());
 
     @Override
-    public Map<String, Employee> findAllEmployees() {
-        Map<String, Employee> map;
-        List<Employee> employeeList = findAll(fileNameEmployees);
+    public Map<String, EmployeeFile> findAllEmployees() {
+        Map<String, EmployeeFile> map;
+        List<EmployeeFile> employeeList = findAll(fileNameEmployees);
 
-        map = employeeList.stream().collect(Collectors.toMap(Employee::getId,
+        map = employeeList.stream().collect(Collectors.toMap(EmployeeFile::getId,
                 employee -> employee));
 
         return map;
     }
 
     @Override
-    public Map<String, Vacation> findAllVacations() {
-        Map<String, Vacation> map;
-        List<Vacation> vacationList = findAll(fileNameVacations);
+    public Map<String, VacationFile> findAllVacations() {
+        Map<String, VacationFile> map;
+        List<VacationFile> vacationList = findAll(fileNameVacations);
 
-        map = vacationList.stream().collect(Collectors.toMap(Vacation::getId,
+        map = vacationList.stream().collect(Collectors.toMap(VacationFile::getId,
                 vacation -> vacation));
 
         return map;
@@ -59,8 +58,10 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
                     "Can't read "
                             + file.substring(0, file.indexOf('.'))
                             + " from file", eofException);
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException("File " + file + " not found.");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("class not found exception");
         }
         return list;
     }
@@ -78,12 +79,12 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
     }
 
     @Override
-    public void saveAllEmployees(Map<String, Employee> employeeMap) {
+    public void saveAllEmployees(Map<String, EmployeeFile> employeeMap) {
         saveAll(employeeMap, fileNameEmployees);
     }
 
     @Override
-    public void saveAllVacations(Map<String, Vacation> vacationMap) {
+    public void saveAllVacations(Map<String, VacationFile> vacationMap) {
         saveAll(vacationMap, fileNameVacations);
     }
 
@@ -117,7 +118,7 @@ public class FileReaderAndWriterImpl implements FileReaderAndWriter {
             throws IOException {
 
         if (isFileEmpty(new File(fileName))) {
-            System.out.println(fileName + " is empty");
+            //System.out.println(fileName + " is empty");
             return null;
         }
 

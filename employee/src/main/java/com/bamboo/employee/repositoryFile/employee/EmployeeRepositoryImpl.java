@@ -1,8 +1,7 @@
-package com.bamboo.employee.repository.employee;
+package com.bamboo.employee.repositoryFile.employee;
 
-import com.bamboo.employee.entities.Employee;
-import com.bamboo.employee.model.EmployeeDTO;
-import com.bamboo.employee.repository.FileReaderAndWriter;
+import com.bamboo.employee.entitiesFile.EmployeeFile;
+import com.bamboo.employee.repositoryFile.FileReaderAndWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -19,43 +18,41 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Value("${spring.file.name.employees}")
     private String fileNameEmployees;
 
-    private Map<String, Employee> employeeMap;
+    private Map<String, EmployeeFile> employeeMap;
 
     @PostConstruct
     public void init() {
-        System.out.println("init: " + fileNameEmployees);
+        //System.out.println("init: " + fileNameEmployees);
         employeeMap = findAll();
     }
 
     @Override
-    public Map<String, Employee> findAll() {
-        //read from file
+    public Map<String, EmployeeFile> findAll() {
         return fileReaderAndWriter.findAllEmployees();
     }
 
     @Override
-    public void saveAll(Map<String, Employee> employeeMap) {
-        //write to file
+    public void saveAll(Map<String, EmployeeFile> employeeMap) {
         fileReaderAndWriter.saveAllEmployees(employeeMap);
     }
 
     @Override
-    public void addEmployee(Employee employee) {
+    public void addEmployee(EmployeeFile employee) {
         employeeMap.put(employee.getId(), employee);
         fileReaderAndWriter.saveAllEmployees(employeeMap);
     }
 
 
     @Override
-    public Optional<Employee> removeEmployee(String id) {
-        Optional<Employee> employee = Optional.ofNullable(employeeMap.remove(id));
+    public Optional<EmployeeFile> removeEmployee(String id) {
+        Optional<EmployeeFile> employee = Optional.ofNullable(employeeMap.remove(id));
 
         fileReaderAndWriter.saveAllEmployees(employeeMap);
         return employee;
     }
 
     @Override
-    public Employee findEmployee(String id) {
+    public EmployeeFile findEmployee(String id) {
         return employeeMap.get(id);
     }
 

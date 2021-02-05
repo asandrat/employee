@@ -1,7 +1,7 @@
 package com.bamboo.employee.service.employee;
 
-import com.bamboo.employee.entities.Employee;
-import com.bamboo.employee.repository.employee.EmployeeRepository;
+import com.bamboo.employee.entitiesFile.EmployeeFile;
+import com.bamboo.employee.repositoryFile.employee.EmployeeRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,14 +28,14 @@ class EmployeeServiceImplTest {
     ArgumentCaptor<String> argumentCaptorString;
 
     @Captor
-    ArgumentCaptor<Employee> argumentCaptorEmployee;
+    ArgumentCaptor<EmployeeFile> argumentCaptorEmployee;
 
     @Test
     void addEmployeeToRepository() {
         employeeServiceImpl.addEmployee("Mihailo", "Petrovic");
         verify(employeeRepository).addEmployee(argumentCaptorEmployee.capture());
 
-        Employee employee = argumentCaptorEmployee.getValue();
+        EmployeeFile employee = argumentCaptorEmployee.getValue();
         Assertions.assertEquals("Mihailo", employee.getName());
         Assertions.assertEquals("Petrovic", employee.getSurname());
     }
@@ -50,8 +50,8 @@ class EmployeeServiceImplTest {
 
     @Test
     void saveAllEmployeesToRepository() {
-        Map<String, Employee> employeeMap = new HashMap<>();
-        employeeMap.put("123", new Employee("123", "Andjela", "Krizan"));
+        Map<String, EmployeeFile> employeeMap = new HashMap<>();
+        employeeMap.put("123", new EmployeeFile("123", "Andjela", "Krizan"));
         employeeServiceImpl.saveAll(employeeMap);
         verify(employeeRepository).saveAll(employeeMap);
     }

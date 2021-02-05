@@ -1,77 +1,90 @@
 package com.bamboo.employee.service.vacation;
 
-import com.bamboo.employee.entities.Vacation;
-import com.bamboo.employee.entities.VacationStatus;
+import com.bamboo.employee.entitiesDB.Employee;
+import com.bamboo.employee.entitiesDB.Vacation;
+import com.bamboo.employee.entitiesFile.VacationFile;
 import com.bamboo.employee.model.VacationDTO;
-import com.bamboo.employee.repository.vacation.VacationRepository;
+import com.bamboo.employee.repositoryDB.employee.EmployeeRepositoryDB;
+import com.bamboo.employee.repositoryDB.vacation.VacationRepositoryDB;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.lang.reflect.Type;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
+@Transactional
 public class VacationServiceImpl implements VacationService {
-    private final VacationRepository vacationRepository;
-
+    private final VacationRepositoryDB vacationRepositoryDB;
+    private final EmployeeRepositoryDB employeeRepositoryDB;
     private final ModelMapper modelMapper;
 
-    public VacationServiceImpl(VacationRepository vacationRepository) {
-        this.vacationRepository = vacationRepository;
+    public VacationServiceImpl(VacationRepositoryDB vacationRepositoryDB,
+                               EmployeeRepositoryDB employeeRepositoryDB) {
+        this.vacationRepositoryDB = vacationRepositoryDB;
+        this.employeeRepositoryDB = employeeRepositoryDB;
         this.modelMapper = new ModelMapper();
     }
 
     @Override
     public VacationDTO addVacation(String employeeId, String dateFromString,
                                    String dateToString, String status) {
-        final String id = UUID.randomUUID().toString();
-        System.out.println("service vacation: " + id);
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         LocalDate dateFrom = LocalDate.parse(dateFromString, formatter);
         LocalDate dateTo = LocalDate.parse(dateToString, formatter);
 
-        int duration = (int) Duration.between(dateFrom.atStartOfDay(),
-                dateTo.atStartOfDay()).toDays();
-        VacationStatus vacationStatus = VacationStatus.fromString
-                (status);
-        Vacation vacation = new Vacation(id, employeeId, dateFrom, dateTo,
-                duration, vacationStatus);
+        long longEmployeeId = Long.parseLong(employeeId);
+        Employee employee =
+                employeeRepositoryDB.findEmployeeById(longEmployeeId);
+        Vacation vacation = new Vacation(employee, dateFrom, dateTo,
+                status);
 
-        vacationRepository.addVacationToEmployee(vacation);
+        vacationRepositoryDB.addVacationToEmployee(vacation);
         return modelMapper.map(vacation, VacationDTO.class);
     }
 
     @Override
-    public Optional<Vacation> removeVacation(String id) {
-        return vacationRepository.removeVacation(id);
+    public void removeVacation(String id) {
+        long longId = Long.parseLong(id);
+        Vacation vacation = vacationRepositoryDB.findVacationById(longId);
+        if (vacation == null) {
+            throw new IllegalArgumentException(
+                    "Vacation with id " + id + " not found.");
+        }
+        vacationRepositoryDB.deleteVacation(vacation);
     }
 
     @Override
     public void approveVacation(String id) {
-        vacationRepository.approveVacation(id);
+        long longId = Long.parseLong(id);
+        Vacation vacation = vacationRepositoryDB.findVacationById(longId);
+        vacationRepositoryDB.approveVacation(vacation);
     }
 
     @Override
     public void rejectVacation(String id) {
-        vacationRepository.rejectVacation(id);
+        long longId = Long.parseLong(id);
+        Vacation vacation = vacationRepositoryDB.findVacationById(longId);
+        vacationRepositoryDB.rejectVacation(vacation);
     }
 
     @Override
-    public List<VacationDTO> findAll() {
+    public Collection<VacationDTO> findAll() {
         List<Vacation> list =
-                new ArrayList<>(vacationRepository.findAll().values());
+                new ArrayList<>(vacationRepositoryDB.findAllVacations());
         Type listType = new TypeToken<List<VacationDTO>>() {
         }.getType();
         return modelMapper.map(list, listType);
     }
 
     @Override
-    public void saveAllVacations(Map<String, Vacation> vacationMap) {
-        vacationRepository.saveAllVacations(vacationMap);
+    public void saveAllVacations(Map<String, VacationFile> vacationMap) {
+        //vacationRepository.saveAllVacations(vacationMap);
     }
 }
