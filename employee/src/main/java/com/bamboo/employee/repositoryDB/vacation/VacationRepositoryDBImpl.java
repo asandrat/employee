@@ -29,7 +29,7 @@ public class VacationRepositoryDBImpl implements VacationRepositoryDB {
     }
 
     @Override
-    public void deleteVacationById(Vacation vacation) {
+    public void deleteVacation(Vacation vacation) {
         entityManager.remove(vacation);
     }
 
@@ -63,7 +63,7 @@ public class VacationRepositoryDBImpl implements VacationRepositoryDB {
         long id = vacation.getId();
         query.setParameter("id", id);
         query.executeUpdate();
-        deleteVacationById(vacation);
+        deleteVacation(vacation);
         System.out.println("vacation rejected and deleted.");
     }
 }

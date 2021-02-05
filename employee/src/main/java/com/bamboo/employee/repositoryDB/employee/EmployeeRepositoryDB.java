@@ -12,7 +12,7 @@ public interface EmployeeRepositoryDB {
 
     Employee findEmployeeById(long id);
 
-     void deleteEmployeeById(Employee employee);
+     void deleteEmployee(Employee employee);
 
     Collection<Vacation> findAllVacationsOfEmployee(long id);
 

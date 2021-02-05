@@ -40,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new IllegalArgumentException(
                     "Employee with id " + id + " not found.");
         }
-        employeeRepositoryDB.deleteEmployeeById(employee);
+        employeeRepositoryDB.deleteEmployee(employee);
     }
 
     @Override

@@ -12,7 +12,7 @@ public interface VacationRepositoryDB {
 
     Vacation findVacationById (long id);
 
-    void deleteVacationById(Vacation vacation);
+    void deleteVacation(Vacation vacation);
 
     void approveVacation(Vacation vacation);
 

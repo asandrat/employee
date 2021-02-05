@@ -36,7 +36,7 @@ public class EmployeeRepositoryDBImpl implements EmployeeRepositoryDB {
     }
 
     @Override
-    public void deleteEmployeeById(Employee employee) {
+    public void deleteEmployee(Employee employee) {
         entityManager.remove(employee);
     }
 

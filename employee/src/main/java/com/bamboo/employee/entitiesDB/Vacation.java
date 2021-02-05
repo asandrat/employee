@@ -19,7 +19,6 @@ public class Vacation {
     private LocalDate dateTo;
 
     @Transient
-   // @Column(name="duration")
     private int duration;
 
     @Column(name = "status")

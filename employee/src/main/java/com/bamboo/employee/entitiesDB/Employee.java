@@ -17,7 +17,9 @@ public class Employee {
     @Column(name = "surname")
     private String surname;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "employee",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<Vacation> vacations;
 
     public Employee() {

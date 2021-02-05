@@ -8,12 +8,10 @@ import com.bamboo.employee.repositoryDB.employee.EmployeeRepositoryDB;
 import com.bamboo.employee.repositoryDB.vacation.VacationRepositoryDB;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.lang.reflect.Type;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -59,7 +57,7 @@ public class VacationServiceImpl implements VacationService {
             throw new IllegalArgumentException(
                     "Vacation with id " + id + " not found.");
         }
-        vacationRepositoryDB.deleteVacationById(vacation);
+        vacationRepositoryDB.deleteVacation(vacation);
     }
 
     @Override
