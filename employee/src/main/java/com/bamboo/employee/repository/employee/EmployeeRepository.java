@@ -1,7 +1,9 @@
 package com.bamboo.employee.repository.employee;
 
 import com.bamboo.employee.model.Employee;
+import com.bamboo.employee.entity.EmployeeEntity;
 import com.bamboo.employee.model.Vacation;
+import com.bamboo.employee.entity.VacationEntity;
 import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
 import org.jetbrains.annotations.NotNull;
@@ -13,19 +15,24 @@ public interface EmployeeRepository {
 
 
     @NotNull
-    Collection<Employee> findAll();
+    Collection<EmployeeEntity> findAll();
 
-    Optional<Employee> read(int employeeId);
+    Optional<EmployeeEntity> read(int employeeId);
 
-    Employee create(Employee employee);
+    EmployeeEntity create(EmployeeEntity employeeEntity);
 
     void saveAll(Collection<Employee> employees);
 
-    Vacation addVacationToEmployee(Vacation vacation);
+    VacationEntity addVacationToEmployee(EmployeeEntity employeeEntity,
+                                         VacationEntity vacationEntity);
 
-    Optional<Employee> delete(int id);
+    Optional<EmployeeEntity> delete(int id);
 
     Vacation deleteVacation(VacationId id);
 
     void update(VacationId vacationId, VacationStatus status);
+
+    Collection<VacationEntity> findAllEmployeesVacations(int employeeId);
+
+    Optional<VacationEntity> findEmployeesVacationById(int employeeId, int vacationId);
 }

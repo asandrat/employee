@@ -2,94 +2,71 @@ package com.bamboo.employee.model;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
-import java.util.Objects;
 
 public class Vacation {
-    private VacationId id;
+    private int id;
     private LocalDate from;
     private LocalDate to;
     private long duration;
     private VacationStatus status;
 
-    public Vacation(final Vacation other) {
-        this.id = other.id;
-        this.from = other.from;
-        this.to = other.to;
-        this.duration = other.duration;
-        this.status = other.status;
+    public Vacation() {
     }
 
-
-    public Vacation(final Integer employeeId,
-                    final Integer vacationId,
-                    final LocalDate from,
-                    final LocalDate to,
-                    final String duration,
+    public Vacation(final int id, final LocalDate from, final LocalDate to,
                     final VacationStatus status) {
-        this.id = new VacationId(employeeId, vacationId);
+        this.id = id;
         this.from = from;
         this.to = to;
-        this.duration = duration == null
-                ? Math.abs(ChronoUnit.DAYS.between(from, to))
-                : Long.parseLong(duration);
         this.status = status;
+        this.duration = ChronoUnit.DAYS.between(from, to);
     }
 
-    public Vacation(VacationId id) {
-        this.id = id;
+    public Vacation(final Vacation other) {
+        this.id = other.getId();
+        this.from = other.getFrom();
+        this.to = other.getTo();
+        this.duration = other.getDuration();
+        this.status = other.getStatus();
     }
 
-    public VacationId getId() {
+    public int getId() {
         return id;
+    }
+
+    public void setId(final int id) {
+        this.id = id;
     }
 
     public LocalDate getFrom() {
         return from;
     }
 
+    public void setFrom(final LocalDate from) {
+        this.from = from;
+    }
+
     public LocalDate getTo() {
         return to;
+    }
+
+    public void setTo(final LocalDate to) {
+        this.to = to;
     }
 
     public long getDuration() {
         return duration;
     }
 
+    public void setDuration(final long duration) {
+        this.duration = duration;
+    }
+
     public VacationStatus getStatus() {
         return status;
     }
 
-
-    public void setStatus(VacationStatus status) {
+    public void setStatus(final VacationStatus status) {
         this.status = status;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Vacation vacation = (Vacation) o;
-        return id.equals(vacation.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Vacation{"
-                + "id=" + id
-                + ", from=" + from
-                + ", to=" + to
-                + ", duration=" + duration
-                + ", status=" + status
-                + '}';
     }
 }

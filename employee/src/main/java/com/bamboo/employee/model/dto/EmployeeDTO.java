@@ -5,7 +5,6 @@ import javax.validation.constraints.Size;
 
 public class EmployeeDTO {
 
-    @NotNull
     private String uniqueId;
     @NotNull
     @Size(min=2, max=80)

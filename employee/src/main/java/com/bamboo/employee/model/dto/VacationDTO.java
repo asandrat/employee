@@ -1,28 +1,31 @@
 package com.bamboo.employee.model.dto;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class VacationDTO {
 
-    @NotNull
-    private String uniqueId;
+    @Nullable
+    private String id;
     @NotNull
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$")
     private String from;
     @NotNull
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$")
     private String to;
+    @Nullable
     private String duration;
     @NotNull
     private String status;
 
-    public String getUniqueId() {
-        return uniqueId;
+    public String getId() {
+        return id;
     }
 
-    public void setUniqueId(final String uniqueId) {
-        this.uniqueId = uniqueId;
+    public void setId(final String id) {
+        this.id = id;
     }
 
     public String getFrom() {
