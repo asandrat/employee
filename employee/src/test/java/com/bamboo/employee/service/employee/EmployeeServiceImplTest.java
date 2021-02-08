@@ -1,64 +1,57 @@
 package com.bamboo.employee.service.employee;
 
-import com.bamboo.employee.entitiesFile.EmployeeFile;
-import com.bamboo.employee.repositoryFile.employee.EmployeeRepository;
+import com.bamboo.employee.model.EmployeeDTO;
+import com.bamboo.employee.model.VacationDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import static org.mockito.Mockito.verify;
-
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class EmployeeServiceImplTest {
-    @Mock
-    EmployeeRepository employeeRepository;
 
-    @InjectMocks
-    EmployeeServiceImpl employeeServiceImpl;
-
-    @Captor
-    ArgumentCaptor<String> argumentCaptorString;
-
-    @Captor
-    ArgumentCaptor<EmployeeFile> argumentCaptorEmployee;
+    @Autowired
+    private EmployeeService employeeService;
 
     @Test
-    void addEmployeeToRepository() {
-        employeeServiceImpl.addEmployee("Mihailo", "Petrovic");
-        verify(employeeRepository).addEmployee(argumentCaptorEmployee.capture());
-
-        EmployeeFile employee = argumentCaptorEmployee.getValue();
-        Assertions.assertEquals("Mihailo", employee.getName());
-        Assertions.assertEquals("Petrovic", employee.getSurname());
+    void add() {
+        EmployeeDTO employeeDTO = employeeService.addEmployee("Eva",
+                "Longoria");
+        Assertions.assertEquals("Eva", employeeDTO.getName());
+        Assertions.assertEquals("Longoria", employeeDTO.getSurname());
     }
 
     @Test
-    void removeEmployeeFromRepository() {
-        employeeServiceImpl.removeEmployee("123");
-        verify(employeeRepository).removeEmployee(argumentCaptorString.capture());
-        Assertions.assertEquals("123", argumentCaptorString.getValue());
-    }
-
-
-    @Test
-    void saveAllEmployeesToRepository() {
-        Map<String, EmployeeFile> employeeMap = new HashMap<>();
-        employeeMap.put("123", new EmployeeFile("123", "Andjela", "Krizan"));
-        employeeServiceImpl.saveAll(employeeMap);
-        verify(employeeRepository).saveAll(employeeMap);
+    void remove() {
+        EmployeeDTO employeeDTO = employeeService.addEmployee("Eva",
+                "Longoria");
+        int oldSize = employeeService.findAll().size();
+        employeeService.removeEmployee(employeeDTO.getId());
+        Assertions.assertEquals(oldSize - 1, employeeService.findAll().size());
     }
 
     @Test
-    void findAllEmployeesFromRepository() {
-        employeeServiceImpl.findAll();
-        verify(employeeRepository).findAll();
+    void findAll() {
+        Collection<EmployeeDTO> employees = employeeService.findAll();
+        Set<String> namesSet =
+                employees.stream().map(EmployeeDTO::getName).collect(Collectors.toSet());
+        Assertions.assertNotNull(employees);
+        Assertions.assertTrue(namesSet.containsAll(Arrays.asList(
+                "Anica", "Branka", "Tereza", "Natasa")));
     }
+
+    @Test
+    void findAllVacations() {
+        Collection<VacationDTO> vacations =
+                employeeService.findAllVacationsOfEmployee("2");
+        Set<String> dateFromSet =
+                vacations.stream().map(VacationDTO::getDateFrom).collect(Collectors.toSet());
+        Assertions.assertNotNull(vacations);
+        Assertions.assertTrue(dateFromSet.containsAll(Arrays.asList(
+                "2021-04-01", "2021-05-01")));
+    }
+
 }

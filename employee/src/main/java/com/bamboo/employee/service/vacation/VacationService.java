@@ -1,10 +1,8 @@
 package com.bamboo.employee.service.vacation;
 
-import com.bamboo.employee.entitiesFile.VacationFile;
 import com.bamboo.employee.model.VacationDTO;
 
 import java.util.Collection;
-import java.util.Map;
 
 public interface VacationService {
 
@@ -19,5 +17,5 @@ public interface VacationService {
 
     Collection<VacationDTO> findAll();
 
-    void saveAllVacations(Map<String, VacationFile> vacationMap);
+    VacationDTO findById(String id);
 }

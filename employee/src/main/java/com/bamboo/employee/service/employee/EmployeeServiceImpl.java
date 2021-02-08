@@ -44,11 +44,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void saveAll(Map<String, EmployeeFile> map) {
-        //employeeRepository.saveAll(map);
-    }
-
-    @Override
     public Collection<EmployeeDTO> findAll() {
         List<Employee> list =
                 new ArrayList<>(employeeRepositoryDB.findAllEmployees());

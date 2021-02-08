@@ -4,12 +4,14 @@ import com.bamboo.employee.entitiesDB.Vacation;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.Collection;
 
 @Repository
 public class VacationRepositoryDBImpl implements VacationRepositoryDB {
 
+    @PersistenceContext
     private final EntityManager entityManager;
 
     public VacationRepositoryDBImpl(EntityManager entityManager) {
@@ -24,7 +26,6 @@ public class VacationRepositoryDBImpl implements VacationRepositoryDB {
 
     @Override
     public void addVacationToEmployee(Vacation vacation) {
-        System.out.println(vacation);
         entityManager.persist(vacation);
     }
 

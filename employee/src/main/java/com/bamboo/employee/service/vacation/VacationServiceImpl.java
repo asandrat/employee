@@ -84,7 +84,9 @@ public class VacationServiceImpl implements VacationService {
     }
 
     @Override
-    public void saveAllVacations(Map<String, VacationFile> vacationMap) {
-        //vacationRepository.saveAllVacations(vacationMap);
+    public VacationDTO findById(String id) {
+        long longId = Long.parseLong(id);
+        Vacation vacation = vacationRepositoryDB.findVacationById(longId);
+        return modelMapper.map(vacation, VacationDTO.class);
     }
 }

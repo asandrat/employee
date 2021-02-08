@@ -1,88 +1,71 @@
 package com.bamboo.employee.service.vacation;
 
-import com.bamboo.employee.entitiesFile.VacationFile;
-import com.bamboo.employee.entitiesFile.VacationStatusFile;
-import com.bamboo.employee.repositoryFile.vacation.VacationRepository;
+import com.bamboo.employee.model.VacationDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import static org.mockito.Mockito.verify;
-
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class VacationServiceImplTest {
-    @Mock
-    VacationRepository vacationRepository;
 
-    @InjectMocks
-    VacationServiceImpl vacationServiceImpl;
-
-    @Captor
-    ArgumentCaptor<String> argumentCaptorString;
-
-    @Captor
-    ArgumentCaptor<VacationFile> argumentCaptorVacation;
+    @Autowired
+    private VacationService vacationService;
 
     @Test
-    void addVacationToRepository() {
-        vacationServiceImpl.addVacation("123", "2021-03-01", "2021-03-05",
-                "submitted");
+    void add() {
+        VacationDTO vacationDTO = vacationService.addVacation(
+                "1", "2022-01-01", "2022-01-10", "SUBMITTED");
+        Assertions.assertEquals("2022-01-01", vacationDTO.getDateFrom());
+        Assertions.assertEquals("2022-01-10", vacationDTO.getDateTo());
+    }
 
-        verify(vacationRepository).addVacationToEmployee(
-                argumentCaptorVacation.capture());
 
-        VacationFile vacation = argumentCaptorVacation.getValue();
-        Assertions.assertEquals("123", vacation.getEmployeeId());
-        Assertions.assertEquals(VacationStatusFile.fromString("SUBMITTED"),
-                vacation.getStatus());
+    @Test
+    void remove() {
+        VacationDTO vacationDTO = vacationService.addVacation(
+                "1", "2022-01-01", "2022-01-10", "SUBMITTED");
+        int oldSize = vacationService.findAll().size();
+        vacationService.removeVacation(vacationDTO.getId());
+        Assertions.assertEquals(oldSize - 1, vacationService.findAll().size());
     }
 
     @Test
-    void removeVacationFromRepository() {
-        vacationServiceImpl.removeVacation("123456");
-        verify(vacationRepository).removeVacation(argumentCaptorString.capture());
-        Assertions.assertEquals("123456", argumentCaptorString.getValue());
+    void findAll() {
+        Collection<VacationDTO> vacations = vacationService.findAll();
+        Set<String> dateFromSet =
+                vacations.stream().map(VacationDTO::getDateFrom).collect(Collectors.toSet());
+        Assertions.assertNotNull(vacations);
+        Assertions.assertTrue(dateFromSet.containsAll(Arrays.asList(
+                "2021-03-01", "2021-04-01", "2021-05-01",
+                "2021-06-01", "2021-07-01")));
+
     }
 
     @Test
-    void approveVacation() {
-        vacationServiceImpl.approveVacation("789");
-        verify(vacationRepository).approveVacation(argumentCaptorString.capture());
-        Assertions.assertEquals("789", argumentCaptorString.getValue());
+    void approve() {
+        VacationDTO vacationDTO = vacationService.addVacation(
+                "1", "2022-01-01", "2022-01-10", "SUBMITTED");
+        Assertions.assertEquals("SUBMITTED", vacationDTO.getStatus());
+        vacationService.approveVacation(vacationDTO.getId());
+        VacationDTO approvedVacation =
+                vacationService.findById(vacationDTO.getId());
+        Assertions.assertEquals("APPROVED", approvedVacation.getStatus());
     }
 
     @Test
-    void rejectVacation() {
-        vacationServiceImpl.rejectVacation("456");
-        verify(vacationRepository).rejectVacation(argumentCaptorString.capture());
-        Assertions.assertEquals("456", argumentCaptorString.getValue());
-    }
-
-    @Test
-    void saveAllVacationsToRepository() {
-        Map<String, VacationFile> vacationMap = new HashMap<>();
-        vacationMap.put("456",
-                new VacationFile("456", "123",
-                LocalDate.of(2021, 3, 1),
-                LocalDate.of(2021, 3, 5),
-                5, VacationStatusFile.fromString("submitted")));
-        vacationServiceImpl.saveAllVacations(vacationMap);
-        verify(vacationRepository).saveAllVacations(vacationMap);
-    }
-
-    @Test
-    void findAllVacationsFromRepository(){
-        vacationServiceImpl.findAll();
-        verify(vacationRepository).findAll();
+    void reject() {
+        VacationDTO vacationDTO = vacationService.addVacation(
+                "1", "2022-01-01", "2022-01-10", "SUBMITTED");
+        Assertions.assertEquals("SUBMITTED", vacationDTO.getStatus());
+        int oldSize = vacationService.findAll().size();
+        vacationService.rejectVacation(vacationDTO.getId());
+        Assertions.assertEquals(oldSize - 1, vacationService.findAll().size());
     }
 
 }
