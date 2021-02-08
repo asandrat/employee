@@ -37,7 +37,7 @@ class EmployeeControllerTest {
     @BeforeEach
     void setUp() {
         employee = new EmployeeDTO();
-        employee.setId("1");
+        employee.setId(1);
         employee.setName("John");
         employee.setSurname("Wick");
     }

@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 @Data
 public class EmployeeDTO {
 
-    private String id;
+    private int id;
 
     @NotBlank(message = "Name is required")
     @Size(min = 3, message = "Name must contains at least 3 letter")
