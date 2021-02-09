@@ -4,6 +4,7 @@ import com.bamboo.employee.custom.exception.VacationNotFoundException;
 import com.bamboo.employee.entity.Employee;
 import com.bamboo.employee.entity.Vacation;
 import com.bamboo.employee.entity.VacationStatus;
+import com.bamboo.employee.mapstruct.VacationMapper;
 import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.repository.VacationRepository;
 import com.bamboo.employee.service.EmployeeService;
@@ -17,7 +18,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 
@@ -37,7 +37,7 @@ class VacationServiceImplTest {
     private VacationRepository vacationRepository;
 
     @Mock
-    private ModelMapper modelMapper;
+    private VacationMapper vacationMapper;
 
     @Mock
     private EmployeeService employeeService;
@@ -83,7 +83,8 @@ class VacationServiceImplTest {
                 .thenReturn(employee);
         when(vacationRepository.save(any(Vacation.class)))
                 .thenReturn(vacation);
-        when(modelMapper.map(any(), any())).thenReturn(vacationDTO);
+        when(vacationMapper.vacationToVacationDTO(any()))
+                .thenReturn(vacationDTO);
 
         VacationDTO returnedVacation = vacationService.addVacation(
                 3,
@@ -156,7 +157,7 @@ class VacationServiceImplTest {
                 .thenReturn(employee);
         when(vacationRepository.findById(anyInt()))
                 .thenReturn(vacation);
-        when(modelMapper.map(any(), any()))
+        when(vacationMapper.vacationToVacationDTO(any()))
                 .thenReturn(vacationDTO);
 
         VacationDTO returnedVacation = vacationService.findVacation(

@@ -5,19 +5,17 @@ import com.bamboo.employee.custom.exception.VacationNotFoundException;
 import com.bamboo.employee.entity.Employee;
 import com.bamboo.employee.entity.Vacation;
 import com.bamboo.employee.entity.VacationStatus;
+import com.bamboo.employee.mapstruct.VacationMapper;
 import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.repository.EntityRepository;
 import com.bamboo.employee.repository.VacationRepository;
 import com.bamboo.employee.validator.VacationStateTransitionValidator;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -30,7 +28,7 @@ public class VacationServiceImpl implements VacationService {
     private final EmployeeService employeeService;
     private final VacationRepository vacationRepository;
     private final VacationStateTransitionValidator vacationStateTransitionValidator;
-    private final ModelMapper modelMapper;
+    private final VacationMapper mapper;
 
     EntityRepository<Vacation> dao;
 
@@ -52,7 +50,7 @@ public class VacationServiceImpl implements VacationService {
         Vacation vacation = createVacation(dateFrom, dateTo, status);
         employee.addVacation(vacation);
         Vacation dbVacation = vacationRepository.save(vacation);
-        return modelMapper.map(dbVacation, VacationDTO.class);
+        return mapper.vacationToVacationDTO(dbVacation);
     }
 
     @Override
@@ -89,7 +87,7 @@ public class VacationServiceImpl implements VacationService {
                 vacationId,
                 employeeId
         );
-        return modelMapper.map(vacation, VacationDTO.class);
+        return mapper.vacationToVacationDTO(vacation);
     }
 
     @Override
@@ -103,8 +101,7 @@ public class VacationServiceImpl implements VacationService {
                             + employeeId
             );
         }
-        Type listType = new TypeToken<List<VacationDTO>>(){}.getType();
-        return modelMapper.map(vacationList,listType);
+        return mapper.map(vacationList);
     }
 
     public Vacation createVacation(
