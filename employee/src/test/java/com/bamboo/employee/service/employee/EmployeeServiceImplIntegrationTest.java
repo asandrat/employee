@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 @SpringBootTest
 @Transactional // for rolling back after each test
-class EmployeeServiceImplTest {
+class EmployeeServiceImplIntegrationTest {
 
     @Autowired
     private EmployeeService service;
@@ -30,28 +30,40 @@ class EmployeeServiceImplTest {
 
     @Test
     void addingEmployeeShouldIncreaseSize() {
+
+        int numberOfPreloadedEmployees = service.findAll().size();
+
         Employee employee = new Employee();
         employee.setName("Test");
         employee.setSurname("Testovski");
         service.addEmployee(employee);
-        Assertions.assertEquals(3, service.findAll().size());
+
+        Assertions.assertEquals(
+                numberOfPreloadedEmployees + 1,
+                service.findAll().size());
     }
 
     @Test
-    void shouldFetchTwoEmployees() {
-        Assertions.assertEquals(2, service.findAll().size());
+    void shouldReadFromDataSql() {
+        Assertions.assertNotEquals(0, service.findAll().size());
     }
 
     @Test
     void removingEmployeShouldDecreaseSize() {
+
+        int numberOfPreloadedEmployees = service.findAll().size();
+
         service.removeEmployee(1);
-        Assertions.assertEquals(1, service.findAll().size());
+
+        Assertions.assertEquals(
+                numberOfPreloadedEmployees - 1,
+                service.findAll().size());
     }
 
     @Test
     void shouldThrowForNonExistingEmployees() {
         Assertions.assertThrows(EmployeeNotFoundException.class,
-                () -> service.getEmployee(42));
+                () -> service.getEmployee(-1));
     }
 
     @Test
@@ -59,9 +71,8 @@ class EmployeeServiceImplTest {
         Employee employee = new Employee();
         employee.setName("Test");
         employee.setSurname("Testovski");
-        service.addEmployee(employee);
+        Employee persistedEmployee = service.addEmployee(employee);
 
-        Employee persistedEmployee = service.getEmployee(3);
         Assertions.assertEquals(employee.getName(), persistedEmployee.getName());
         Assertions.assertEquals(employee.getSurname(), persistedEmployee.getSurname());
     }
@@ -100,7 +111,7 @@ class EmployeeServiceImplTest {
         vacation.setTo(LocalDate.now());
 
         Assertions.assertThrows(EmployeeNotFoundException.class,
-                () -> service.addVacationToEmployee(42,
+                () -> service.addVacationToEmployee(-1,
                 vacation));
     }
 
@@ -116,7 +127,7 @@ class EmployeeServiceImplTest {
         Assertions.assertThrows(VacationNotFoundException.class,
                 () -> service.removeVacationFromEmployee(1, 1));
         Assertions.assertThrows(EmployeeNotFoundException.class,
-                () -> service.removeVacationFromEmployee(42, 1));
+                () -> service.removeVacationFromEmployee(-1, 1));
     }
 
     @Test
@@ -129,12 +140,18 @@ class EmployeeServiceImplTest {
     @Test
     void updatingVacationShouldUpdatePeristedVacation() {
         Vacation vacation = new Vacation();
-        vacation.setId(1); //todo
         vacation.setStatus(VacationStatus.SUBMITTED);
         vacation.setFrom(LocalDate.now());
         vacation.setTo(LocalDate.now());
 
         service.addVacationToEmployee(1, vacation);
-        service.updateVacationForEmployee(1, 1, VacationStatus.APPROVED);
+        /*
+        vacationId is 0 due to added vacation isn't instantly saved in DB
+        need to fix this or its probably just bad design
+         */
+        service.updateVacationForEmployee(1, 0, VacationStatus.APPROVED);
+
+        Assertions.assertEquals(VacationStatus.APPROVED,
+                service.getVacationFromEmployee(1, 0).getStatus());
     }
 }
