@@ -2,6 +2,7 @@ package com.bamboo.employee.service.unit;
 
 import com.bamboo.employee.custom.exception.EmployeeNotFoundException;
 import com.bamboo.employee.entity.Employee;
+import com.bamboo.employee.mapstruct.EmployeeMapper;
 import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.repository.EmployeeRepository;
 import com.bamboo.employee.service.EmployeeServiceImpl;
@@ -13,7 +14,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,7 +28,7 @@ class EmployeeServiceImplTest {
     private EmployeeRepository employeeRepository;
 
     @Mock
-    private ModelMapper modelMapper;
+    private EmployeeMapper employeeMapper;
 
     @InjectMocks
     private EmployeeServiceImpl employeeService;
@@ -55,7 +55,7 @@ class EmployeeServiceImplTest {
     void addEmployeeTest() {
 
         when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
-        when(modelMapper.map(any(), any())).thenReturn(employeeDTO);
+        when(employeeMapper.employeeToEmployeeDTO(any())).thenReturn(employeeDTO);
         EmployeeDTO employeeDTO = employeeService.addEmployee(
                 "Monica",
                 "Geller"
@@ -86,7 +86,7 @@ class EmployeeServiceImplTest {
     @Test
     void getEmployeeTest() {
 
-        when(modelMapper.map(any(), any())).thenReturn(employeeDTO);
+        when(employeeMapper.employeeToEmployeeDTO(any())).thenReturn(employeeDTO);
 
         when(employeeRepository.findById(anyInt())).thenReturn(employee);
 
