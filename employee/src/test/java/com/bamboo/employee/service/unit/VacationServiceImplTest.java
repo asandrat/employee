@@ -1,4 +1,4 @@
-package com.bamboo.employee.service;
+package com.bamboo.employee.service.unit;
 
 import com.bamboo.employee.custom.exception.VacationNotFoundException;
 import com.bamboo.employee.entity.Employee;
@@ -6,6 +6,8 @@ import com.bamboo.employee.entity.Vacation;
 import com.bamboo.employee.entity.VacationStatus;
 import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.repository.VacationRepository;
+import com.bamboo.employee.service.EmployeeService;
+import com.bamboo.employee.service.VacationServiceImpl;
 import com.bamboo.employee.validator.VacationStateTransitionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

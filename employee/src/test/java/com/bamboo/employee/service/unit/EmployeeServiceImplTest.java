@@ -1,9 +1,10 @@
-package com.bamboo.employee.service;
+package com.bamboo.employee.service.unit;
 
 import com.bamboo.employee.custom.exception.EmployeeNotFoundException;
 import com.bamboo.employee.entity.Employee;
 import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.repository.EmployeeRepository;
+import com.bamboo.employee.service.EmployeeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +46,7 @@ class EmployeeServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        employeeDTO.setId("1");
+        employeeDTO.setId(1);
         employeeDTO.setName("Rachel");
         employeeDTO.setSurname("Thomas");
     }

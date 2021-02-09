@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
-    EntityRepository<Employee> dao;
+    private EntityRepository<Employee> dao;
 
     private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
