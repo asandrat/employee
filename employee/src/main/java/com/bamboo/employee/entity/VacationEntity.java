@@ -7,20 +7,28 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 @Entity
 @Table(name = "vacation")
 public class VacationEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "vacation_generator"
+    )
+    @SequenceGenerator(name = "vacation_generator", sequenceName =
+            "vacation_sequence", allocationSize = 1)
     private int id;
 
     @Column(name = "from_date")
@@ -91,5 +99,34 @@ public class VacationEntity {
 
     public void setEmployee(final EmployeeEntity employee) {
         this.employee = employee;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        VacationEntity that = (VacationEntity) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "VacationEntity{" +
+                "id=" + id +
+                ", from=" + from +
+                ", to=" + to +
+                ", duration=" + duration +
+                ", status=" + status +
+                ", employee=" + employee +
+                '}';
     }
 }

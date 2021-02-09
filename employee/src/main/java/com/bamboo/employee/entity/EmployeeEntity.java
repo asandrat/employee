@@ -5,8 +5,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +18,12 @@ import java.util.Collection;
 public class EmployeeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "employee_generator"
+    )
+    @SequenceGenerator(name = "employee_generator", sequenceName =
+            "employee_sequence", allocationSize = 1)
     @Column(name = "id")
     private int uniqueId;
 
@@ -33,6 +40,10 @@ public class EmployeeEntity {
     )
     private final Collection<VacationEntity> vacations = new ArrayList<>();
 
+    public Collection<VacationEntity> getVacations() {
+        return vacations;
+    }
+
     public void addVacation(VacationEntity vacationEntity) {
         vacations.add(vacationEntity);
         vacationEntity.setEmployee(this);
@@ -42,7 +53,6 @@ public class EmployeeEntity {
         vacations.remove(vacationEntity);
         vacationEntity.setEmployee(null);
     }
-
 
     public int getUniqueId() {
         return uniqueId;

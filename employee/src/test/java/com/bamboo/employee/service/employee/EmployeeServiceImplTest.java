@@ -1,159 +1,140 @@
 package com.bamboo.employee.service.employee;
 
+
+import com.bamboo.employee.exceptions.EmployeeNotFoundException;
+import com.bamboo.employee.exceptions.VacationNotFoundException;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
-import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
-import com.bamboo.employee.repository.employee.EmployeeRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@Transactional // for rolling back after each test
 class EmployeeServiceImplTest {
-    @Mock
-    private EmployeeRepository repository;
 
-    @InjectMocks
-    private EmployeeServiceImpl service;
-
-    private Vacation v;
-
-    @BeforeEach
-    void init() {
-        v = new Vacation(
-                1,
-                1, LocalDate.parse("2021-01-01"),
-                LocalDate.parse("2021-02-01"),
-                null,
-                VacationStatus.SUBMITTED);
-    }
+    @Autowired
+    private EmployeeService service;
 
     @Test
-    void getEmployeeShouldDelegateToRepositoryRead() {
-        int id = 1;
-        Employee e = new Employee(id, "Petar", "Petrovski");
-
-        when(repository.read(id)).thenReturn(Optional.of(e));
-
-        Assertions.assertEquals(e, service.getEmployee(id));
-        Assertions.assertNotEquals(e, service.getEmployee(2));
-
-        verify(repository, times(2)).read(anyInt());
-    }
-
-    @Test
-    void addEmployeeShouldDelegateToRepositoryCreate() {
-        Employee e = new Employee(1, "Petar", "Petrovski");
-        when(repository.create(e)).thenReturn(true);
-
-        Assertions.assertTrue(service.addEmployee(e));
-
-        // can't add 2 same employees
-        when(repository.create(e)).thenReturn(false);
-        Assertions.assertFalse(service.addEmployee(e));
-
-        verify(repository, times(2)).create(any(Employee.class));
-    }
-
-    @Test
-    void addEmployeeShouldNotCreateDefaultVacation() {
-        Employee e = new Employee(1, "Petar", "Petrovski");
-        when(repository.create(e)).thenReturn(true);
-        Assertions.assertTrue(service.addEmployee(e));
-        verify(repository, never()).addVacationToEmployee(any(Vacation.class));
-    }
-
-    @Test
-    void removeEmployeeShouldDelegateToRepositoryDelete() {
-        Employee e = new Employee(1, "Petar", "Petrovski");
-        when(repository.delete(1)).thenReturn(Optional.of(e));
-
-        Assertions.assertEquals(Optional.of(e).get(), service.removeEmployee(1));
-
-    }
-
-    @Test
-    void addVacationShouldDelegateToRepository() {
-        Employee e = new Employee(1, "as", "asd");
-        doNothing().when(repository).addVacationToEmployee(v);
-        when(repository.read(1)).thenReturn(Optional.of(e));
-        Assertions.assertDoesNotThrow(() -> service.addVacationToEmployee(v));
-        verify(repository).addVacationToEmployee(any(Vacation.class));
-    }
-
-    @Test
-    void addVacationShouldThrowIfEmpDoesntExist() {
-        when(repository.read(any(Integer.class))).thenReturn(null);
-
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> service.addVacationToEmployee(v));
-        verify(repository, never()).addVacationToEmployee(any(Vacation.class));
-    }
-
-    @Test
-    void shouldApproveSubmittedVacations() {
-        VacationId id = new VacationId(1, 1);
-        Employee e = new Employee(1, "petar", "testovski");
-        e.addVacation(v);
-        when(repository.read(1)).thenReturn(Optional.of(e));
-
-        Assertions.assertTrue(service.approveVacationForEmployee(id));
-        verify(repository).update(id, VacationStatus.APPROVED);
-    }
-
-    @Test
-    void shouldRejectSubmittedVacations() {
-        VacationId id = new VacationId(1, 1);
-        Employee e = new Employee(1, "petar", "testovski");
-        e.addVacation(v);
-        when(repository.read(1)).thenReturn(Optional.of(e));
-
-        Assertions.assertTrue(service.rejectVacationForEmployee(id));
-        verify(repository, never()).update(id, VacationStatus.APPROVED);
-    }
-
-    @Test
-    void shouldFailToModifyAlreadyModifiedVacation() {
-        VacationId id = new VacationId(1, 1);
-        v.setStatus(VacationStatus.APPROVED);
-        Employee e = new Employee(1, "petar", "testovski");
-        e.addVacation(v);
-        when(repository.read(1)).thenReturn(Optional.of(e));
-
-        Assertions.assertFalse(service.approveVacationForEmployee(id));
-
-        v.setStatus(VacationStatus.REJECTED);
-        e.removeVacation(id);
-        e.addVacation(v);
-        Assertions.assertFalse(service.approveVacationForEmployee(id));
-
-        v.setStatus(VacationStatus.APPROVED);
-        e.removeVacation(id);
-        e.addVacation(v);
-        Assertions.assertFalse(service.rejectVacationForEmployee(id));
-
-        v.setStatus(VacationStatus.REJECTED);
-        e.removeVacation(id);
-        e.addVacation(v);
-        Assertions.assertFalse(service.rejectVacationForEmployee(id));
+    void sanityCheck() {
+        Assertions.assertNotNull(service);
     }
 
 
     @Test
-    void shouldDelegateDeletionOfVacationToRepository() {
-        VacationId id = new VacationId(1, 1);
-        when(repository.deleteVacation(id)).thenReturn(new Vacation(id));
-        service.removeVacationFromEmployee(id);
+    void addingEmployeeShouldIncreaseSize() {
+        Employee employee = new Employee();
+        employee.setName("Test");
+        employee.setSurname("Testovski");
+        service.addEmployee(employee);
+        Assertions.assertEquals(3, service.findAll().size());
+    }
+
+    @Test
+    void shouldFetchTwoEmployees() {
+        Assertions.assertEquals(2, service.findAll().size());
+    }
+
+    @Test
+    void removingEmployeShouldDecreaseSize() {
+        service.removeEmployee(1);
+        Assertions.assertEquals(1, service.findAll().size());
+    }
+
+    @Test
+    void shouldThrowForNonExistingEmployees() {
+        Assertions.assertThrows(EmployeeNotFoundException.class,
+                () -> service.getEmployee(42));
+    }
+
+    @Test
+    void employeeDO_ShouldBeEqualToItsEmployeeEntity() {
+        Employee employee = new Employee();
+        employee.setName("Test");
+        employee.setSurname("Testovski");
+        service.addEmployee(employee);
+
+        Employee persistedEmployee = service.getEmployee(3);
+        Assertions.assertEquals(employee.getName(), persistedEmployee.getName());
+        Assertions.assertEquals(employee.getSurname(), persistedEmployee.getSurname());
+    }
+
+    @Test
+    void employeeShouldNotHaveAnyVacationsOnStart() {
+        Assertions.assertEquals(0, service.findAllEmployeesVacations(1).size());
+    }
+
+    @Test
+    void addingVacationShouldNotThrowIfEmployeeExists() {
+        Vacation vacation = new Vacation();
+        vacation.setStatus(VacationStatus.SUBMITTED);
+        vacation.setFrom(LocalDate.now());
+        vacation.setTo(LocalDate.now());
+
+        service.addVacationToEmployee(1, vacation);
+        Assertions.assertEquals(1, service.findAllEmployeesVacations(1).size());
+        Assertions.assertEquals(0, service.findAllEmployeesVacations(2).size());
+
+        Vacation persistedVacation =
+                service.findAllEmployeesVacations(1).stream().findFirst().get();
+
+        Assertions.assertEquals(1, persistedVacation.getId());
+        Assertions.assertEquals(vacation.getStatus(), persistedVacation.getStatus());
+        Assertions.assertEquals(vacation.getFrom(), persistedVacation.getFrom());
+        Assertions.assertEquals(vacation.getTo(), persistedVacation.getTo());
+    }
+
+    @Test
+    void addingVacationToNonExistingEmployeeShouldThrow() {
+
+        Vacation vacation = new Vacation();
+        vacation.setStatus(VacationStatus.SUBMITTED);
+        vacation.setFrom(LocalDate.now());
+        vacation.setTo(LocalDate.now());
+
+        Assertions.assertThrows(EmployeeNotFoundException.class,
+                () -> service.addVacationToEmployee(42,
+                vacation));
+    }
+
+    @Test
+    void shouldThrowIfRequestedVacationDoesntExists() {
+        Assertions.assertThrows(VacationNotFoundException.class,
+                () -> service.getVacationFromEmployee(1, 1));
+    }
+
+    @Test
+    void removingVacationShouldThrowIfEmployeeDoesntExistsOrVacationDoesntExists() {
+
+        Assertions.assertThrows(VacationNotFoundException.class,
+                () -> service.removeVacationFromEmployee(1, 1));
+        Assertions.assertThrows(EmployeeNotFoundException.class,
+                () -> service.removeVacationFromEmployee(42, 1));
+    }
+
+    @Test
+    void updatingShouldThrowIfVacationsDoesntExists() {
+
+        Assertions.assertThrows(VacationNotFoundException.class,
+                () -> service.updateVacationForEmployee(1, 1, VacationStatus.APPROVED));
+    }
+
+    @Test
+    void updatingVacationShouldUpdatePeristedVacation() {
+        Vacation vacation = new Vacation();
+        vacation.setId(1); //todo
+        vacation.setStatus(VacationStatus.SUBMITTED);
+        vacation.setFrom(LocalDate.now());
+        vacation.setTo(LocalDate.now());
+
+        service.addVacationToEmployee(1, vacation);
+        service.updateVacationForEmployee(1, 1, VacationStatus.APPROVED);
     }
 }

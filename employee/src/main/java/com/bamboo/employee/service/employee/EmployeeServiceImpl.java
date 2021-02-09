@@ -12,7 +12,6 @@ import com.bamboo.employee.exceptions.EmployeeNotFoundException;
 import com.bamboo.employee.service.vacationstate.VacationStateManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -163,7 +162,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         VacationEntity vacationEntity = repository.findEmployeesVacationById(employeeId, vacationId)
                 .orElseThrow(() -> new VacationNotFoundException(employeeId, vacationId));
 
-        vacationEntity.setStatus(target);
+        vacationEntity.setStatus(vacationStateManager.getValidStatus(vacationEntity.getStatus(), target));
     }
 
     @Override
