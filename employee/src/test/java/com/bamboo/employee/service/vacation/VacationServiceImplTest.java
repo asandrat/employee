@@ -1,6 +1,7 @@
 package com.bamboo.employee.service.vacation;
 
 import com.bamboo.employee.model.VacationDTO;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,22 +18,33 @@ class VacationServiceImplTest {
     @Autowired
     private VacationService vacationService;
 
+    @AfterEach// to track database state
+    void printIds() {
+        vacationService.findAll()
+                .forEach(vacation -> System.out.println(vacation.getId()));
+    }
+
     @Test
     void add() {
+        int oldSize = vacationService.findAll().size();
         VacationDTO vacationDTO = vacationService.addVacation(
                 "1", "2022-01-01", "2022-01-10", "SUBMITTED");
+        Assertions.assertEquals(oldSize + 1, vacationService.findAll().size());
         Assertions.assertEquals("2022-01-01", vacationDTO.getDateFrom());
         Assertions.assertEquals("2022-01-10", vacationDTO.getDateTo());
+        vacationService.removeVacation(vacationDTO.getId());
+        Assertions.assertEquals(oldSize, vacationService.findAll().size());
     }
 
 
     @Test
     void remove() {
+        int oldSize = vacationService.findAll().size();
         VacationDTO vacationDTO = vacationService.addVacation(
                 "1", "2022-01-01", "2022-01-10", "SUBMITTED");
-        int oldSize = vacationService.findAll().size();
+        Assertions.assertEquals(oldSize + 1, vacationService.findAll().size());
         vacationService.removeVacation(vacationDTO.getId());
-        Assertions.assertEquals(oldSize - 1, vacationService.findAll().size());
+        Assertions.assertEquals(oldSize, vacationService.findAll().size());
     }
 
     @Test
@@ -47,15 +59,20 @@ class VacationServiceImplTest {
 
     }
 
+
     @Test
     void approve() {
+        int oldSize = vacationService.findAll().size();
         VacationDTO vacationDTO = vacationService.addVacation(
                 "1", "2022-01-01", "2022-01-10", "SUBMITTED");
         Assertions.assertEquals("SUBMITTED", vacationDTO.getStatus());
+        Assertions.assertEquals(oldSize + 1, vacationService.findAll().size());
         vacationService.approveVacation(vacationDTO.getId());
         VacationDTO approvedVacation =
                 vacationService.findById(vacationDTO.getId());
         Assertions.assertEquals("APPROVED", approvedVacation.getStatus());
+        vacationService.removeVacation(vacationDTO.getId());
+        Assertions.assertEquals(oldSize, vacationService.findAll().size());
     }
 
     @Test

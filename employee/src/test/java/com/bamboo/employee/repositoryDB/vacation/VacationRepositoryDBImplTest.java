@@ -2,6 +2,7 @@ package com.bamboo.employee.repositoryDB.vacation;
 
 import com.bamboo.employee.entitiesDB.Employee;
 import com.bamboo.employee.entitiesDB.Vacation;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,12 @@ class VacationRepositoryDBImplTest {
     @Autowired
     private VacationRepositoryDB vacationRepositoryDB;
 
+    @AfterEach // to track database state
+    void printIds() {
+        vacationRepositoryDB.findAllVacations()
+                .forEach(vacation -> System.out.println(vacation.getId()));
+    }
+
     @Test
     void findAll() {
         Assertions.assertNotNull(vacationRepositoryDB);
@@ -34,12 +41,15 @@ class VacationRepositoryDBImplTest {
         int oldSize = vacationRepositoryDB.findAllVacations().size();
         long employeeId = 1;
         Employee employee = testEntityManager.find(Employee.class, employeeId);
-        testEntityManager.persist(new Vacation(
+        Vacation addedVacation = testEntityManager.persist(new Vacation(
                 employee,
                 LocalDate.of(2021, 4, 10),
                 LocalDate.of(2021, 4, 14),
                 "SUBMITTED"));
         Assertions.assertEquals(oldSize + 1,
+                vacationRepositoryDB.findAllVacations().size());
+        vacationRepositoryDB.deleteVacation(addedVacation);
+        Assertions.assertEquals(oldSize,
                 vacationRepositoryDB.findAllVacations().size());
     }
 
@@ -55,13 +65,21 @@ class VacationRepositoryDBImplTest {
     @Test
     void delete() {
         Assertions.assertNotNull(vacationRepositoryDB);
-        long id = 1;
-        Vacation vacation = testEntityManager.find(Vacation.class, id);
-        Assertions.assertEquals(vacation,
-                vacationRepositoryDB.findVacationById(id));
-
-        vacationRepositoryDB.deleteVacation(vacation);
-        Assertions.assertNull(testEntityManager.find(Vacation.class, id));
+        int oldSize = vacationRepositoryDB.findAllVacations().size();
+        long employeeId = 1;
+        Employee employee = testEntityManager.find(Employee.class, employeeId);
+        Vacation addedVacation = testEntityManager.persist(new Vacation(
+                employee,
+                LocalDate.of(2021, 4, 10),
+                LocalDate.of(2021, 4, 14),
+                "SUBMITTED"));
+        Assertions.assertEquals(oldSize + 1,
+                vacationRepositoryDB.findAllVacations().size());
+        vacationRepositoryDB.deleteVacation(addedVacation);
+        Assertions.assertNull(testEntityManager.find(Vacation.class,
+                addedVacation.getId()));
+        Assertions.assertEquals(oldSize,
+                vacationRepositoryDB.findAllVacations().size());
     }
 
     @Test
@@ -80,11 +98,21 @@ class VacationRepositoryDBImplTest {
     @Test
     void reject() {
         Assertions.assertNotNull(vacationRepositoryDB);
-        long id = 1;
-        Vacation vacation = vacationRepositoryDB.findVacationById(id);
-        Assertions.assertEquals("SUBMITTED", vacation.getStatus());
-        vacationRepositoryDB.rejectVacation(vacation);
-        Assertions.assertNull(testEntityManager.find(Vacation.class, id));
+        int oldSize = vacationRepositoryDB.findAllVacations().size();
+        long employeeId = 1;
+        Employee employee = testEntityManager.find(Employee.class, employeeId);
+        Vacation addedVacation = testEntityManager.persist(new Vacation(
+                employee,
+                LocalDate.of(2021, 4, 10),
+                LocalDate.of(2021, 4, 14),
+                "SUBMITTED"));
+        Assertions.assertEquals(oldSize + 1,
+                vacationRepositoryDB.findAllVacations().size());
+        vacationRepositoryDB.rejectVacation(addedVacation);
+        Assertions.assertNull(testEntityManager.find(Vacation.class,
+                addedVacation.getId()));
+        Assertions.assertEquals(oldSize,
+                vacationRepositoryDB.findAllVacations().size());
     }
 
 

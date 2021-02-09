@@ -2,6 +2,7 @@ package com.bamboo.employee.repositoryDB.employee;
 
 import com.bamboo.employee.entitiesDB.Employee;
 import com.bamboo.employee.entitiesDB.Vacation;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,12 @@ class EmployeeRepositoryDBImplTest {
     @Autowired
     private EmployeeRepositoryDB employeeRepositoryDB;
 
+    @AfterEach //to track database state
+    void printNames() {
+        employeeRepositoryDB.findAllEmployees()
+                .forEach(employee -> System.out.println(employee.getName()));
+    }
+
     @Test
     void findAll() {
         Assertions.assertNotNull(employeeRepositoryDB);
@@ -32,8 +39,12 @@ class EmployeeRepositoryDBImplTest {
     void addEmployee() {
         Assertions.assertNotNull(employeeRepositoryDB);
         int oldSize = employeeRepositoryDB.findAllEmployees().size();
-        testEntityManager.persist(new Employee("Eva", "Ras"));
+        Employee addedEmployee = testEntityManager.persist(
+                new Employee("Eva", "Ras"));
         Assertions.assertEquals(oldSize + 1,
+                employeeRepositoryDB.findAllEmployees().size());
+        employeeRepositoryDB.deleteEmployee(addedEmployee);
+        Assertions.assertEquals(oldSize,
                 employeeRepositoryDB.findAllEmployees().size());
     }
 
@@ -56,13 +67,16 @@ class EmployeeRepositoryDBImplTest {
     @Test
     void delete() {
         Assertions.assertNotNull(employeeRepositoryDB);
-        long id = 1;
-        Employee employee = testEntityManager.find(Employee.class, id);
-        Assertions.assertEquals(employee,
-                employeeRepositoryDB.findEmployeeById(id));
-
-        employeeRepositoryDB.deleteEmployee(employee);
-        Assertions.assertNull(testEntityManager.find(Employee.class, id));
+        int oldSize = employeeRepositoryDB.findAllEmployees().size();
+        Employee addedEmployee = testEntityManager.persist(
+                new Employee("Eva", "Ras"));
+        Assertions.assertEquals(oldSize + 1,
+                employeeRepositoryDB.findAllEmployees().size());
+        employeeRepositoryDB.deleteEmployee(addedEmployee);
+        Assertions.assertNull(testEntityManager.find(
+                Employee.class, addedEmployee.getId()));
+        Assertions.assertEquals(oldSize,
+                employeeRepositoryDB.findAllEmployees().size());
     }
 
     @Test
@@ -72,7 +86,6 @@ class EmployeeRepositoryDBImplTest {
         Optional<Vacation> vacation =
                 employeeRepositoryDB.findAllVacationsOfEmployee(id)
                         .stream().findFirst();
-
         Assertions.assertTrue(vacation.isPresent());
         Assertions.assertEquals(id, vacation.get().getEmployee().getId());
     }

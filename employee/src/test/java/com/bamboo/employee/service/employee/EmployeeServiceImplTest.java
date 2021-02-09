@@ -2,6 +2,7 @@ package com.bamboo.employee.service.employee;
 
 import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.model.VacationDTO;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,21 +17,32 @@ class EmployeeServiceImplTest {
     @Autowired
     private EmployeeService employeeService;
 
+    @AfterEach//to track database state
+    void printNames() {
+        employeeService.findAll()
+                .forEach(employee -> System.out.println(employee.getName()));
+    }
+
     @Test
     void add() {
-        EmployeeDTO employeeDTO = employeeService.addEmployee("Eva",
-                "Longoria");
+        int oldSize = employeeService.findAll().size();
+        EmployeeDTO employeeDTO = employeeService.addEmployee(
+                "Eva", "Longoria");
+        Assertions.assertEquals(oldSize + 1, employeeService.findAll().size());
         Assertions.assertEquals("Eva", employeeDTO.getName());
         Assertions.assertEquals("Longoria", employeeDTO.getSurname());
+        employeeService.removeEmployee(employeeDTO.getId());
+        Assertions.assertEquals(oldSize, employeeService.findAll().size());
     }
 
     @Test
     void remove() {
-        EmployeeDTO employeeDTO = employeeService.addEmployee("Eva",
-                "Longoria");
         int oldSize = employeeService.findAll().size();
+        EmployeeDTO employeeDTO = employeeService.addEmployee(
+                "Eva", "Longoria");
+        Assertions.assertEquals(oldSize + 1, employeeService.findAll().size());
         employeeService.removeEmployee(employeeDTO.getId());
-        Assertions.assertEquals(oldSize - 1, employeeService.findAll().size());
+        Assertions.assertEquals(oldSize, employeeService.findAll().size());
     }
 
     @Test
