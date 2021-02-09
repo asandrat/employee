@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @DataJpaTest
 @Import(PersistentEmployeeRepositoryImpl.class) //todo
-class PersistentEmployeeRepositoryImplTest {
+class PersistentEmployeeRepositoryImplIntegrationTest {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -33,51 +33,55 @@ class PersistentEmployeeRepositoryImplTest {
     }
 
     @Test
-    void shouldPreloadTwoEmployees() {
-        // take a look at data.sql
-        Assertions.assertEquals(2, repository.findAll().size());
+    void shouldPreloadEmployeesFromDataSql() {
+        Assertions.assertNotEquals(0, repository.findAll().size());
     }
 
     @Test
     void preloadedEmployeesShouldBeEqualToValuesInsertedInDataSqlFile() {
         Collection<EmployeeEntity> employees = repository.findAll();
-        for (EmployeeEntity employeeEntity :employees) {
+        for (EmployeeEntity employeeEntity : employees) {
             Assertions.assertEquals("Petar", employeeEntity.getName());
         }
     }
 
     @Test
     void addingEmployeeShouldIncreaseSize() {
+
+        int sizeWithoutNewEmployee = repository.findAll().size();
+
         EmployeeEntity employeeEntity = new EmployeeEntity();
         employeeEntity.setName("Test");
         employeeEntity.setSurname("Psd");
         entityManager.persist(employeeEntity);
-        Assertions.assertEquals(3, repository.findAll().size());
+
+        Assertions.assertEquals(
+                sizeWithoutNewEmployee + 1,
+                repository.findAll().size());
     }
 
     @Test
     void removingEmployeeShouldDecreaseTheSize() {
+
+        int numberOfPreloadedEmployees = repository.findAll().size();
+
         repository.delete(1);
-        Assertions.assertEquals(1, repository.findAll().size());
+        Assertions.assertEquals(numberOfPreloadedEmployees - 1,
+                repository.findAll().size());
     }
 
     @Test
     void deletingEmployeeShouldDeleteVacation() {
-        EmployeeEntity employeeEntity = new EmployeeEntity();
-        employeeEntity.setName("Test");
-        employeeEntity.setSurname("Psd");
-        entityManager.persist(employeeEntity);
-
+        EmployeeEntity employeeEntity = repository.read(1).get();
         VacationEntity vacationEntity = new VacationEntity();
         vacationEntity.setStatus(VacationStatus.SUBMITTED);
         vacationEntity.setFrom(LocalDate.now());
         vacationEntity.setTo(LocalDate.now());
-
         employeeEntity.addVacation(vacationEntity);
+        entityManager.flush();
 
-        repository.delete(3);
-        Assertions.assertNull(repository.findEmployeesVacationById(3, 4).orElse(null));
-
+        repository.delete(1);
+        Assertions.assertNull(repository.findEmployeesVacationById(1, 1).orElse(null));
     }
 
 
