@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public EmployeeDTO addEmployee(String name, String surname) {
         Employee employee = new Employee(name, surname);
+        employee.setRegisteredAt(LocalDateTime.now());
         Employee dbEmployee = employeeRepository.save(employee);
         return mapper.employeeToEmployeeDTO(dbEmployee);
     }

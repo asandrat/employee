@@ -12,6 +12,7 @@ CREATE TABLE employee (
                             id int(11) NOT NULL AUTO_INCREMENT,
                             name varchar(128) DEFAULT NULL,
                             surname varchar(128) DEFAULT NULL,
+                            registration_date datetime DEFAULT NULL,
 
                             PRIMARY KEY (id)
 

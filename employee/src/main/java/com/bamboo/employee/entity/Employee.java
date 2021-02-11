@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,9 @@ public class Employee {
     @NonNull
     @Column(name = "surname")
     private String surname;
+
+    @Column(name = "registration_date")
+    private LocalDateTime registeredAt;
 
     @OneToMany(mappedBy = "employee")
     private List<Vacation> vacations;
