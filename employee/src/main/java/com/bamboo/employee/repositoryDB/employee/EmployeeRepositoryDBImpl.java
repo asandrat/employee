@@ -26,7 +26,6 @@ public class EmployeeRepositoryDBImpl implements EmployeeRepositoryDB {
 
     @Override
     public void addEmployee(Employee employee) {
-        System.out.println(employee);
         entityManager.persist(employee);
     }
 

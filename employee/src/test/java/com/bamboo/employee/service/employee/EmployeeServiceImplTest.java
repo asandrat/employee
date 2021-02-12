@@ -1,64 +1,80 @@
 package com.bamboo.employee.service.employee;
 
-import com.bamboo.employee.entitiesFile.EmployeeFile;
-import com.bamboo.employee.repositoryFile.employee.EmployeeRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import com.bamboo.employee.entitiesDB.Employee;
+import com.bamboo.employee.model.EmployeeDTO;
+import com.bamboo.employee.model.VacationDTO;
+import org.junit.jupiter.api.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-import static org.mockito.Mockito.verify;
+import java.util.*;
+import java.util.stream.Collectors;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ActiveProfiles("test")
 class EmployeeServiceImplTest {
-    @Mock
-    EmployeeRepository employeeRepository;
 
-    @InjectMocks
-    EmployeeServiceImpl employeeServiceImpl;
+    @Autowired
+    private EmployeeService employeeService;
 
-    @Captor
-    ArgumentCaptor<String> argumentCaptorString;
+    @AfterEach//to track database state
+    void printNames() {
+        employeeService.findAll()
+                .forEach(employee -> System.out.println(employee.getName()));
+    }
 
-    @Captor
-    ArgumentCaptor<EmployeeFile> argumentCaptorEmployee;
-
-    @Test
-    void addEmployeeToRepository() {
-        employeeServiceImpl.addEmployee("Mihailo", "Petrovic");
-        verify(employeeRepository).addEmployee(argumentCaptorEmployee.capture());
-
-        EmployeeFile employee = argumentCaptorEmployee.getValue();
-        Assertions.assertEquals("Mihailo", employee.getName());
-        Assertions.assertEquals("Petrovic", employee.getSurname());
+    @BeforeEach
+    void addRecordsToDB(){
+        employeeService.addEmployee("Anica", "Dobra");
+        employeeService.addEmployee("Branka", "Katic");
+        employeeService.addEmployee("Tereza", "Kesofija");
+        employeeService.addEmployee("Natasa", "Markovic");
     }
 
     @Test
-    void removeEmployeeFromRepository() {
-        employeeServiceImpl.removeEmployee("123");
-        verify(employeeRepository).removeEmployee(argumentCaptorString.capture());
-        Assertions.assertEquals("123", argumentCaptorString.getValue());
-    }
-
-
-    @Test
-    void saveAllEmployeesToRepository() {
-        Map<String, EmployeeFile> employeeMap = new HashMap<>();
-        employeeMap.put("123", new EmployeeFile("123", "Andjela", "Krizan"));
-        employeeServiceImpl.saveAll(employeeMap);
-        verify(employeeRepository).saveAll(employeeMap);
+    void add() {
+        int oldSize = employeeService.findAll().size();
+        EmployeeDTO employeeDTO = employeeService.addEmployee(
+                "Eva", "Longoria");
+        Assertions.assertEquals(oldSize + 1, employeeService.findAll().size());
+        Assertions.assertEquals("Eva", employeeDTO.getName());
+        Assertions.assertEquals("Longoria", employeeDTO.getSurname());
+        employeeService.removeEmployee(employeeDTO.getId());
+        Assertions.assertEquals(oldSize, employeeService.findAll().size());
     }
 
     @Test
-    void findAllEmployeesFromRepository() {
-        employeeServiceImpl.findAll();
-        verify(employeeRepository).findAll();
+    void remove() {
+        int oldSize = employeeService.findAll().size();
+        EmployeeDTO employeeDTO = employeeService.addEmployee(
+                "Eva", "Longoria");
+        Assertions.assertEquals(oldSize + 1, employeeService.findAll().size());
+        employeeService.removeEmployee(employeeDTO.getId());
+        Assertions.assertEquals(oldSize, employeeService.findAll().size());
     }
+
+    @Test
+    void findAll() {
+        Collection<EmployeeDTO> employees = employeeService.findAll();
+        Set<String> namesSet =
+                employees.stream().map(EmployeeDTO::getName).collect(Collectors.toSet());
+        Assertions.assertNotNull(employees);
+        Assertions.assertTrue(namesSet.containsAll(Arrays.asList(
+                "Anica", "Branka", "Tereza", "Natasa")));
+    }
+
+    @Test
+    @Disabled // TODO
+    void findAllVacations() {
+        Collection<VacationDTO> vacations =
+                employeeService.findAllVacationsOfEmployee("2");
+        Set<String> dateFromSet =
+                vacations.stream().map(VacationDTO::getDateFrom).collect(Collectors.toSet());
+        Assertions.assertNotNull(vacations);
+        Assertions.assertTrue(dateFromSet.containsAll(Arrays.asList(
+                "2021-04-01", "2021-05-01")));
+    }
+
 }
