@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -17,7 +18,8 @@ import java.util.Optional;
 
 
 @DataJpaTest
-@Import(PersistentEmployeeRepositoryImpl.class) //todo
+@Import(PersistentEmployeeRepositoryImpl.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class PersistentEmployeeRepositoryImplIntegrationTest {
 
     @Autowired
@@ -33,8 +35,8 @@ class PersistentEmployeeRepositoryImplIntegrationTest {
     }
 
     @Test
-    void shouldPreloadEmployeesFromDataSql() {
-        Assertions.assertNotEquals(0, repository.findAll().size());
+    void employeeTableShouldBeEmptyOnStart() {
+        Assertions.assertEquals(0, repository.findAll().size());
     }
 
     @Test
@@ -53,7 +55,7 @@ class PersistentEmployeeRepositoryImplIntegrationTest {
         EmployeeEntity employeeEntity = new EmployeeEntity();
         employeeEntity.setName("Test");
         employeeEntity.setSurname("Psd");
-        entityManager.persist(employeeEntity);
+        repository.create(employeeEntity);
 
         Assertions.assertEquals(
                 sizeWithoutNewEmployee + 1,
@@ -62,6 +64,11 @@ class PersistentEmployeeRepositoryImplIntegrationTest {
 
     @Test
     void removingEmployeeShouldDecreaseTheSize() {
+
+        EmployeeEntity employeeEntity = new EmployeeEntity();
+        employeeEntity.setName("Test");
+        employeeEntity.setSurname("Psd");
+        repository.create(employeeEntity);
 
         int numberOfPreloadedEmployees = repository.findAll().size();
 
@@ -72,28 +79,41 @@ class PersistentEmployeeRepositoryImplIntegrationTest {
 
     @Test
     void deletingEmployeeShouldDeleteVacation() {
-        EmployeeEntity employeeEntity = repository.read(1).get();
+        EmployeeEntity employeeEntity = new EmployeeEntity();
+        employeeEntity.setName("Test");
+        employeeEntity.setSurname("Test");
+
         VacationEntity vacationEntity = new VacationEntity();
         vacationEntity.setStatus(VacationStatus.SUBMITTED);
         vacationEntity.setFrom(LocalDate.now());
         vacationEntity.setTo(LocalDate.now());
-        employeeEntity.addVacation(vacationEntity);
-        entityManager.flush();
 
-        repository.delete(1);
-        Assertions.assertNull(repository.findEmployeesVacationById(1, 1).orElse(null));
+        employeeEntity.addVacation(vacationEntity);
+
+        entityManager.persist(employeeEntity);
+
+        entityManager.detach(employeeEntity);
+
+        Assertions.assertFalse(entityManager.getEntityManager().contains(vacationEntity));
+
     }
 
 
     @Test
     void addingVacationToEmployeeShouldPersistSuchVacation() {
 
+
+        EmployeeEntity employeeEntity = new EmployeeEntity();
+        employeeEntity.setName("Test");
+        employeeEntity.setSurname("Test");
+        repository.create(employeeEntity);
+
+        Optional<EmployeeEntity> entity = repository.read(1);
+
         VacationEntity vacationEntity = new VacationEntity();
         vacationEntity.setStatus(VacationStatus.SUBMITTED);
         vacationEntity.setFrom(LocalDate.now());
         vacationEntity.setTo(LocalDate.now());
-
-        Optional<EmployeeEntity> entity = repository.read(1);
         entity.get().addVacation(vacationEntity);
 
         Assertions.assertEquals(1,
@@ -103,12 +123,17 @@ class PersistentEmployeeRepositoryImplIntegrationTest {
     @Test
     void updatingVacationShouldNotChangeNumberOfVacations() {
 
+        EmployeeEntity employeeEntity = new EmployeeEntity();
+        employeeEntity.setName("Test");
+        employeeEntity.setSurname("Test");
+        repository.create(employeeEntity);
+
+        Optional<EmployeeEntity> entity = repository.read(1);
+
         VacationEntity vacationEntity = new VacationEntity();
         vacationEntity.setStatus(VacationStatus.SUBMITTED);
         vacationEntity.setFrom(LocalDate.now());
         vacationEntity.setTo(LocalDate.now());
-
-        Optional<EmployeeEntity> entity = repository.read(1);
         // adding vacation to employee
         entity.get().addVacation(vacationEntity);
         // updating vacation
@@ -120,4 +145,24 @@ class PersistentEmployeeRepositoryImplIntegrationTest {
         Assertions.assertEquals(VacationStatus.APPROVED,
                 repository.findAllEmployeesVacations(1).stream().findFirst().get().getStatus());
     }
+
+
+    @Test
+    void persistingEmployeeShouldPersistVacation() {
+        EmployeeEntity employeeEntity = new EmployeeEntity();
+        employeeEntity.setName("Test");
+        employeeEntity.setSurname("Test");
+
+        VacationEntity vacationEntity = new VacationEntity();
+        vacationEntity.setStatus(VacationStatus.SUBMITTED);
+        vacationEntity.setFrom(LocalDate.now());
+        vacationEntity.setTo(LocalDate.now());
+
+        employeeEntity.addVacation(vacationEntity);
+
+        entityManager.persist(employeeEntity);
+
+        Assertions.assertTrue(entityManager.getEntityManager().contains(vacationEntity));
+    }
+
 }
