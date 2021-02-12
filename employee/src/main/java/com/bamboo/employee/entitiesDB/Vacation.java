@@ -21,8 +21,9 @@ public class Vacation {
     @Transient
     private int duration;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private VacationStatus status;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
@@ -32,15 +33,17 @@ public class Vacation {
     }
 
     public Vacation(Employee employee, LocalDate dateFrom,
-                    LocalDate dateTo, String status) {
+                    LocalDate dateTo, VacationStatus status) {
         this.employee = employee;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.status = status;
+        this.duration = (int) Duration.between(dateFrom.atStartOfDay(),
+                dateTo.atStartOfDay()).toDays();
     }
 
     public Vacation(Employee employee, LocalDate dateFrom,
-                    LocalDate dateTo, String status, int duration) {
+                    LocalDate dateTo, VacationStatus status, int duration) {
         this.employee = employee;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
@@ -89,11 +92,11 @@ public class Vacation {
         this.duration = duration;
     }
 
-    public String getStatus() {
+    public VacationStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(VacationStatus status) {
         this.status = status;
     }
 }

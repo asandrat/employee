@@ -2,7 +2,6 @@ package com.bamboo.employee.service.employee;
 
 import com.bamboo.employee.entitiesDB.Employee;
 import com.bamboo.employee.entitiesDB.Vacation;
-import com.bamboo.employee.entitiesFile.EmployeeFile;
 import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.repositoryDB.employee.EmployeeRepositoryDB;
@@ -20,8 +19,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepositoryDB employeeRepositoryDB;
     private final ModelMapper modelMapper;
 
-    public EmployeeServiceImpl(EmployeeRepositoryDB employeeRepositoryDB) {
-        this.modelMapper = new ModelMapper();
+    public EmployeeServiceImpl(EmployeeRepositoryDB employeeRepositoryDB,
+                               ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
         this.employeeRepositoryDB = employeeRepositoryDB;
     }
 
