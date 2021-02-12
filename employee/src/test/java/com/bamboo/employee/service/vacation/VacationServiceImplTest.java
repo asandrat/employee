@@ -3,9 +3,11 @@ package com.bamboo.employee.service.vacation;
 import com.bamboo.employee.model.VacationDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class VacationServiceImplTest {
 
     @Autowired
@@ -22,6 +25,18 @@ class VacationServiceImplTest {
     void printIds() {
         vacationService.findAll()
                 .forEach(vacation -> System.out.println(vacation.getId()));
+    }
+
+    @BeforeEach
+    void addRecordsToDB() {
+        vacationService.addVacation(
+                "1", "2021-11-01", "2021-11-10", "SUBMITTED");
+        vacationService.addVacation(
+                "1", "2021-10-01", "2021-10-10", "SUBMITTED");
+        vacationService.addVacation(
+                "2", "2021-09-01", "2021-09-10", "SUBMITTED");
+        vacationService.addVacation(
+                "3", "2021-08-01", "2021-08-10", "SUBMITTED");
     }
 
     @Test
@@ -54,8 +69,8 @@ class VacationServiceImplTest {
                 vacations.stream().map(VacationDTO::getDateFrom).collect(Collectors.toSet());
         Assertions.assertNotNull(vacations);
         Assertions.assertTrue(dateFromSet.containsAll(Arrays.asList(
-                "2021-03-01", "2021-04-01", "2021-05-01",
-                "2021-06-01", "2021-07-01")));
+                "2021-11-01", "2021-10-01", "2021-09-01",
+                "2021-08-01")));
 
     }
 
