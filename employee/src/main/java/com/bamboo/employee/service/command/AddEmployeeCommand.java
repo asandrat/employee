@@ -16,7 +16,7 @@ public class AddEmployeeCommand implements Command {
 
     @Override
     public void execute(Map<String, String> data) {
-        employeeService.addEmployee(data.get("name"), data.get("surname"));
+        //employeeService.addEmployee(data.get("name"), data.get("surname"));
     }
 
     @Override

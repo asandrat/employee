@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -26,8 +28,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO addEmployee(String name, String surname) {
-        Employee employeeDB = new Employee(name, surname);
+    public EmployeeDTO addEmployee(String name, String surname, String registrationDateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate registrationDate = LocalDate.parse(registrationDateString, formatter);
+        Employee employeeDB = new Employee(name, surname, registrationDate);
         employeeRepositoryDB.addEmployee(employeeDB);
         return modelMapper.map(employeeDB, EmployeeDTO.class);
     }

@@ -1,6 +1,5 @@
 package com.bamboo.employee.service.employee;
 
-import com.bamboo.employee.entitiesDB.Employee;
 import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.model.VacationDTO;
 import org.junit.jupiter.api.*;
@@ -27,17 +26,17 @@ class EmployeeServiceImplTest {
 
     @BeforeEach
     void addRecordsToDB(){
-        employeeService.addEmployee("Anica", "Dobra");
-        employeeService.addEmployee("Branka", "Katic");
-        employeeService.addEmployee("Tereza", "Kesofija");
-        employeeService.addEmployee("Natasa", "Markovic");
+        employeeService.addEmployee("Anica", "Dobra", "2010-09-01");
+        employeeService.addEmployee("Branka", "Katic", "2010-09-01");
+        employeeService.addEmployee("Tereza", "Kesofija", "2010-09-01");
+        employeeService.addEmployee("Natasa", "Markovic", "2010-09-01");
     }
 
     @Test
     void add() {
         int oldSize = employeeService.findAll().size();
         EmployeeDTO employeeDTO = employeeService.addEmployee(
-                "Eva", "Longoria");
+                "Eva", "Longoria", "2010-09-01");
         Assertions.assertEquals(oldSize + 1, employeeService.findAll().size());
         Assertions.assertEquals("Eva", employeeDTO.getName());
         Assertions.assertEquals("Longoria", employeeDTO.getSurname());
@@ -49,7 +48,7 @@ class EmployeeServiceImplTest {
     void remove() {
         int oldSize = employeeService.findAll().size();
         EmployeeDTO employeeDTO = employeeService.addEmployee(
-                "Eva", "Longoria");
+                "Eva", "Longoria", "2010-09-01");
         Assertions.assertEquals(oldSize + 1, employeeService.findAll().size());
         employeeService.removeEmployee(employeeDTO.getId());
         Assertions.assertEquals(oldSize, employeeService.findAll().size());

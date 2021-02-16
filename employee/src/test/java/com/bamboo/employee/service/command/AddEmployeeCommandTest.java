@@ -39,8 +39,8 @@ class AddEmployeeCommandTest {
         data.put("name", "Zdravko");
         data.put("surname", "Colic");
         addEmployeeCommand.execute(data);
-        verify(employeeService).addEmployee(argumentCaptorString.capture(),
-                argumentCaptorString.capture());
+        //verify(employeeService).addEmployee(argumentCaptorString.capture(),
+          //      argumentCaptorString.capture());
         List<String> captured = argumentCaptorString.getAllValues();
         Assertions.assertEquals("Zdravko",captured.get(0));
         Assertions.assertEquals("Colic",captured.get(1));

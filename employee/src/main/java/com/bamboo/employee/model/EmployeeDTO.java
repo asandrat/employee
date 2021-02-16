@@ -11,6 +11,8 @@ public class EmployeeDTO {
     @NotBlank(message = "Surname is required")
     private String surname;
 
+    private String registrationDate;
+
     public EmployeeDTO() {
     }
 
@@ -18,6 +20,14 @@ public class EmployeeDTO {
         this.id = id;
         this.name = name;
         this.surname = surname;
+    }
+
+    public EmployeeDTO(String id, String name, String surname,
+                       String registrationDate) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.registrationDate = registrationDate;
     }
 
     public String getId() {
@@ -43,4 +53,14 @@ public class EmployeeDTO {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+    public String getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(String registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+
 }

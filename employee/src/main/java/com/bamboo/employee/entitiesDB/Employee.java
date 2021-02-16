@@ -1,6 +1,7 @@
 package com.bamboo.employee.entitiesDB;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,9 @@ public class Employee {
     @Column(name = "surname")
     private String surname;
 
+    @Column(name = "registration_date")
+    private LocalDate registrationDate;
+
     @OneToMany(mappedBy = "employee",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
@@ -28,6 +32,12 @@ public class Employee {
     public Employee(String name, String surname) {
         this.name = name;
         this.surname = surname;
+    }
+
+    public Employee(String name, String surname, LocalDate registrationDate) {
+        this.name = name;
+        this.surname = surname;
+        this.registrationDate = registrationDate;
     }
 
     public long getId() {
@@ -52,6 +62,14 @@ public class Employee {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public LocalDate getRegistrationDate() {
+        return this.registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public List<Vacation> getVacations() {
