@@ -1,8 +1,8 @@
 {
   "properties": [
     {
-      "name": "spring.employeeApp.file.path",
+      "name": "cron.expression",
       "type": "java.lang.String",
-      "description": "Description for spring.employeeApp.file.path."
+      "description": "Description for cron.expression."
     }
   ] }

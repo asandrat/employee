@@ -1,19 +1,18 @@
 package com.bamboo.employee.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @NoArgsConstructor
+@Getter
+@Setter
 @RequiredArgsConstructor
 @Entity
+@ToString
 @Table(name="employee")
 public class Employee {
     @Id

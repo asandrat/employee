@@ -40,6 +40,22 @@ CREATE TABLE vacation (
 
                                     ON DELETE NO ACTION ON UPDATE NO ACTION
 );
+CREATE TABLE employees_favorite_months (
+                          id int(11) NOT NULL AUTO_INCREMENT,
+                          created_at date DEFAULT NULL,
+                          favorite_month varchar(128) DEFAULT NULL,
+                          employee_id int(11) DEFAULT NULL,
+
+                          PRIMARY KEY (id),
+
+                          KEY FK_EMPLOYEE_ID_idx (employee_id),
+
+                          CONSTRAINT FK_EMPLOYEE
+                              FOREIGN KEY (employee_id)
+                                  REFERENCES employee (id)
+
+                                  ON DELETE NO ACTION ON UPDATE NO ACTION
+);
 
 
 SET FOREIGN_KEY_CHECKS = 1;
