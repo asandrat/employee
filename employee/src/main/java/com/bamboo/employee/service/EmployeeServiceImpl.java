@@ -28,9 +28,10 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EntityRepository<Employee> dao;
-
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper mapper;
+    private LocalDateTime registeredFrom = null;
+    ExecutorService executorService = Executors.newFixedThreadPool(3);
 
     @Autowired
     public void setDao(EntityRepository<Employee> daoToSet) {
@@ -80,10 +81,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public void calculateFavoriteMonthsForEmployees() {
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
-        List<Employee> employees = employeeRepository.findOldest3();
-        List<Integer> favoriteMonthsForAll3Employees = new ArrayList<>();
+    public void calculateFavoriteMonthsForEmployees(int limitNumberOfEmployees) {
+        List<Employee> employees = employeeRepository.findOldestRegisteredEmployees(
+                limitNumberOfEmployees,
+                registeredFrom
+        );
+        List<Integer> favoriteMonthsForEmployees = new ArrayList<>();
+
+        updateRegisteredFrom(employees, limitNumberOfEmployees);
 
         for (Employee employee : employees) {
             Future<List<Integer>> future = executorService.submit(
@@ -91,14 +96,14 @@ public class EmployeeServiceImpl implements EmployeeService {
             );
 
             try {
-                favoriteMonthsForAll3Employees.addAll(future.get());
+                favoriteMonthsForEmployees.addAll(future.get());
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }
         if (employees.size() >= 2) {
             Set<Integer> commonMonths = calculateCommonMonths(
-                    favoriteMonthsForAll3Employees
+                    favoriteMonthsForEmployees
             );
             if (!commonMonths.isEmpty()) {
                 log.info("Employees with ids " + Arrays.toString(employees.stream()
@@ -113,12 +118,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    private void updateRegisteredFrom(List<Employee> employees, int limit) {
+        if (employees.size() < limit) {
+            registeredFrom = null;
+        }
+
+        registeredFrom = employees.stream()
+                .map(Employee::getRegisteredAt)
+                .max(LocalDateTime::compareTo)
+                .get();
+    }
+
     private Set<Integer> calculateCommonMonths(
-            List<Integer> commonMonths
+            List<Integer> favoriteMonthsForEmployees
     ) {
-        Set<Integer> items = new HashSet<>();
-        return commonMonths.stream()
-                .filter(n -> !items.add(n))
+        Set<Integer> commonMonths = new HashSet<>();
+        return favoriteMonthsForEmployees.stream()
+                .filter(month -> !commonMonths.add(month))
                 .collect(Collectors.toSet());
     }
 

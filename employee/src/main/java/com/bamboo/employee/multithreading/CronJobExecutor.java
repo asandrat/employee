@@ -13,6 +13,6 @@ public class CronJobExecutor {
 
     @Scheduled(cron = "${cron.expression}")
     public void cronJob() {
-        employeeService.calculateFavoriteMonthsForEmployees();
+        employeeService.calculateFavoriteMonthsForEmployees(3);
     }
 }

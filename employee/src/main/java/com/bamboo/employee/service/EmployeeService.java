@@ -17,7 +17,7 @@ public interface EmployeeService {
 
     Employee checkIfEmployeeExists(int employeeId);
 
-    void calculateFavoriteMonthsForEmployees();
+    void calculateFavoriteMonthsForEmployees(int limitNumberOfEmployees);
 
     void saveFavoriteMonth(Employee e, List<Integer> month);
 }
