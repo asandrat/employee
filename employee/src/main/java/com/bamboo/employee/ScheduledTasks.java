@@ -43,7 +43,7 @@ public class ScheduledTasks {
         this.service = service;
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(cron = "${cronForScheduledTask}")
     public void vacationStatistics() {
         // READ EMPLOYEES
         List<Employee> employees =
