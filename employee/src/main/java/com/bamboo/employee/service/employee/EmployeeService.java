@@ -1,12 +1,15 @@
 package com.bamboo.employee.service.employee;
 
-import com.bamboo.employee.exceptions.InvalidStateTransitionException;
+import com.bamboo.employee.entity.EmployeeEntity;
 import com.bamboo.employee.model.Employee;
+import com.bamboo.employee.model.FavoriteVacation;
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
 
+import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 public interface EmployeeService {
 
@@ -41,4 +44,9 @@ public interface EmployeeService {
 
     Collection<Vacation> findAllEmployeesVacations(int employeeId);
 
+    void createEmployeesFavoriteVacation(FavoriteVacation favoriteVacation);
+
+    List<Employee> findFirstNEmployeesByTimestamp(
+            int maxNumberOfEmployeesPerTask,
+            Timestamp timestamp);
 }

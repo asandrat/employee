@@ -1,8 +1,10 @@
 package com.bamboo.employee.service.employee;
 
+import com.bamboo.employee.entity.FavoriteVacationEntity;
 import com.bamboo.employee.exceptions.VacationNotFoundException;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.entity.EmployeeEntity;
+import com.bamboo.employee.model.FavoriteVacation;
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.entity.VacationEntity;
 import com.bamboo.employee.model.VacationId;
@@ -14,7 +16,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -171,5 +175,22 @@ public class EmployeeServiceImpl implements EmployeeService {
         return repository.findAllEmployeesVacations(employeeId).stream()
                 .map(vacationEntity -> mapper.map(vacationEntity, Vacation.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void createEmployeesFavoriteVacation(final FavoriteVacation favoriteVacation) {
+        repository.createEmployeesFavoriteVacation(
+                mapper.map(favoriteVacation, FavoriteVacationEntity.class));
+    }
+
+    @Override
+    public List<Employee> findFirstNEmployeesByTimestamp(
+            final int maxNumberOfEmployeesPerTask,
+            final Timestamp timestamp) {
+        return repository.findFirstNEmployeesByTimestamp(maxNumberOfEmployeesPerTask, timestamp)
+                .stream()
+                .map(employeeEntity -> mapper.map(employeeEntity, Employee.class))
+                .collect(Collectors.toList());
+
     }
 }
