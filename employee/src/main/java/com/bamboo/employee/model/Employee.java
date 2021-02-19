@@ -1,5 +1,6 @@
 package com.bamboo.employee.model;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 public class Employee {
@@ -7,6 +8,7 @@ public class Employee {
     private int uniqueId;
     private String name;
     private String surname;
+    private Timestamp creationTime;
 
     // todo is this neccessary in DO ?
     private final Map<Integer, Vacation> vacations = new HashMap<>();
@@ -67,6 +69,14 @@ public class Employee {
                                final VacationStatus status) {
         Vacation v = vacations.get(id);
         v.setStatus(status);
+    }
+
+    public Timestamp getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(final Timestamp creationTime) {
+        this.creationTime = creationTime;
     }
 
     @Override
