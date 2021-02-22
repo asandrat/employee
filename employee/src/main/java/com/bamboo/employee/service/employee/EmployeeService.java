@@ -14,4 +14,7 @@ public interface EmployeeService {
 
     Collection<VacationDTO> findAllVacationsOfEmployee(String id);
 
+    Collection<EmployeeDTO> findFirstN(int n);
+
+    void saveFavouriteMonth(EmployeeDTO employeeDTO, int favouriteMonth);
 }

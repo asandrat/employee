@@ -1,6 +1,7 @@
 package com.bamboo.employee.service.employee;
 
 import com.bamboo.employee.entitiesDB.Employee;
+import com.bamboo.employee.entitiesDB.EmployeesFavouriteMonth;
 import com.bamboo.employee.entitiesDB.Vacation;
 import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.model.VacationDTO;
@@ -28,9 +29,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO addEmployee(String name, String surname, String registrationDateString) {
+    public EmployeeDTO addEmployee(String name, String surname,
+                                   String registrationDateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate registrationDate = LocalDate.parse(registrationDateString, formatter);
+        LocalDate registrationDate = LocalDate.parse(registrationDateString,
+                formatter);
         Employee employeeDB = new Employee(name, surname, registrationDate);
         employeeRepositoryDB.addEmployee(employeeDB);
         return modelMapper.map(employeeDB, EmployeeDTO.class);
@@ -64,6 +67,33 @@ public class EmployeeServiceImpl implements EmployeeService {
         Type listType = new TypeToken<List<VacationDTO>>() {
         }.getType();
         return modelMapper.map(list, listType);
+    }
+
+    @Override
+    public Collection<EmployeeDTO> findFirstN(int n) {
+        List<Employee> employees = employeeRepositoryDB.findFirstN(n);
+        if (employees == null) {
+            return null;
+        }
+        Type listType = new TypeToken<List<EmployeeDTO>>() {
+        }.getType();
+        return modelMapper.map(employees, listType);
+    }
+
+    @Override
+    public void saveFavouriteMonth(EmployeeDTO employeeDTO,
+                                   int favouriteMonth) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate registrationDate =
+                LocalDate.parse(employeeDTO.getRegistrationDate(), formatter);
+
+        Employee employeeDB = new Employee(employeeDTO.getName(),
+                employeeDTO.getSurname(), registrationDate);
+        employeeDB.setId(Long.parseLong(employeeDTO.getId()));
+        EmployeesFavouriteMonth employeesFavouriteMonth =
+                new EmployeesFavouriteMonth(employeeDB,favouriteMonth);
+
+        employeeRepositoryDB.saveFavoriteMonth(employeesFavouriteMonth);
     }
 
 }
