@@ -6,10 +6,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 
@@ -18,6 +22,17 @@ import java.sql.Timestamp;
 public class FavoriteVacationEntity {
 
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "favorite_vacation_generator"
+    )
+    @SequenceGenerator(
+            name = "favorite_vacation_generator",
+            sequenceName = "favorite_vacation_sequence",
+            allocationSize = 1)
+    private int id;
+
+
     @Column(name = "employee_id")
     private int employeeId;
 
@@ -28,12 +43,18 @@ public class FavoriteVacationEntity {
     @CreationTimestamp
     private Timestamp creationTime;
 
-
-    // todo prebaciti u manyToOne
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId("employeeId")
-    @JoinColumn(name = "employee_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+//    @MapsId("employeeId")
+    @JoinColumn(name = "employee_id", insertable = false, updatable = false)
     private EmployeeEntity employeeEntity;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(final int id) {
+        this.id = id;
+    }
 
     public int getEmployeeId() {
         return employeeId;

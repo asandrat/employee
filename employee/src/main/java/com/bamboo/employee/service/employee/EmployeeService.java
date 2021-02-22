@@ -49,4 +49,6 @@ public interface EmployeeService {
     List<Employee> findFirstNEmployeesByTimestamp(
             int maxNumberOfEmployeesPerTask,
             Timestamp timestamp);
+
+    void removeEmployeesFavoriteVacations(int uniqueId);
 }

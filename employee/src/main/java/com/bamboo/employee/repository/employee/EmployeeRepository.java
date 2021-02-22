@@ -39,4 +39,6 @@ public interface EmployeeRepository {
     List<EmployeeEntity> findFirstNEmployeesByTimestamp(int maxNumberOfEmployees, Timestamp timestamp);
 
     void createEmployeesFavoriteVacation(FavoriteVacationEntity favoriteVacationEntity);
+
+    void deleteEmployeesFavoriteVacations(int uniqueId);
 }

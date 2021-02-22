@@ -66,7 +66,8 @@ public class ScheduledTasks {
 
         try {
             // EXECUTE ALL TASKS
-            List<Future<Integer>> futures = executorService.invokeAll(tasks);
+            List<Future<List<Integer>>> futures =
+                    executorService.invokeAll(tasks);
             List<Integer> favoriteMonths = new ArrayList<>();
             /*
                 Deluje da je invokeAll blokirajuci; ubacio sam mini test
@@ -75,8 +76,8 @@ public class ScheduledTasks {
                 ispisivao-flush-ovao future.isDone() -> svaki put su se prvo
                 izvrsile niti a zatim ispisalo N true-a
              */
-            for (Future<Integer> future : futures) {
-                favoriteMonths.add(future.get());
+            for (Future<List<Integer>> future : futures) {
+                favoriteMonths.addAll(future.get());
             }
 
 

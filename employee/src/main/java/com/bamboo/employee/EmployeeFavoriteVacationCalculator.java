@@ -6,11 +6,15 @@ import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationStatus;
 import com.bamboo.employee.service.employee.EmployeeService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public class EmployeeFavoriteVacationCalculator implements Callable<Integer> {
+public class EmployeeFavoriteVacationCalculator implements Callable<List<Integer>> {
 
     private final Employee employee;
     private final EmployeeService service;
@@ -23,26 +27,31 @@ public class EmployeeFavoriteVacationCalculator implements Callable<Integer> {
     }
 
     @Override
-    public Integer call() {
+    public List<Integer> call() {
 
-        Collection<Vacation> getApprovedEmployeesVacations =
-                approvedEmployeesVacations();
+        Collection<Vacation> approvedEmployeesVacations =
+                getApprovedEmployeesVacations();
 
-        int[] monthValues = calculateMonthValuesOccurrences(getApprovedEmployeesVacations);
-        // kada se prbaci u manyToOne vraca int[]
-        int favoriteMonth = findFavoriteMonth(monthValues);
+        int[] monthValues = calculateMonthValuesOccurrences(approvedEmployeesVacations);
+        List<Integer> favoriteMonths = findFavoriteMonths(monthValues);
 
-        if (favoriteMonth != 0) {
-            FavoriteVacation favoriteVacation = new FavoriteVacation(
-                    employee.getUniqueId(),
-                    favoriteMonth);
-            service.createEmployeesFavoriteVacation(favoriteVacation);
+        if (favoriteMonths.size() != 0) {
+            // remove existing favorite vacations
+            service.removeEmployeesFavoriteVacations(employee.getUniqueId());
+
+            // persist employees favorite vacations
+            favoriteMonths.forEach(favoriteMonth -> {
+                FavoriteVacation favoriteVacation = new FavoriteVacation(
+                        employee.getUniqueId(),
+                        favoriteMonth);
+                service.createEmployeesFavoriteVacation(favoriteVacation);
+            });
+
         }
-
-        return favoriteMonth;
+        return favoriteMonths;
     }
 
-    private Collection<Vacation> approvedEmployeesVacations() {
+    private Collection<Vacation> getApprovedEmployeesVacations() {
         return service
                 .findAllEmployeesVacations(employee.getUniqueId())
                 .stream()
@@ -63,15 +72,19 @@ public class EmployeeFavoriteVacationCalculator implements Callable<Integer> {
         return monthValuesOccurrences;
     }
 
-    private int findFavoriteMonth(final int[] monthValuesOccurrences) {
-        int favoriteMonth = 0;
-        int mostFrequentMonth = 0;
-        for (int i = 0; i < NUMBER_OF_MONTHS; i++) {
-            if (monthValuesOccurrences[i] > mostFrequentMonth) {
-                mostFrequentMonth = monthValuesOccurrences[i];
-                favoriteMonth = i + 1; // plus one because indices start w/ 0
-            }
+    private List<Integer> findFavoriteMonths(final int[] monthValuesOccurrences) {
+        int max = Arrays.stream(monthValuesOccurrences)
+                .max()
+                .orElse(0);
+
+        // employee has no vacations
+        if (max == 0) {
+            return new ArrayList<>();
         }
-        return favoriteMonth;
+
+        return IntStream.rangeClosed(1, NUMBER_OF_MONTHS)
+                .filter(index -> monthValuesOccurrences[index - 1] == max)
+                .boxed()
+                .collect(Collectors.toList());
     }
 }

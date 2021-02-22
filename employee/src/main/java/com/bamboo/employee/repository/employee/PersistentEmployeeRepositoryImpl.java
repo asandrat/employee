@@ -108,4 +108,13 @@ public class PersistentEmployeeRepositoryImpl implements EmployeeRepository {
             final FavoriteVacationEntity favoriteVacationEntity) {
         entityManager.merge(favoriteVacationEntity);
     }
+
+    @Override
+    public void deleteEmployeesFavoriteVacations(final int uniqueId) {
+        Query query = entityManager.createQuery(
+                "delete from FavoriteVacationEntity where "
+                        + "employeeId = :uniqueId");
+        query.setParameter("uniqueId", uniqueId);
+        int x = query.executeUpdate();
+    }
 }

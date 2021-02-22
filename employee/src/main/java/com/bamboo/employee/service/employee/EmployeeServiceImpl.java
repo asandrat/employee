@@ -193,4 +193,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .collect(Collectors.toList());
 
     }
+
+    @Override
+    public void removeEmployeesFavoriteVacations(final int uniqueId) {
+        repository.deleteEmployeesFavoriteVacations(uniqueId);
+    }
 }
