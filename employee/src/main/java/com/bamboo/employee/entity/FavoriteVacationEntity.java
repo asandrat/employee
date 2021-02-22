@@ -44,8 +44,11 @@ public class FavoriteVacationEntity {
     private Timestamp creationTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @MapsId("employeeId")
-    @JoinColumn(name = "employee_id", insertable = false, updatable = false)
+    @JoinColumn(
+            name = "employee_id",
+            insertable = false,
+            updatable = false
+    )
     private EmployeeEntity employeeEntity;
 
     public int getId() {

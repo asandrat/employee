@@ -9,7 +9,6 @@ import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,12 +19,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class PersistentEmployeeRepositoryImpl implements EmployeeRepository {
+public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @PersistenceContext
     private final EntityManager entityManager;
 
-    public PersistentEmployeeRepositoryImpl(final EntityManager entityManager) {
+    public EmployeeRepositoryImpl(final EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 

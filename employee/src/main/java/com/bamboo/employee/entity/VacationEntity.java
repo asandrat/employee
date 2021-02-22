@@ -103,23 +103,6 @@ public class VacationEntity {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        VacationEntity that = (VacationEntity) o;
-        return id == that.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
-
-    @Override
     public String toString() {
         return "VacationEntity{" +
                 "id=" + id +

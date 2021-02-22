@@ -28,7 +28,7 @@ public class ScheduledTasks {
     private Timestamp timestamp = new Timestamp(0);
 
     @Value("${maxNumberOfEmployeesPerJob}")
-    private int maxNumberOfEmployeesPerJob;
+    private final int maxNumberOfEmployeesPerJob;
 
     private static final Logger log =
             LoggerFactory.getLogger(ScheduledTasks.class);
@@ -38,8 +38,10 @@ public class ScheduledTasks {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
             "dd-MM-yyyy HH:mm:ss");
 
-
-    public ScheduledTasks(final EmployeeService service) {
+    public ScheduledTasks(
+            @Value("${maxNumberOfEmployeesPerJob}") final int maxNumberOfEmployeesPerJob,
+            final EmployeeService service) {
+        this.maxNumberOfEmployeesPerJob = maxNumberOfEmployeesPerJob;
         this.service = service;
     }
 
@@ -69,13 +71,6 @@ public class ScheduledTasks {
             List<Future<List<Integer>>> futures =
                     executorService.invokeAll(tasks);
             List<Integer> favoriteMonths = new ArrayList<>();
-            /*
-                Deluje da je invokeAll blokirajuci; ubacio sam mini test
-                gde sam postavio da niti spavaju nasumicnih 0-10sec i
-                zatim izvrse svoje zadatke a u pratecoj for petlji
-                ispisivao-flush-ovao future.isDone() -> svaki put su se prvo
-                izvrsile niti a zatim ispisalo N true-a
-             */
             for (Future<List<Integer>> future : futures) {
                 favoriteMonths.addAll(future.get());
             }
