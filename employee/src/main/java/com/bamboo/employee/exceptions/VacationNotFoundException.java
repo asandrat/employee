@@ -11,6 +11,6 @@ public class VacationNotFoundException extends RuntimeException {
     public VacationNotFoundException(int employeeId, int vacationId) {
         super(String.format(
                 "Vacation with id=%d doesn't exists "
-                        + "for employee with id=%d", employeeId, vacationId));
+                        + "for employee with id=%d", vacationId, employeeId));
     }
 }
