@@ -106,13 +106,15 @@ public class EmployeeServiceImpl implements EmployeeService {
                     favoriteMonthsForEmployees
             );
             if (!commonMonths.isEmpty()) {
-                log.info("Employees with ids " + Arrays.toString(employees.stream()
-                        .mapToInt(Employee::getUniqueId).toArray()) +
+                log.info("Employees with ids " + employees.stream()
+                        .map(e -> String.valueOf(e.getUniqueId()))
+                        .collect(Collectors.joining(", ")) +
                         " have common vacation months: " +
                         commonMonths.toString());
             } else {
-                log.info("Employees with ids " + Arrays.toString(employees.stream()
-                        .mapToInt(Employee::getUniqueId).toArray()) +
+                log.info("Employees with ids " + employees.stream()
+                        .map(e -> String.valueOf(e.getUniqueId()))
+                        .collect(Collectors.joining(", "))+
                         " have not common vacation months ");
             }
         }
