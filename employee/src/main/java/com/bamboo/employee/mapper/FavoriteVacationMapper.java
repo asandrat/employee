@@ -12,5 +12,6 @@ public interface FavoriteVacationMapper {
             Mappers.getMapper(FavoriteVacationMapper.class);
 
     FavoriteVacationEntity favoriteVacationToEntity(FavoriteVacation favoriteVacation);
+
     FavoriteVacation entityToFavoriteVaction(FavoriteVacationEntity favoriteVacationEntity);
 }

@@ -12,7 +12,10 @@ public interface VacationMapper {
     VacationMapper INSTANCE = Mappers.getMapper(VacationMapper.class);
 
     VacationDTO vacationToDTO(Vacation vacation);
+
     Vacation vacationDTOtoVacation(VacationDTO vacationDTO);
+
     Vacation entityToVacation(VacationEntity vacationEntity);
+
     VacationEntity vacationToEntity(Vacation vacation);
 }

@@ -68,15 +68,18 @@ public class EmployeeController {
             @PathVariable final int employeeId,
             @RequestBody @Valid final VacationDTO vacationDTO) {
 
-        Vacation vacation = VacationMapper.INSTANCE.vacationDTOtoVacation(vacationDTO);
-        Vacation outputVacation = service.addVacationToEmployee(employeeId, vacation);
+        Vacation vacation =
+                VacationMapper.INSTANCE.vacationDTOtoVacation(vacationDTO);
+        Vacation outputVacation = service.addVacationToEmployee(employeeId,
+                vacation);
         return ResponseEntity.ok(VacationMapper.INSTANCE.vacationToDTO(outputVacation));
     }
 
     @GetMapping("/{employeeId}/vacations/{vacationId}")
     ResponseEntity<VacationDTO> getVacationById(@PathVariable int employeeId,
                                                 @PathVariable int vacationId) {
-        Vacation vacation = service.getVacationFromEmployee(employeeId, vacationId);
+        Vacation vacation = service.getVacationFromEmployee(employeeId,
+                vacationId);
         return ResponseEntity.ok(VacationMapper.INSTANCE.vacationToDTO(vacation));
     }
 
