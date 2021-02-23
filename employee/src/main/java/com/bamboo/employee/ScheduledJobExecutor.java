@@ -27,8 +27,7 @@ public class ScheduledJobExecutor {
 
     private static final Logger logger = LoggerFactory.getLogger(ScheduledJobExecutor.class);
 
-    //@Scheduled(cron = "${cron.expression}")
-    @Scheduled(fixedDelay = 5000, initialDelay = 1000)
+    @Scheduled(cron = "${cron.expression}")
     public void scheduleCronJob() {
         ExecutorService executorService =
                 Executors.newFixedThreadPool(Integer.parseInt(limitNumberOfEmployees));
