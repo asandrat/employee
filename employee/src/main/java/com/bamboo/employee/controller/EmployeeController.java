@@ -1,6 +1,8 @@
 package com.bamboo.employee.controller;
 
 
+import com.bamboo.employee.mapper.EmployeeMapper;
+import com.bamboo.employee.mapper.VacationMapper;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.model.VacationStatus;
@@ -8,11 +10,9 @@ import com.bamboo.employee.model.dto.EmployeeDTO;
 import com.bamboo.employee.model.dto.VacationDTO;
 import com.bamboo.employee.model.dto.VacationUpdateDTO;
 import com.bamboo.employee.service.employee.EmployeeService;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -28,27 +28,25 @@ Dataflow
 public class EmployeeController {
 
     private final EmployeeService service;
-    private final ModelMapper modelMapper;
 
-    public EmployeeController(final EmployeeService service,
-                              final ModelMapper modelMapper) {
+    public EmployeeController(final EmployeeService service) {
         this.service = service;
-        this.modelMapper = modelMapper;
     }
 
     @PostMapping
     ResponseEntity<EmployeeDTO> addEmployee(
             @RequestBody @Valid final EmployeeDTO employeeDTO) {
-        Employee inputEmployee = modelMapper.map(employeeDTO, Employee.class);
+        Employee inputEmployee =
+                EmployeeMapper.INSTANCE.EmployeeDTOtoEmployee(employeeDTO);
         Employee outputEmployee = service.addEmployee(inputEmployee);
-        return ResponseEntity.ok(modelMapper.map(outputEmployee, EmployeeDTO.class));
+        return ResponseEntity.ok(EmployeeMapper.INSTANCE.employeeToDTO(outputEmployee));
     }
 
     @GetMapping
     ResponseEntity<Collection<EmployeeDTO>> allEmployees() {
         Collection<EmployeeDTO> employees =
                 service.findAll().stream()
-                        .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
+                        .map(EmployeeMapper.INSTANCE::employeeToDTO)
                         .collect(Collectors.toList());
         return ResponseEntity.ok(employees);
     }
@@ -56,31 +54,30 @@ public class EmployeeController {
     @GetMapping("/{id}")
     ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable final int id) {
         Employee employee = service.getEmployee(id);
-        return ResponseEntity.ok(modelMapper.map(employee, EmployeeDTO.class));
+        return ResponseEntity.ok(EmployeeMapper.INSTANCE.employeeToDTO(employee));
     }
 
     @DeleteMapping("/{id}")
     ResponseEntity<EmployeeDTO> removeEmployeeById(@PathVariable final int id) {
         Employee employee = service.removeEmployee(id);
-        return ResponseEntity.ok(modelMapper.map(employee, EmployeeDTO.class));
+        return ResponseEntity.ok(EmployeeMapper.INSTANCE.employeeToDTO(employee));
     }
 
     @PostMapping("/{employeeId}/vacations/")
     ResponseEntity<VacationDTO> addVacationToEmployee(
             @PathVariable final int employeeId,
-            @RequestBody @Valid final VacationDTO vacationDTO,
-            HttpServletRequest request) {
+            @RequestBody @Valid final VacationDTO vacationDTO) {
 
-        Vacation vacation = modelMapper.map(vacationDTO, Vacation.class);
+        Vacation vacation = VacationMapper.INSTANCE.vacationDTOtoVacation(vacationDTO);
         Vacation outputVacation = service.addVacationToEmployee(employeeId, vacation);
-        return ResponseEntity.ok(modelMapper.map(outputVacation, VacationDTO.class));
+        return ResponseEntity.ok(VacationMapper.INSTANCE.vacationToDTO(outputVacation));
     }
 
     @GetMapping("/{employeeId}/vacations/{vacationId}")
     ResponseEntity<VacationDTO> getVacationById(@PathVariable int employeeId,
                                                 @PathVariable int vacationId) {
         Vacation vacation = service.getVacationFromEmployee(employeeId, vacationId);
-        return ResponseEntity.ok(modelMapper.map(vacation, VacationDTO.class));
+        return ResponseEntity.ok(VacationMapper.INSTANCE.vacationToDTO(vacation));
     }
 
     @DeleteMapping("/{employeeId}/vacations/{vacationId}")
@@ -96,8 +93,7 @@ public class EmployeeController {
         Collection<VacationDTO> vacations =
                 service.findAllEmployeesVacations(employeeId)
                         .stream()
-                        .map(vacation -> modelMapper.map(vacation,
-                                VacationDTO.class))
+                        .map(VacationMapper.INSTANCE::vacationToDTO)
                         .collect(Collectors.toList());
         return ResponseEntity.ok(vacations);
     }

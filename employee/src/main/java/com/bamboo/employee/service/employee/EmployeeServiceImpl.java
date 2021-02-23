@@ -2,6 +2,9 @@ package com.bamboo.employee.service.employee;
 
 import com.bamboo.employee.entity.FavoriteVacationEntity;
 import com.bamboo.employee.exceptions.VacationNotFoundException;
+import com.bamboo.employee.mapper.EmployeeMapper;
+import com.bamboo.employee.mapper.FavoriteVacationMapper;
+import com.bamboo.employee.mapper.VacationMapper;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.entity.EmployeeEntity;
 import com.bamboo.employee.model.FavoriteVacation;
@@ -12,7 +15,6 @@ import com.bamboo.employee.model.VacationStatus;
 import com.bamboo.employee.repository.employee.EmployeeRepository;
 import com.bamboo.employee.exceptions.EmployeeNotFoundException;
 import com.bamboo.employee.service.vacationstate.VacationStateManager;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,47 +31,48 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository repository;
     private final VacationStateManager vacationStateManager;
-    private final ModelMapper mapper;
 
     public EmployeeServiceImpl(final EmployeeRepository repository,
-                               final VacationStateManager vacationStateManager,
-                               final ModelMapper mapper) {
+                               final VacationStateManager vacationStateManager) {
         this.repository = repository;
         this.vacationStateManager = vacationStateManager;
-        this.mapper = mapper;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Collection<Employee> findAll() {
         return repository.findAll().stream()
-                .map(employeeEntity -> mapper.map(employeeEntity, Employee.class))
+                .map(EmployeeMapper.INSTANCE::entityToEmployee)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Employee addEmployee(final Employee employee) {
-        EmployeeEntity employeeEntity = mapper.map(employee,
-                EmployeeEntity.class);
-        return mapper.map(repository.create(employeeEntity), Employee.class);
+        EmployeeEntity employeeEntity =
+                EmployeeMapper.INSTANCE.employeeToEntity(employee);
+        EmployeeEntity persistedEntity = repository.create(employeeEntity);
+        return EmployeeMapper.INSTANCE.entityToEmployee(persistedEntity);
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(
+            readOnly = true,
+            rollbackFor = EmployeeNotFoundException.class //todo jel treba ovo?
+    )
     public Employee getEmployee(final int id) {
         EmployeeEntity employeeEntity = repository.read(id)
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
-        return mapper.map(employeeEntity, Employee.class);
+        return EmployeeMapper.INSTANCE.entityToEmployee(employeeEntity);
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = EmployeeNotFoundException.class)
     public Employee removeEmployee(int id) {
         Optional<EmployeeEntity> maybeEmployeeEntity = repository.delete(id);
         if (!maybeEmployeeEntity.isPresent()) {
             throw new EmployeeNotFoundException(id);
         }
-        return mapper.map(maybeEmployeeEntity.get(), Employee.class);
+        return EmployeeMapper.INSTANCE.entityToEmployee(maybeEmployeeEntity.get());
     }
 
     @Override
@@ -101,7 +104,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         optionalEmployeeEntity.get()
-                .addVacation(mapper.map(vacation, VacationEntity.class));
+                .addVacation(VacationMapper.INSTANCE.vacationToEntity(vacation));
 
         return vacation;
     }
@@ -110,7 +113,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional(readOnly = true)
     public Vacation getVacationFromEmployee(final VacationId vacationId) {
         Employee e = this.getEmployee(vacationId.getEmployeeId());
-        return e.getVacation(vacationId).orElseThrow(() -> new VacationNotFoundException(vacationId));
+        return e.getVacation(vacationId.getUniqueId()).orElseThrow(() -> new VacationNotFoundException(vacationId));
     }
 
     @Override
@@ -122,7 +125,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (!vacationEntity.isPresent()) {
             throw new VacationNotFoundException(employeeId, vacationId);
         }
-        return mapper.map(vacationEntity.get(), Vacation.class);
+        return VacationMapper.INSTANCE.entityToVacation(vacationEntity.get());
     }
 
     @Override
@@ -173,14 +176,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional(readOnly = true)
     public Collection<Vacation> findAllEmployeesVacations(final int employeeId) {
         return repository.findAllEmployeesVacations(employeeId).stream()
-                .map(vacationEntity -> mapper.map(vacationEntity, Vacation.class))
+                .map(VacationMapper.INSTANCE::entityToVacation)
                 .collect(Collectors.toList());
     }
 
     @Override
     public void createEmployeesFavoriteVacation(final FavoriteVacation favoriteVacation) {
-        repository.createEmployeesFavoriteVacation(
-                mapper.map(favoriteVacation, FavoriteVacationEntity.class));
+        FavoriteVacationEntity favoriteVacationEntity =
+                FavoriteVacationMapper.INSTANCE
+                        .favoriteVacationToEntity(favoriteVacation);
+        repository.createEmployeesFavoriteVacation(favoriteVacationEntity);
     }
 
     @Override
@@ -189,7 +194,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             final Timestamp timestamp) {
         return repository.findFirstNEmployeesByTimestamp(maxNumberOfEmployeesPerTask, timestamp)
                 .stream()
-                .map(employeeEntity -> mapper.map(employeeEntity, Employee.class))
+                .map(EmployeeMapper.INSTANCE::entityToEmployee)
                 .collect(Collectors.toList());
 
     }

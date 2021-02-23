@@ -1,6 +1,8 @@
 package com.bamboo.employee.entity;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.CascadeType;
@@ -16,6 +18,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Getter @Setter
 @Entity
 @Table(name = "employee")
 public class EmployeeEntity {
@@ -34,6 +37,7 @@ public class EmployeeEntity {
 
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String surname;
 
@@ -61,37 +65,5 @@ public class EmployeeEntity {
     public void removeVacation(VacationEntity vacationEntity) {
         vacations.remove(vacationEntity);
         vacationEntity.setEmployee(null);
-    }
-
-    public int getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(final int uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(final String surname) {
-        this.surname = surname;
-    }
-
-    public Timestamp getCreationTime() {
-        return creationTime;
-    }
-
-    public void setCreationTime(final Timestamp creationTime) {
-        this.creationTime = creationTime;
     }
 }
