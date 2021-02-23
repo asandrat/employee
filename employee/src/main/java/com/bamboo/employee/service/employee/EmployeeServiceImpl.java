@@ -22,6 +22,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepositoryDB employeeRepositoryDB;
     private final ModelMapper modelMapper;
 
+    private LocalDate registered = null;
+
     public EmployeeServiceImpl(EmployeeRepositoryDB employeeRepositoryDB,
                                ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
@@ -70,9 +72,24 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Collection<EmployeeDTO> findFirstN(int n) {
-        List<Employee> employees = employeeRepositoryDB.findFirstN(n);
+    public Collection<EmployeeDTO> findFirstNRegisteredEmployees(int n) {
+        List<Employee> employees =
+                employeeRepositoryDB.findFirstNRegisteredEmployees(n,
+                        registered);
         if (employees == null) {
+            return null;
+        }
+
+        if (employees.size() < n) {
+            registered = null;
+        }
+
+        registered = employees.stream()
+                .map(Employee::getRegistrationDate)
+                .max(LocalDate::compareTo)
+                .orElse(null);
+
+        if (registered == null) {
             return null;
         }
         Type listType = new TypeToken<List<EmployeeDTO>>() {
@@ -91,7 +108,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employeeDTO.getSurname(), registrationDate);
         employeeDB.setId(Long.parseLong(employeeDTO.getId()));
         EmployeesFavouriteMonth employeesFavouriteMonth =
-                new EmployeesFavouriteMonth(employeeDB,favouriteMonth);
+                new EmployeesFavouriteMonth(employeeDB, favouriteMonth);
 
         employeeRepositoryDB.saveFavoriteMonth(employeesFavouriteMonth);
     }

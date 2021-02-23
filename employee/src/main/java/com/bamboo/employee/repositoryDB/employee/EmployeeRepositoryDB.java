@@ -4,6 +4,7 @@ import com.bamboo.employee.entitiesDB.Employee;
 import com.bamboo.employee.entitiesDB.EmployeesFavouriteMonth;
 import com.bamboo.employee.entitiesDB.Vacation;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface EmployeeRepositoryDB {
 
     Collection<Vacation> findAllVacationsOfEmployee(long id);
 
-    List<Employee> findFirstN(int n);
+    List<Employee> findFirstNRegisteredEmployees(int n, LocalDate x);
 
     void saveFavoriteMonth(EmployeesFavouriteMonth employeesFavoriteMonth);
 

@@ -65,15 +65,10 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    @Disabled // TODO
     void findAllVacations() {
         Collection<VacationDTO> vacations =
-                employeeService.findAllVacationsOfEmployee("2");
-        Set<String> dateFromSet =
-                vacations.stream().map(VacationDTO::getDateFrom).collect(Collectors.toSet());
+                employeeService.findAllVacationsOfEmployee("15");
         Assertions.assertNotNull(vacations);
-        Assertions.assertTrue(dateFromSet.containsAll(Arrays.asList(
-                "2021-04-01", "2021-05-01")));
     }
 
 }

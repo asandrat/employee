@@ -8,12 +8,12 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-public class FavouriteMonth implements Callable<Integer> {
+public class EmployeeFavouriteMonthCalculator implements Callable<Integer> {
     private final EmployeeDTO employeeDTO;
     private final EmployeeService employeeService;
 
-    public FavouriteMonth(final EmployeeDTO employeeDTO,
-                          final EmployeeService employeeService) {
+    public EmployeeFavouriteMonthCalculator(final EmployeeDTO employeeDTO,
+                                            final EmployeeService employeeService) {
         this.employeeDTO = employeeDTO;
         this.employeeService = employeeService;
     }
@@ -69,7 +69,4 @@ public class FavouriteMonth implements Callable<Integer> {
         return Integer.parseInt(favouriteMonthString);
     }
 
-    public static void main(String[] args) {
-
-    }
 }

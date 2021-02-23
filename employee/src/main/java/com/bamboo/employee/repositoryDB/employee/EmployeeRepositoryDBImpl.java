@@ -14,7 +14,6 @@ import java.util.List;
 
 @Repository
 public class EmployeeRepositoryDBImpl implements EmployeeRepositoryDB {
-    private volatile LocalDate registered = null;
 
     @PersistenceContext
     private final EntityManager entityManager;
@@ -53,24 +52,14 @@ public class EmployeeRepositoryDBImpl implements EmployeeRepositoryDB {
     }
 
     @Override
-    public List<Employee> findFirstN(int n) {
+    public List<Employee> findFirstNRegisteredEmployees(int n, LocalDate registered) {
         Query query = entityManager.createQuery(
                 "Select e from Employee as e join fetch e.vacations " +
                         "where :param = null or e.registrationDate > :param " +
                         "order by e.registrationDate asc");
         query.setParameter("param", registered);
-        List<Employee> employees = query.setMaxResults(n).getResultList();
 
-        if (employees.size() < n) {
-            registered = null;
-        }
-        if (employees.size() == 0) {
-            return null;
-        }
-        registered = employees.stream().map(Employee::getRegistrationDate)
-                .max(LocalDate::compareTo).get();
-
-        return employees;
+        return (List<Employee>) query.setMaxResults(n).getResultList();
     }
 
     @Override
