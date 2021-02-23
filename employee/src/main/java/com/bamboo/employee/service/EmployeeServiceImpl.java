@@ -15,10 +15,12 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
@@ -31,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper mapper;
     private LocalDateTime registeredFrom = null;
-    ExecutorService executorService = Executors.newFixedThreadPool(3);
+    private final ExecutorService executorService;
 
     @Autowired
     public void setDao(EntityRepository<Employee> daoToSet) {
