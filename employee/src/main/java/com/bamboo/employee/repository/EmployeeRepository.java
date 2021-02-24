@@ -1,7 +1,9 @@
 package com.bamboo.employee.repository;
 
 import com.bamboo.employee.entity.Employee;
+import com.bamboo.employee.entity.EmployeesFavoriteMonth;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EmployeeRepository {
@@ -14,4 +16,10 @@ public interface EmployeeRepository {
 
     void deleteById(int theId);
 
+    List<Employee> findOldestRegisteredEmployees(
+            int limit,
+            LocalDateTime registeredFrom
+    );
+
+    void saveFavoriteMonth(EmployeesFavoriteMonth employeesFavoriteMonth);
 }

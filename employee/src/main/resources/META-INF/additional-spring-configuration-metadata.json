@@ -1,8 +1,18 @@
 {
   "properties": [
     {
-      "name": "spring.employeeApp.file.path",
+      "name": "cron.expression",
       "type": "java.lang.String",
-      "description": "Description for spring.employeeApp.file.path."
+      "description": "Description for cron.expression."
+    },
+    {
+      "name": "number.of.threads",
+      "type": "java.lang.String",
+      "description": "Description for number.of.threads."
+    },
+    {
+      "name": "number.of.employees.to.fetch",
+      "type": "java.lang.String",
+      "description": "Description for number.of.employees.to.fetch."
     }
   ] }

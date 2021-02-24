@@ -12,6 +12,7 @@ CREATE TABLE employee (
                             id int(11) NOT NULL AUTO_INCREMENT,
                             name varchar(128) DEFAULT NULL,
                             surname varchar(128) DEFAULT NULL,
+                            registration_date datetime DEFAULT NULL,
 
                             PRIMARY KEY (id)
 
@@ -38,6 +39,22 @@ CREATE TABLE vacation (
                                     REFERENCES employee (id)
 
                                     ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+CREATE TABLE employees_favorite_months (
+                          id int(11) NOT NULL AUTO_INCREMENT,
+                          created_at date DEFAULT NULL,
+                          favorite_month varchar(128) DEFAULT NULL,
+                          employee_id int(11) DEFAULT NULL,
+
+                          PRIMARY KEY (id),
+
+                          KEY FK_EMPLOYEE_ID_idx (employee_id),
+
+                          CONSTRAINT FK_EMPLOYEE
+                              FOREIGN KEY (employee_id)
+                                  REFERENCES employee (id)
+
+                                  ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 
