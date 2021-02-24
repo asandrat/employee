@@ -12,12 +12,12 @@ public class EmployeeDTO {
     private int id;
 
     @NotBlank(message = "Name is required")
-    @Size(min = 3, message = "Name must contains at least 3 letter")
+    @Size(min = 3, max = 20, message = "Name must contains at least 3 letter")
     @Pattern(regexp = "[A-Z][A-Za-z]+")
     private String name;
 
     @NotBlank(message = "Surname is required")
-    @Size(min = 3, message = "Surname must contains at least 3 letter")
+    @Size(min = 3, max = 20, message = "Surname must contains at least 3 letter")
     @Pattern(regexp = "[A-Z][A-Za-z]+")
     private String surname;
 
