@@ -25,41 +25,51 @@ public class ScheduledJobExecutor {
     @Value("${limit.number.of.employees}")
     private String limitNumberOfEmployees;
 
-    private static final Logger logger = LoggerFactory.getLogger(ScheduledJobExecutor.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(ScheduledJobExecutor.class);
 
     @Scheduled(cron = "${cron.expression}")
     public void scheduleCronJob() {
-        ExecutorService executorService =
-                Executors.newFixedThreadPool(Integer.parseInt(limitNumberOfEmployees));
-        Collection<EmployeeDTO> firstNEmployees =
-                employeeService.findFirstNRegisteredEmployees(Integer.parseInt(limitNumberOfEmployees));
+        ExecutorService executorService = Executors
+                .newFixedThreadPool(Integer.parseInt(limitNumberOfEmployees));
+
+        Collection<EmployeeDTO> firstNEmployees = employeeService
+                .findFirstNRegisteredEmployees(
+                        Integer.parseInt(limitNumberOfEmployees));
 
         if (firstNEmployees == null || firstNEmployees.size() == 0) {
             return;
         }
-        ArrayList<Integer> months = new ArrayList<>();
+        ArrayList<Integer> favouriteMonthsOfEmployees = new ArrayList<>();
 
         for (EmployeeDTO employee : firstNEmployees) {
-            Future<Integer> integerFuture = executorService.submit(
-                    new EmployeeFavouriteMonthCalculator(employee, employeeService));
+            Future<Integer> integerFuture = executorService
+                    .submit(new EmployeeFavouriteMonthCalculator(
+                            employee, employeeService));
             try {
-                months.add(integerFuture.get());
+                favouriteMonthsOfEmployees.add(integerFuture.get());
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-
         }
 
-        Set<Integer> set = new HashSet<>();
-        List<Integer> commonMonths =
-                months.stream().filter(e -> !set.add(e)).collect(Collectors.toList());
-        if (commonMonths.size() == 0) {
+        Set<Integer> distinctMonths = new HashSet<>();
+        List<Integer> commonFavouriteMonths = favouriteMonthsOfEmployees
+                .stream()
+                .filter(e -> !distinctMonths.add(e))
+                .collect(Collectors.toList());
+
+        if (commonFavouriteMonths.size() == 0) {
             logger.info("\nNo common months found.");
             return;
         }
         logger.info("\nCommon favourite months: ");
 
-        commonMonths.stream().distinct().collect(Collectors.toList()).forEach(System.out::println);
+        commonFavouriteMonths
+                .stream()
+                .distinct()
+                .collect(Collectors.toList())
+                .forEach(System.out::println);
     }
 
 }

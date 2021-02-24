@@ -36,6 +36,16 @@ public class EmployeeFavouriteMonthCalculator implements Callable<Integer> {
             return 0;
         }
 
+        List<String> vacationDates =
+                extractDatesFromVacations(vacationsOfEmployee);
+
+        List<Integer> monthsOfVacations =
+                extractMonthsFromVacations(vacationDates);
+
+        return calculateFavouriteMonth(monthsOfVacations);
+    }
+
+    private List<String> extractDatesFromVacations(Collection<VacationDTO> vacationsOfEmployee) {
         List<String> dateList = vacationsOfEmployee
                 .stream()
                 .map(VacationDTO::getDateFrom)
@@ -45,8 +55,11 @@ public class EmployeeFavouriteMonthCalculator implements Callable<Integer> {
                 .stream()
                 .map(VacationDTO::getDateTo)
                 .collect(Collectors.toList()));
+        return dateList;
+    }
 
-        List<String> months = dateList
+    private List<Integer> extractMonthsFromVacations(List<String> vacationDates) {
+        return vacationDates
                 .stream()
                 .map(date -> date.substring(5, 7))
                 .map(month -> {
@@ -55,18 +68,20 @@ public class EmployeeFavouriteMonthCalculator implements Callable<Integer> {
                     } else {
                         return month;
                     }
-                })
+                }).map(Integer::parseInt)
                 .collect(Collectors.toList());
+    }
 
-        Map<String, Long> occurrences = months
+    private int calculateFavouriteMonth(List<Integer> monthsOfVacations) {
+        Map<Integer, Long> monthOccurrences = monthsOfVacations
                 .stream()
-                .collect(Collectors.groupingBy(w -> w, Collectors.counting()));
+                .collect(Collectors.groupingBy(month -> month,
+                        Collectors.counting()));
 
-        String favouriteMonthString = Collections
-                .max(occurrences.entrySet(),
-                        (entry1, entry2) -> (int) (entry1.getValue() - entry2.getValue())).getKey();
-
-        return Integer.parseInt(favouriteMonthString);
+        return Collections
+                .max(monthOccurrences.entrySet(), (entry1, entry2)
+                        -> (int) (entry1.getValue() - entry2.getValue()))
+                .getKey();
     }
 
 }
