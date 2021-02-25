@@ -1,9 +1,14 @@
 package com.bamboo.employee.entitiesDB;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "Employee")
 public class Employee {
@@ -26,9 +31,6 @@ public class Employee {
             orphanRemoval = true)
     private List<Vacation> vacations;
 
-    public Employee() {
-    }
-
     public Employee(String name, String surname) {
         this.name = name;
         this.surname = surname;
@@ -40,43 +42,4 @@ public class Employee {
         this.registrationDate = registrationDate;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public LocalDate getRegistrationDate() {
-        return this.registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public List<Vacation> getVacations() {
-        return vacations;
-    }
-
-    public void setVacations(List<Vacation> vacations) {
-        this.vacations = vacations;
-    }
 }

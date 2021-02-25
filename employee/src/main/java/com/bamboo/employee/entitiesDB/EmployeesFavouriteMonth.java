@@ -1,7 +1,14 @@
 package com.bamboo.employee.entitiesDB;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "Employees_favourite_month ")
 public class EmployeesFavouriteMonth {
@@ -17,35 +24,8 @@ public class EmployeesFavouriteMonth {
     @Column(name = "favourite_month")
     private int favouriteMonth;
 
-    public EmployeesFavouriteMonth() {
-    }
-
     public EmployeesFavouriteMonth(Employee employee, int favouriteMonth) {
         this.employee = employee;
-        this.favouriteMonth = favouriteMonth;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public int getFavouriteMonth() {
-        return favouriteMonth;
-    }
-
-    public void setFavouriteMonth(int favouriteMonth) {
         this.favouriteMonth = favouriteMonth;
     }
 }

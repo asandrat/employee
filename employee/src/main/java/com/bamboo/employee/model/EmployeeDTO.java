@@ -1,7 +1,10 @@
 package com.bamboo.employee.model;
 
+import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
 
+@Data
 public class EmployeeDTO {
     private String id;
 
@@ -12,55 +15,5 @@ public class EmployeeDTO {
     private String surname;
 
     private String registrationDate;
-
-    public EmployeeDTO() {
-    }
-
-    public EmployeeDTO(String id, String name, String surname) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-    }
-
-    public EmployeeDTO(String id, String name, String surname,
-                       String registrationDate) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.registrationDate = registrationDate;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(String registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
 
 }
