@@ -2,7 +2,7 @@ package com.bamboo.employee.service.vacation;
 
 import com.bamboo.employee.entitiesDB.Employee;
 import com.bamboo.employee.entitiesDB.Vacation;
-import com.bamboo.employee.entitiesFile.VacationFile;
+import com.bamboo.employee.entitiesDB.VacationStatus;
 import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.repositoryDB.employee.EmployeeRepositoryDB;
 import com.bamboo.employee.repositoryDB.vacation.VacationRepositoryDB;
@@ -24,10 +24,11 @@ public class VacationServiceImpl implements VacationService {
     private final ModelMapper modelMapper;
 
     public VacationServiceImpl(VacationRepositoryDB vacationRepositoryDB,
-                               EmployeeRepositoryDB employeeRepositoryDB) {
+                               EmployeeRepositoryDB employeeRepositoryDB,
+                               ModelMapper modelMapper) {
         this.vacationRepositoryDB = vacationRepositoryDB;
         this.employeeRepositoryDB = employeeRepositoryDB;
-        this.modelMapper = new ModelMapper();
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -42,8 +43,10 @@ public class VacationServiceImpl implements VacationService {
         long longEmployeeId = Long.parseLong(employeeId);
         Employee employee =
                 employeeRepositoryDB.findEmployeeById(longEmployeeId);
+
+        VacationStatus vacationStatus = VacationStatus.fromString(status);
         Vacation vacation = new Vacation(employee, dateFrom, dateTo,
-                status);
+                vacationStatus);
 
         vacationRepositoryDB.addVacationToEmployee(vacation);
         return modelMapper.map(vacation, VacationDTO.class);

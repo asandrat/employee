@@ -6,7 +6,7 @@ import com.bamboo.employee.model.VacationDTO;
 import java.util.Collection;
 
 public interface EmployeeService {
-    EmployeeDTO addEmployee(String name, String surname);
+    EmployeeDTO addEmployee(String name, String surname, String registrationDate);
 
     void removeEmployee(String id);
 
@@ -14,4 +14,7 @@ public interface EmployeeService {
 
     Collection<VacationDTO> findAllVacationsOfEmployee(String id);
 
+    Collection<EmployeeDTO> findFirstNRegisteredEmployees(int n);
+
+    void saveFavouriteMonth(EmployeeDTO employeeDTO, int favouriteMonth);
 }

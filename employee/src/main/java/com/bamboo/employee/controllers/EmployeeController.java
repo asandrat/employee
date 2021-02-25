@@ -30,7 +30,9 @@ public class EmployeeController {
             @Valid @RequestBody EmployeeDTO employeeDTO) {
         String name = employeeDTO.getName();
         String surname = employeeDTO.getSurname();
-        return ResponseEntity.ok(employeeService.addEmployee(name, surname));
+        String registrationDate = employeeDTO.getRegistrationDate();
+        return ResponseEntity.ok(employeeService.addEmployee(name, surname,
+                registrationDate));
     }
 
     @DeleteMapping("/{id}")

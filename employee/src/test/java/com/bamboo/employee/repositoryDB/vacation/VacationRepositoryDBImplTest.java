@@ -92,10 +92,8 @@ class VacationRepositoryDBImplTest {
     }
 
     @Test
-    @Disabled //TODO
     void approve() {
-        long id = 2;
-        long employeeId = 1;
+        long employeeId = 13;
         Employee employee = testEntityManager.find(Employee.class, employeeId);
         Vacation addedVacation = testEntityManager.persist(new Vacation(
                 employee,
@@ -107,7 +105,8 @@ class VacationRepositoryDBImplTest {
         vacationRepositoryDB.approveVacation(addedVacation);
         testEntityManager.clear();
         testEntityManager.flush();
-        Vacation approvedVacation = testEntityManager.find(Vacation.class, id);
+        Vacation approvedVacation =
+                vacationRepositoryDB.findVacationById(addedVacation.getId());
         Assertions.assertEquals(VacationStatus.fromString("APPROVED"),
                 approvedVacation.getStatus());
     }
@@ -115,7 +114,7 @@ class VacationRepositoryDBImplTest {
     @Test
     void reject() {
         int oldSize = vacationRepositoryDB.findAllVacations().size();
-        long employeeId = 1;
+        long employeeId = 13;
         Employee employee = testEntityManager.find(Employee.class, employeeId);
         Vacation addedVacation = testEntityManager.persist(new Vacation(
                 employee,
