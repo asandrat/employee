@@ -14,6 +14,7 @@ public class EmployeeDTO {
     @NotBlank(message = "Surname is required")
     private String surname;
 
+    @NotBlank(message = "Registration date is required")
     private String registrationDate;
 
 }
