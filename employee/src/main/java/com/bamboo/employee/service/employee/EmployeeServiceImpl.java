@@ -3,15 +3,15 @@ package com.bamboo.employee.service.employee;
 import com.bamboo.employee.entitiesDB.Employee;
 import com.bamboo.employee.entitiesDB.EmployeesFavouriteMonth;
 import com.bamboo.employee.entitiesDB.Vacation;
+import com.bamboo.employee.mapstruct.EmployeeMapper;
+import com.bamboo.employee.mapstruct.VacationMapper;
 import com.bamboo.employee.model.EmployeeDTO;
 import com.bamboo.employee.model.VacationDTO;
 import com.bamboo.employee.repositoryDB.employee.EmployeeRepositoryDB;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
+
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -20,14 +20,17 @@ import java.util.*;
 @Transactional
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepositoryDB employeeRepositoryDB;
-    private final ModelMapper modelMapper;
+    private final EmployeeMapper employeeMapper;
+    private final VacationMapper vacationMapper;
 
     private LocalDate registered = null;
 
     public EmployeeServiceImpl(EmployeeRepositoryDB employeeRepositoryDB,
-                               ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
+                               EmployeeMapper employeeMapper,
+                               VacationMapper vacationMapper) {
         this.employeeRepositoryDB = employeeRepositoryDB;
+        this.employeeMapper = employeeMapper;
+        this.vacationMapper = vacationMapper;
     }
 
     @Override
@@ -38,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 formatter);
         Employee employeeDB = new Employee(name, surname, registrationDate);
         employeeRepositoryDB.addEmployee(employeeDB);
-        return modelMapper.map(employeeDB, EmployeeDTO.class);
+        return employeeMapper.employeeEntityToEmployeeDTO(employeeDB);
     }
 
     @Override
@@ -54,21 +57,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Collection<EmployeeDTO> findAll() {
-        List<Employee> list =
+        List<Employee> listOfEmployees =
                 new ArrayList<>(employeeRepositoryDB.findAllEmployees());
-        Type listType = new TypeToken<List<EmployeeDTO>>() {
-        }.getType();
-        return modelMapper.map(list, listType);
+        return employeeMapper.map(listOfEmployees);
     }
 
     @Override
     public Collection<VacationDTO> findAllVacationsOfEmployee(String id) {
         long longId = Long.parseLong(id);
-        List<Vacation> list = new ArrayList<>(
+        List<Vacation> listOfVacations = new ArrayList<>(
                 employeeRepositoryDB.findAllVacationsOfEmployee(longId));
-        Type listType = new TypeToken<List<VacationDTO>>() {
-        }.getType();
-        return modelMapper.map(list, listType);
+        Collection<VacationDTO> vacationDTOList = new ArrayList<>();
+        String employeeId;
+        for (Vacation vacation : listOfVacations) {
+            VacationDTO vacationDTO = vacationMapper
+                    .vacationEntityToVacationDTO(vacation);
+            employeeId = String.valueOf(vacation.getEmployee().getId());
+            vacationDTO.setEmployeeId(employeeId);
+            vacationDTOList.add(vacationDTO);
+        }
+        return vacationDTOList;
     }
 
     @Override
@@ -92,9 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (registered == null) {
             return null;
         }
-        Type listType = new TypeToken<List<EmployeeDTO>>() {
-        }.getType();
-        return modelMapper.map(employees, listType);
+        return employeeMapper.map(employees);
     }
 
     @Override
