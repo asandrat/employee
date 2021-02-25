@@ -6,10 +6,8 @@ import com.bamboo.employee.model.dto.VacationDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface VacationMapper {
-
-    VacationMapper INSTANCE = Mappers.getMapper(VacationMapper.class);
 
     VacationDTO vacationToDTO(Vacation vacation);
 

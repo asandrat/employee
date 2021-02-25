@@ -7,6 +7,7 @@ import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.entity.VacationEntity;
 import com.bamboo.employee.model.VacationId;
 import com.bamboo.employee.model.VacationStatus;
+import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Repository;
 
@@ -19,14 +20,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@AllArgsConstructor
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @PersistenceContext
     private final EntityManager entityManager;
-
-    public EmployeeRepositoryImpl(final EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     @Override
     public @NotNull List<EmployeeEntity> findAll() {
@@ -49,10 +47,6 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         return employeeEntity;
     }
 
-    @Override
-    public void saveAll(final Collection<Employee> employees) {
-
-    }
 
     @Override
     public Optional<EmployeeEntity> delete(final int id) {

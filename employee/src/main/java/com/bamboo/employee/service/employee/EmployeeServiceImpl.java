@@ -15,6 +15,7 @@ import com.bamboo.employee.model.VacationStatus;
 import com.bamboo.employee.repository.employee.EmployeeRepository;
 import com.bamboo.employee.exceptions.EmployeeNotFoundException;
 import com.bamboo.employee.service.vacationstate.VacationStateManager;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,31 +28,29 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository repository;
     private final VacationStateManager vacationStateManager;
-
-    public EmployeeServiceImpl(final EmployeeRepository repository,
-                               final VacationStateManager vacationStateManager) {
-        this.repository = repository;
-        this.vacationStateManager = vacationStateManager;
-    }
+    private final EmployeeMapper employeeMapper;
+    private final VacationMapper vacationMapper;
+    private final FavoriteVacationMapper favoriteVacationMapper;
 
     @Override
     @Transactional(readOnly = true)
     public Collection<Employee> findAll() {
         return repository.findAll().stream()
-                .map(EmployeeMapper.INSTANCE::entityToEmployee)
+                .map(employeeMapper::entityToEmployee)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Employee addEmployee(final Employee employee) {
         EmployeeEntity employeeEntity =
-                EmployeeMapper.INSTANCE.employeeToEntity(employee);
+                employeeMapper.employeeToEntity(employee);
         EmployeeEntity persistedEntity = repository.create(employeeEntity);
-        return EmployeeMapper.INSTANCE.entityToEmployee(persistedEntity);
+        return employeeMapper.entityToEmployee(persistedEntity);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee getEmployee(final int id) {
         EmployeeEntity employeeEntity = repository.read(id)
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
-        return EmployeeMapper.INSTANCE.entityToEmployee(employeeEntity);
+        return employeeMapper.entityToEmployee(employeeEntity);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (!maybeEmployeeEntity.isPresent()) {
             throw new EmployeeNotFoundException(id);
         }
-        return EmployeeMapper.INSTANCE.entityToEmployee(maybeEmployeeEntity.get());
+        return employeeMapper.entityToEmployee(maybeEmployeeEntity.get());
     }
 
     @Override
@@ -104,7 +103,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         optionalEmployeeEntity.get()
-                .addVacation(VacationMapper.INSTANCE.vacationToEntity(vacation));
+                .addVacation(vacationMapper.vacationToEntity(vacation));
 
         return vacation;
     }
@@ -113,7 +112,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional(readOnly = true)
     public Vacation getVacationFromEmployee(final VacationId vacationId) {
         Employee e = this.getEmployee(vacationId.getEmployeeId());
-        return e.getVacation(vacationId.getUniqueId()).orElseThrow(() -> new VacationNotFoundException(vacationId));
+        // legacy method
+        // will be removed
+        return null;
     }
 
     @Override
@@ -125,7 +126,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (!vacationEntity.isPresent()) {
             throw new VacationNotFoundException(employeeId, vacationId);
         }
-        return VacationMapper.INSTANCE.entityToVacation(vacationEntity.get());
+        return vacationMapper.entityToVacation(vacationEntity.get());
     }
 
     @Override
@@ -176,15 +177,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional(readOnly = true)
     public Collection<Vacation> findAllEmployeesVacations(final int employeeId) {
         return repository.findAllEmployeesVacations(employeeId).stream()
-                .map(VacationMapper.INSTANCE::entityToVacation)
+                .map(vacationMapper::entityToVacation)
                 .collect(Collectors.toList());
     }
 
     @Override
     public void createEmployeesFavoriteVacation(final FavoriteVacation favoriteVacation) {
         FavoriteVacationEntity favoriteVacationEntity =
-                FavoriteVacationMapper.INSTANCE
-                        .favoriteVacationToEntity(favoriteVacation);
+                        favoriteVacationMapper.favoriteVacationToEntity(favoriteVacation);
         repository.createEmployeesFavoriteVacation(favoriteVacationEntity);
     }
 
@@ -194,7 +194,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             final Timestamp timestamp) {
         return repository.findFirstNEmployeesByTimestamp(maxNumberOfEmployeesPerTask, timestamp)
                 .stream()
-                .map(EmployeeMapper.INSTANCE::entityToEmployee)
+                .map(employeeMapper::entityToEmployee)
                 .collect(Collectors.toList());
 
     }

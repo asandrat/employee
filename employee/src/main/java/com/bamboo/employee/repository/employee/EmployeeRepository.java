@@ -24,8 +24,6 @@ public interface EmployeeRepository {
 
     EmployeeEntity create(EmployeeEntity employeeEntity);
 
-    void saveAll(Collection<Employee> employees);
-
     Optional<EmployeeEntity> delete(int id);
 
     Vacation deleteVacation(VacationId id);

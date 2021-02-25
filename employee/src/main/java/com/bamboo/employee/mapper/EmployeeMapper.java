@@ -5,13 +5,11 @@ import com.bamboo.employee.entity.EmployeeEntity;
 import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.model.dto.EmployeeDTO;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
-    EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
 
     EmployeeDTO employeeToDTO(Employee employee);
 
