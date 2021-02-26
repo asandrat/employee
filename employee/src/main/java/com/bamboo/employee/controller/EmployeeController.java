@@ -71,7 +71,7 @@ public class EmployeeController {
     @GetMapping
     ResponseEntity<Collection<EmployeeDTO>> allEmployees() {
         Collection<EmployeeDTO> employees =
-                service.findAll().stream()
+                service.findAllEmployees().stream()
                         .map(employeeMapper::employeeToDTO)
                         .collect(Collectors.toList());
         return ResponseEntity.ok(employees);
@@ -120,9 +120,26 @@ public class EmployeeController {
             @Parameter(description = "Id of the employee to be deleted")
             @PathVariable final int id) {
         service.removeEmployee(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Create new vacation for employee")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "successfully created vacation",
+                    content = { @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation =
+                                    VacationDTO.class)),
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "bad request body",
+                    content = @Content
+            )
+    })
     @PostMapping("/{employeeId}/vacations/")
     ResponseEntity<VacationDTO> addVacationToEmployee(
             @PathVariable int employeeId,
@@ -132,7 +149,10 @@ public class EmployeeController {
                 vacationMapper.vacationDTOtoVacation(vacationDTO);
         Vacation outputVacation = service.addVacationToEmployee(employeeId,
                 vacation);
-        return ResponseEntity.ok(vacationMapper.vacationToDTO(outputVacation));
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(vacationMapper.vacationToDTO(outputVacation));
     }
 
     @Operation(summary = "Get vacation by id")
@@ -160,12 +180,26 @@ public class EmployeeController {
         return ResponseEntity.ok(vacationMapper.vacationToDTO(vacation));
     }
 
+
+    @Operation(summary = "Delete vacation by id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "successfully deleted vacation for given id",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "vacation with given id doesn't exists",
+                    content = @Content
+            )
+    })
     @DeleteMapping("/{employeeId}/vacations/{vacationId}")
     ResponseEntity<Void> removeVacationById(
             @PathVariable int employeeId,
             @PathVariable int vacationId) {
         service.removeVacationFromEmployee(employeeId, vacationId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{employeeId}/vacations")
