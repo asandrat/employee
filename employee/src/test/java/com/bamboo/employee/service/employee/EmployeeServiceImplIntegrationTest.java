@@ -39,7 +39,7 @@ class EmployeeServiceImplIntegrationTest {
     @Test
     void addingEmployeeShouldIncreaseSize() {
 
-        int numberOfPreloadedEmployees = service.findAll().size();
+        int numberOfPreloadedEmployees = service.findAllEmployees().size();
 
         Employee employee = new Employee();
         employee.setName("Test");
@@ -48,12 +48,12 @@ class EmployeeServiceImplIntegrationTest {
 
         Assertions.assertEquals(
                 numberOfPreloadedEmployees + 1,
-                service.findAll().size());
+                service.findAllEmployees().size());
     }
 
     @Test
     void shouldMakeEmptyEmployeeTable() {
-        Assertions.assertEquals(0, service.findAll().size());
+        Assertions.assertEquals(0, service.findAllEmployees().size());
     }
 
     @Test
@@ -64,13 +64,13 @@ class EmployeeServiceImplIntegrationTest {
         e.setSurname("Testovski");
         service.addEmployee(e);
 
-        int numberOfPreloadedEmployees = service.findAll().size();
+        int numberOfPreloadedEmployees = service.findAllEmployees().size();
 
         service.removeEmployee(1);
 
         Assertions.assertEquals(
                 numberOfPreloadedEmployees - 1,
-                service.findAll().size());
+                service.findAllEmployees().size());
     }
 
     @Test
