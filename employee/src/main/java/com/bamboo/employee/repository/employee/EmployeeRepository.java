@@ -26,10 +26,6 @@ public interface EmployeeRepository {
 
     Optional<EmployeeEntity> delete(int id);
 
-    Vacation deleteVacation(VacationId id);
-
-    void update(VacationId vacationId, VacationStatus status);
-
     Collection<VacationEntity> findAllEmployeesVacations(int employeeId);
 
     Optional<VacationEntity> findEmployeesVacationById(int employeeId, int vacationId);

@@ -10,7 +10,7 @@ import java.util.*;
 
 
 //@Repository
-public class EmployeeRepositoryImpl {
+public class LegacyEmployeeRepositoryImpl {
 //
 //    private final Map<Integer, Employee> employees = new HashMap<>();
 //

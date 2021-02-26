@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface EmployeeService {
 
-    Collection<Employee> findAll();
+    Collection<Employee> findAllEmployees();
 
     Employee addEmployee(Employee employee);
 
@@ -21,22 +21,11 @@ public interface EmployeeService {
 
     Employee removeEmployee(int id);
 
-    @Deprecated
-    Vacation addVacationToEmployee(Vacation vacation);
-
     Vacation addVacationToEmployee(int employeeId, Vacation vacation);
-
-    @Deprecated
-    Vacation getVacationFromEmployee(VacationId vacationId);
 
     Vacation getVacationFromEmployee(int employeeId, int vacationId);
 
-    @Deprecated
-    Vacation removeVacationFromEmployee(VacationId id);
-
     void removeVacationFromEmployee(int employeeId, int vacationId);
-
-    Vacation updateVacationForEmployee(VacationId id, VacationStatus status);
 
     void updateVacationForEmployee(int employeeId,
                                   int vacationId,
@@ -44,7 +33,8 @@ public interface EmployeeService {
 
     Collection<Vacation> findAllEmployeesVacations(int employeeId);
 
-    void createEmployeesFavoriteVacation(FavoriteVacation favoriteVacation);
+    void createEmployeesFavoriteVacation(Employee employee,
+                                         FavoriteVacation favoriteVacation);
 
     List<Employee> findFirstNEmployeesByTimestamp(
             int maxNumberOfEmployeesPerTask,

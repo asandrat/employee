@@ -39,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(readOnly = true)
-    public Collection<Employee> findAll() {
+    public Collection<Employee> findAllEmployees() {
         return repository.findAll().stream()
                 .map(employeeMapper::entityToEmployee)
                 .collect(Collectors.toList());
@@ -74,25 +74,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeMapper.entityToEmployee(maybeEmployeeEntity.get());
     }
 
-    @Override
-    public Vacation addVacationToEmployee(final Vacation vacation) {
-//        Optional<Employee> maybeEmployee =
-//        repository.read(vacation.getId().getEmployeeId());
-//
-//        if (!maybeEmployee.isPresent()) {
-//            throw new IllegalArgumentException("No such employee to associate" +
-//                    " vacation with");
-//        }
-//
-//        Optional<Vacation> maybeVacation =
-//                maybeEmployee.get().getVacation(vacation.getId());
-//        if (maybeVacation.isPresent()) {
-//            throw new IllegalArgumentException("Employee already contains "
-//                    + "vacation with id: " + vacation.getId().getUniqueId());
-//        }
-//        return repository.addVacationToEmployee(vacation);
-        return null;
-    }
 
     @Override
     public Vacation addVacationToEmployee(final int employeeId,
@@ -108,14 +89,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return vacation;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Vacation getVacationFromEmployee(final VacationId vacationId) {
-        Employee e = this.getEmployee(vacationId.getEmployeeId());
-        // legacy method
-        // will be removed
-        return null;
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -130,19 +103,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Vacation removeVacationFromEmployee(final VacationId id) {
-        Vacation v = repository.deleteVacation(id);
-
-        //todo zamentiti sout sa Logger-om
-        if (v != null) {
-            System.out.println("Successfully removed vacation with id: " + id);
-        } else {
-            System.out.println("Failed to remove vacation with id: " + id);
-        }
-        return v;
-    }
-
-    @Override
     public void removeVacationFromEmployee(final int employeeId,
                                           final int vacationId) {
         EmployeeEntity employeeEntity = repository.read(employeeId)
@@ -153,15 +113,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeEntity.removeVacation(vacationEntity);
     }
 
-    @Override
-    public Vacation updateVacationForEmployee(final VacationId id,
-                                              final VacationStatus target) {
-        Vacation v = getVacationFromEmployee(id);
-        VacationStatus status = v.getStatus();
-        repository.update(id, vacationStateManager.getValidStatus(status,
-                target));
-        return v;
-    }
 
     @Override
     public void updateVacationForEmployee(final int employeeId,
@@ -182,9 +133,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void createEmployeesFavoriteVacation(final FavoriteVacation favoriteVacation) {
+    public void createEmployeesFavoriteVacation(final Employee employee,
+                                                final FavoriteVacation favoriteVacation) {
         FavoriteVacationEntity favoriteVacationEntity =
                         favoriteVacationMapper.favoriteVacationToEntity(favoriteVacation);
+        favoriteVacationEntity.setEmployeeEntity(employeeMapper.employeeToEntity(employee));
         repository.createEmployeesFavoriteVacation(favoriteVacationEntity);
     }
 

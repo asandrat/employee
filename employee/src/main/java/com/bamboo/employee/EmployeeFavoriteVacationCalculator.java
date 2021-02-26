@@ -41,10 +41,9 @@ public class EmployeeFavoriteVacationCalculator implements Callable<List<Integer
 
             // persist employees favorite vacations
             favoriteMonths.forEach(favoriteMonth -> {
-                FavoriteVacation favoriteVacation = new FavoriteVacation(
-                        employee.getUniqueId(),
-                        favoriteMonth);
-                service.createEmployeesFavoriteVacation(favoriteVacation);
+                FavoriteVacation favoriteVacation = new FavoriteVacation(favoriteMonth);
+                service.createEmployeesFavoriteVacation(employee,
+                        favoriteVacation);
             });
 
         }

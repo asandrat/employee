@@ -32,10 +32,6 @@ public class FavoriteVacationEntity {
             allocationSize = 1)
     private int id;
 
-
-    @Column(name = "employee_id")
-    private int employeeId;
-
     @Column(name = "month_number")
     private int monthValue;
 
@@ -45,9 +41,7 @@ public class FavoriteVacationEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "employee_id",
-            insertable = false,
-            updatable = false
+            name = "employee_id"
     )
     private EmployeeEntity employeeEntity;
 }

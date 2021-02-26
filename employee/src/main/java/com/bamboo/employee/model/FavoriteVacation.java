@@ -9,8 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FavoriteVacation {
 
-    private int employeeId;
-
     private int monthValue;
 }
 

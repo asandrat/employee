@@ -1,12 +1,8 @@
 package com.bamboo.employee.repository.employee;
 
 import com.bamboo.employee.entity.FavoriteVacationEntity;
-import com.bamboo.employee.model.Employee;
 import com.bamboo.employee.entity.EmployeeEntity;
-import com.bamboo.employee.model.Vacation;
 import com.bamboo.employee.entity.VacationEntity;
-import com.bamboo.employee.model.VacationId;
-import com.bamboo.employee.model.VacationStatus;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Repository;
@@ -31,7 +27,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         Query query = entityManager.createQuery(
                 "from EmployeeEntity",
                 EmployeeEntity.class);
-        return (List<EmployeeEntity>)query.getResultList();
+        return (List<EmployeeEntity>) query.getResultList();
     }
 
     @Override
@@ -56,16 +52,6 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public Vacation deleteVacation(final VacationId id) {
-        return null;
-    }
-
-    @Override
-    public void update(final VacationId vacationId, final VacationStatus status) {
-        // legacy method
-    }
-
-    @Override
     public Collection<VacationEntity> findAllEmployeesVacations(final int employeeId) {
         Query query = entityManager.createQuery(
                 "from VacationEntity where employee_id = :employeeId",
@@ -76,7 +62,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public Optional<VacationEntity> findEmployeesVacationById(final int employeeId,
-                                                    final int vacationId) {
+                                                              final int vacationId) {
         Optional<EmployeeEntity> employeeEntity = this.read(employeeId);
         return employeeEntity.flatMap(
                 entity -> entity.getVacations().stream()
@@ -106,7 +92,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public void deleteEmployeesFavoriteVacations(final int uniqueId) {
         Query query = entityManager.createQuery(
                 "delete from FavoriteVacationEntity where "
-                        + "employeeId = :uniqueId");
+                        + "employee_id = :uniqueId");
         query.setParameter("uniqueId", uniqueId);
         query.executeUpdate();
     }
