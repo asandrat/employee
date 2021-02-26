@@ -1,9 +1,16 @@
 package com.bamboo.employee.entitiesDB;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDate;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "Vacation")
 public class Vacation {
@@ -29,8 +36,6 @@ public class Vacation {
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
-    public Vacation() {
-    }
 
     public Vacation(Employee employee, LocalDate dateFrom,
                     LocalDate dateTo, VacationStatus status) {
@@ -50,53 +55,8 @@ public class Vacation {
         this.status = status;
         this.duration = duration;
     }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public LocalDate getDateFrom() {
-        return dateFrom;
-    }
-
-    public void setDateFrom(LocalDate dateFrom) {
-        this.dateFrom = dateFrom;
-    }
-
-    public LocalDate getDateTo() {
-        return dateTo;
-    }
-
-    public void setDateTo(LocalDate dateTo) {
-        this.dateTo = dateTo;
-    }
-
     public int getDuration() {
         return (int) Duration.between(dateFrom.atStartOfDay(),
                 dateTo.atStartOfDay()).toDays();
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public VacationStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(VacationStatus status) {
-        this.status = status;
     }
 }
